@@ -1,0 +1,57 @@
+# personal-site
+
+Trae's personal site. Next.js (App Router) exported as a static site and hosted on GitHub Pages.
+
+## Stack
+
+- Next.js 16 with `output: "export"`, React 19, and TypeScript 6 in strict mode
+- Tailwind CSS 4
+- Bun 1.4 for packages and scripts, pinned with [mise](https://mise.jdx.dev/)
+- Oxlint (type-aware, with the React, Next.js, and jsx-a11y plugins), Oxfmt, and knip
+
+The tooling follows the TypeScript profile of [KrishRVH/standards](https://github.com/KrishRVH/standards), adapted to a static Next.js site. `AGENTS.md` holds the working rules for people and agents.
+
+## Local development
+
+Install [mise](https://mise.jdx.dev/getting-started.html), then:
+
+```sh
+mise install
+mise run ts:install
+bun run dev            # http://localhost:3000
+```
+
+Project workflows run through mise:
+
+| Task                       | What it does                                                           |
+| -------------------------- | ---------------------------------------------------------------------- |
+| `mise run standards`       | Applies lint autofixes and formats the tree                            |
+| `mise run standards:check` | The CI gate: secrets, hygiene, lint, types, format, audit, knip, build |
+| `mise run ts:build`        | Static export to `out/`                                                |
+| `mise run ts:lint`         | Suppression-form check, then Oxlint                                    |
+| `mise run ts:type`         | Generates Next.js route types, then `tsc`                              |
+| `mise run ts:lock`         | Refreshes `bun.lock` after a dependency change                         |
+
+`mise tasks` lists the rest. To preview the production build, serve `out/` with any static server, for example `bunx serve out`.
+
+### Static export limits
+
+There is no server at runtime, so features that need one are unavailable: Server Actions, route handlers that read the request, cookies, rewrites, redirects, headers, ISR, and the default `next/image` optimizer (images are served unoptimized). Dynamic routes need `generateStaticParams`. See the [Next.js static export guide](https://nextjs.org/docs/app/guides/static-exports).
+
+## Deployment
+
+Two workflows in `.github/workflows`:
+
+- `quality.yml` runs `mise run standards:check` on every pull request, merge-queue group, and push to `main`. Its job is named `quality`.
+- `pages.yml` builds the site and deploys `out/` to GitHub Pages on every push to `main` (it can also be run manually).
+
+### One-time setup
+
+Do step 1 before the first merge to `main`, otherwise the first `Pages` run fails. If it already failed, re-run it from the Actions tab (it supports manual runs).
+
+1. In the repo's Settings → Pages, set **Source** to **GitHub Actions**.
+2. In the same page, set **Custom domain** to the site's domain. With Actions-based deployment GitHub ignores a `CNAME` file, so the domain lives only in this setting. Turn on **Enforce HTTPS** once the certificate is issued.
+3. At the DNS provider (Porkbun), point the apex at `thelunchtrae.github.io` with an `ALIAS` record and add a `CNAME` for `www` to the same host. Verifying the domain in your GitHub account settings (Settings → Pages) is recommended to prevent takeover.
+4. Protect `main` with a ruleset that requires the `quality` check and Code Owner review, dismisses stale approvals on new commits, and allows no bypass. Committed files cannot configure these settings.
+
+The site is served from the domain root, so no `basePath` is configured. If it is ever served from `thelunchtrae.github.io/personal-site/` instead, set `basePath: "/personal-site"` in `next.config.ts`.
