@@ -6,9 +6,9 @@ before changing architecture or domain language.
 ## Project Docs
 
 This is a personal site, so `README.md` stays intentionally minimal: what the
-site is, where it lives, and pointers to the docs and license. Do not add setup, workflow, or architecture notes
-to it. Put context that agents need in this file, and general developer docs
-for people and agents in `docs/`.
+site is, where it lives, and pointers to the docs and license. Do not add
+setup, workflow, or architecture notes to it. Put context that agents need in
+this file, and general developer docs for people and agents in `docs/`.
 
 - [docs/development.md](docs/development.md): stack, local setup, mise tasks,
   and static export limits.
