@@ -1,15 +1,24 @@
+import { gameThemes } from '@/themes/registry';
+import { ThemeTour } from '@/themes/theme-tour';
+
 export default function Home() {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-6 py-24">
-      <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Trae</h1>
-      <p className="mt-4 text-lg text-foreground/70">Software engineer. Site coming soon.</p>
-      <a
-        href="/TraeStevens_Resume.pdf"
-        download="TraeStevens_Resume.pdf"
-        className="mt-8 w-fit rounded-md border border-foreground/20 px-4 py-2 text-sm font-medium transition-colors hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-      >
+    <article className="prose-page" data-section="home">
+      <h1>Trae</h1>
+      <p className="lede">Software engineer. Site coming soon.</p>
+      <a href="/TraeStevens_Resume.pdf" download="TraeStevens_Resume.pdf" className="button">
         Download resume (PDF)
       </a>
-    </main>
+      {gameThemes.length > 0 ? (
+        <section className="home-tour" aria-labelledby="home-tour-title">
+          <h2 id="home-tour-title">Get to know me, one game at a time</h2>
+          <p>
+            A few games shaped how I build software. Each theme restyles this whole site after one of them, with
+            gameplay you can use to get around. Try each one, then read what it taught me.
+          </p>
+          <ThemeTour heading="h3" />
+        </section>
+      ) : null}
+    </article>
   );
 }

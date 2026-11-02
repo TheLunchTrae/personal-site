@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+
+// The store reads browser globals, so stub them before it loads. Storage
+// throws on every call, as it does when a browser blocks site data.
+const attributes = new Map<string, string>();
+const refuse = () => {
+  throw new Error('storage blocked');
+};
+const ignore = () => undefined;
+// eslint-disable-next-line standards/no-global-mutation -- the store under test reads the browser's window and document globals.
+Object.assign(globalThis, {
+  window: {
+    localStorage: { getItem: refuse, setItem: refuse },
+    matchMedia: () => ({ matches: false, addEventListener: ignore, removeEventListener: ignore }),
+    addEventListener: ignore,
+    removeEventListener: ignore,
+  },
+  document: { documentElement: { setAttribute: (name: string, value: string) => attributes.set(name, value) } },
+});
+const { setColorMode, setPlay, setTheme } = await import('./theme-store');
+
+await test('choices apply for the visit when storage refuses them', () => {
+  setColorMode('dark');
+  assert.equal(attributes.get('data-color-mode'), 'dark');
+  setColorMode('light');
+  assert.equal(attributes.get('data-color-mode'), 'light');
+});
+
+await test('gameplay stays off for the default theme', () => {
+  setTheme('default');
+  setPlay(true);
+  assert.equal(attributes.get('data-theme'), 'default');
+  assert.equal(attributes.get('data-play'), 'off');
+});

@@ -15,6 +15,7 @@
     "lint": "bun run directives:check && oxlint .",
     "lint:fix": "bun run directives:check && oxlint --fix .",
     "standards": "bun run lint:fix && bun run format",
+    "test": "bun test",
     "typecheck": "tsc --pretty -p tsconfig.json",
     "typegen": "next typegen"
   },
