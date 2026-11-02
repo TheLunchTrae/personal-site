@@ -5,9 +5,8 @@ after the game that inspired it, restyles every page, and offers gameplay
 navigation that the visitor can turn off. With gameplay off, the site stays in
 the theme.
 
-While no game theme is registered, the site shows only the default look and
-its color mode control: the theme picker, the home page's theme invite and
-tour, and the footer credits render nothing.
+The game themes are Minecraft. Each one has an influence page about what the
+game meant to Trae and a credits page for everything the theme draws on.
 
 ## State
 
@@ -55,11 +54,13 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
 - `.play-layer`, the slot that holds gameplay between the header and the page.
   Before hydration it is empty, so `.play-layer:empty` can reserve the
   gameplay's height.
-- `.site-footer` and `.theme-credit[data-credit-for='<id>']`, which each theme
-  reveals for itself. The credit holds `.theme-credit__full` and
-  `.theme-credit__short` (hidden by default, and the same text when the
-  owner's wording is required) for gameplay that covers the page. Keep one of
-  them visible in every state, gameplay on or off.
+- `.site-footer` and `.theme-credit[data-credit-for='<id>']`, a small line
+  with the theme's `notice` and a link to its credits page. It is hidden by
+  default, and each theme reveals its own line while it is active. Keep it
+  visible in every state, gameplay on or off.
+- `.prose-page[data-credit-for='<id>']`, the theme's influence and credits
+  pages. They reveal the theme's footer line in any theme, so the notice
+  shows wherever the theme's work is shown.
 
 ## Order
 
@@ -74,36 +75,40 @@ of the home page's sections is set by the `order` front matter of the files in
 1. Add the theme's id (kebab case) to the `GameThemeId` union in
    `src/themes/registry.ts`, and add its entry to `gameThemes` at the place it
    should appear: `id`, `name` (the game's name), `notice` (the not-affiliated
-   note, in the owner's required wording when it has one), `shortNotice` (a
-   shorter form for gameplay that covers the page, or the same text when the
-   wording is required), `pitch` (one line for the tour), and `storyTitle`.
-   While no theme is registered, `GameThemeId` is `never`, and a few lint and
-   type exceptions, plus a `String()` in `storyHref`, say so; the first theme
-   makes them fail as unused, so delete them with it.
+   note, in the owner's required wording when it has one), `pitch` (one line
+   for the tour), and `storyTitle`.
 2. Create `src/themes/<id>/` with:
    - `<id>.css`: every rule scoped under `:root[data-theme='<id>']`, including
-     `.theme-credit[data-credit-for='<id>'] { display: block; }`. Import it in
-     `src/app/layout.tsx`.
+     `.theme-credit[data-credit-for='<id>'] { display: block; }`, plus the
+     same rule under `:root:has(.prose-page[data-credit-for='<id>'])` so the
+     theme's own pages show it. Import it in `src/app/layout.tsx`.
    - A gameplay component that takes `PlayProps` from
      `src/themes/play-layer.tsx`.
 3. Register the component in `players` in `src/themes/play-layer.tsx` with
    `next/dynamic` and `ssr: false`. The map is typed by the registry, so the
    build fails until this step is done.
 4. Add the influence page at `src/app/influences/<id>/page.tsx`: a server
-   component that renders an `<article className="prose-page">` holding a
+   component that renders an
+   `<article className="prose-page" data-credit-for="<id>">` holding a
    `ContentBlock` from `src/site/content.tsx` for each section that
    `readSections('influences/<id>')` returns. Create
    `content/influences/<id>/` with the theme's blurb files, left empty for
-   Trae to write, and list them in `content/README.md`. The tour, the theme
+   Trae to write, and list them in `content/README.md`. End the page with a
+   link to the theme's credits page (`creditsHref`). The tour, the theme
    picker, the footer credit, and the gameplay's last destination pick the
    theme up from the registry.
-5. Load any display font with `next/font` and `preload: false`, and expose it
+5. Write the theme's credits in `content/credits/<id>/`: the owner's notice,
+   then every font, library and other work the theme uses, with its author
+   and license. `src/app/credits/[theme]/page.tsx` builds a credits page for
+   each registered theme, and the build fails when a theme has no credits
+   written.
+6. Load any display font with `next/font` and `preload: false`, and expose it
    as a CSS variable on `<html>` in `src/app/layout.tsx`. Use only fonts whose
    license allows web embedding. A self-hosted font lives in
    `src/themes/<id>/fonts/` with its license file beside it, loaded through
    `next/font/local`. Ship the license under `public/licenses/` and credit the
-   font with a link to that license on the theme's influence page; never link
-   the font file itself. Declare only the weights the font ships, and use only
+   font with a link to that license in the theme's credits; never link the
+   font file itself. Declare only the weights the font ships, and use only
    those in CSS.
 
 ## Content
@@ -155,6 +160,5 @@ such as a world to walk through. Either way:
 - Heavy engines, such as three.js, load only inside the component, so they
   stay out of every other theme's bundle.
 - Art and sound are original. Fonts are original, or third-party under a
-  license that allows web embedding and credited on the theme's influence
-  page. Never take files from the game itself. Reference the game by name
+  license that allows web embedding and credited in the theme's credits. Never take files from the game itself. Reference the game by name
   only.

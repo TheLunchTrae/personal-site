@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Component, type ComponentType, type ReactNode } from 'react';
 import { type GameSection, gameSections } from '@/site/sections';
 import { gameTheme, type GameThemeId, isGameThemeId } from './registry';
@@ -23,7 +24,11 @@ export interface PlayProps {
  * other visitors. The Record type makes a game theme added to the registry
  * fail to compile until it plugs in here.
  */
-const players: Record<GameThemeId, ComponentType<PlayProps>> = {};
+const players: Record<GameThemeId, ComponentType<PlayProps>> = {
+  minecraft: dynamic(() => import('./minecraft/minecraft-play').then((module) => module.MinecraftPlay), {
+    ssr: false,
+  }),
+};
 
 interface BoundaryState {
   readonly failed: boolean;
@@ -53,7 +58,6 @@ export function PlayLayer() {
   if (!isGameThemeId(theme)) {
     return null;
   }
-  // eslint-disable-next-line typescript/no-unnecessary-condition -- no game theme is registered, so `theme` is never here; this exception fails as unused once one is.
   if (failed === theme) {
     return (
       <p className="game-notice" role="status">
@@ -72,7 +76,6 @@ export function PlayLayer() {
     // The game's own controls unmount, so focus moves to the switch that brings them back.
     document.querySelector<HTMLElement>('.theme-controls__play')?.focus();
   };
-  // @ts-expect-error -- no game theme is registered, so `Player` is never; this exception fails as unused once one is.
   const game = <Player sections={gameSections(theme)} reducedMotion={reducedMotion} onExit={exit} onFail={fail} />;
   return (
     <GameBoundary key={theme} onFail={fail}>

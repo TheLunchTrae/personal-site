@@ -1,16 +1,13 @@
-import { gameThemes } from '@/themes/registry';
+import Link from 'next/link';
+import { creditsHref, gameThemes } from '@/themes/registry';
 
-/** Each game theme's not-affiliated note, in full and in a short form for gameplay overlays, shown by CSS only while that theme is on so it never flashes. */
+/** Each game theme's small not-affiliated line and a link to its credits, shown by CSS only while that theme is on so it never flashes. */
 export function SiteFooter() {
-  if (gameThemes.length === 0) {
-    return null;
-  }
   return (
     <footer className="site-footer">
       {gameThemes.map((theme) => (
         <p key={theme.id} className="theme-credit" data-credit-for={theme.id}>
-          <span className="theme-credit__full">{theme.notice}</span>
-          <span className="theme-credit__short">{theme.shortNotice}</span>
+          <span>{theme.notice}</span> <Link href={creditsHref(theme.id)}>Credits</Link>
         </p>
       ))}
     </footer>

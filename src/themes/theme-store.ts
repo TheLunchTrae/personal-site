@@ -18,7 +18,6 @@ export interface ThemeState {
   readonly play: boolean;
   readonly reducedMotion: boolean;
   /** A game theme whose gameplay could not run in this browser during this visit. */
-  // eslint-disable-next-line typescript/no-redundant-type-constituents -- no game theme is registered, so GameThemeId is never; this exception fails as unused once one is.
   readonly failed: GameThemeId | null;
 }
 
@@ -92,7 +91,6 @@ function computeState(): ThemeState {
     colorMode,
     reducedMotion,
     failed: memory.failed,
-    // eslint-disable-next-line typescript/no-unnecessary-condition -- no game theme is registered, so `failed` can only be null; this exception fails as unused once one is.
     play: theme !== memory.failed && resolvePlay(theme, play, reducedMotion),
   };
 }

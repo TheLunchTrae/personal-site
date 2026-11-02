@@ -8,20 +8,21 @@
 /**
  * Every game theme's id. A theme's id goes here and its entry goes in
  * `gameThemes`; `players` in play-layer.tsx is keyed by this type, so the
- * build fails until the theme's gameplay plugs in. While no game theme is
- * registered, it is `never`.
+ * build fails until the theme's gameplay plugs in.
  */
-export type GameThemeId = never;
+export type GameThemeId = 'minecraft';
 
 export interface GameTheme {
   /** Value of `html[data-theme]`, the theme's folder under src/themes/, and its influence page slug. */
   readonly id: GameThemeId;
   /** The game's name, used as the theme's name. */
   readonly name: string;
-  /** The not-affiliated note shown while the theme is on, in the wording the game's owner asks for when it has one. */
+  /**
+   * The short not-affiliated line in the page footer while the theme is on, in
+   * the wording the game's owner asks for when it has one. The full statement
+   * belongs in the theme's credits under content/credits/<id>/.
+   */
   readonly notice: string;
-  /** A short form of the note for gameplay that covers the page; the same text as `notice` when the owner's wording is required. */
-  readonly shortNotice: string;
   /** One line for the home page tour. */
   readonly pitch: string;
   /** Title of the theme's influence page. */
@@ -33,9 +34,17 @@ export interface GameTheme {
  * theme picker, and the footer credits all follow this list. Reorder the
  * entries to change that order.
  */
-export const gameThemes: readonly GameTheme[] = [];
+export const gameThemes: readonly GameTheme[] = [
+  {
+    id: 'minecraft',
+    name: 'Minecraft',
+    // Mojang's usage guidelines require this exact wording on fan websites.
+    notice: 'NOT AN OFFICIAL MINECRAFT WEBSITE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.',
+    pitch: 'Walk a voxel island and mine your way around it.',
+    storyTitle: 'What Minecraft taught me',
+  },
+];
 
-// eslint-disable-next-line typescript/no-redundant-type-constituents -- no game theme is registered, so GameThemeId is never; this exception fails as unused once one is.
 export type ThemeId = 'default' | GameThemeId;
 
 export const colorModes = ['system', 'light', 'dark'] as const;
@@ -61,8 +70,10 @@ export function isColorMode(value: unknown): value is ColorMode {
   return typeof value === 'string' && (colorModes as readonly string[]).includes(value);
 }
 
+const gameThemesById = new Map(gameThemes.map((theme) => [theme.id, theme]));
+
 export function gameTheme(id: GameThemeId): GameTheme {
-  const theme = gameThemes.find((entry) => entry.id === id);
+  const theme = gameThemesById.get(id);
   if (theme === undefined) {
     throw new Error('A game theme id has no entry in gameThemes.');
   }
@@ -70,9 +81,12 @@ export function gameTheme(id: GameThemeId): GameTheme {
 }
 
 export function storyHref(id: GameThemeId): string {
-  // String() only satisfies restrict-template-expressions while GameThemeId is
-  // never; no-unnecessary-type-conversion flags it once a theme is registered.
-  return `/influences/${String(id)}/`;
+  return `/influences/${id}/`;
+}
+
+/** The theme's credits page, built from content/credits/<id>/. */
+export function creditsHref(id: GameThemeId): string {
+  return `/credits/${id}/`;
 }
 
 /** Gameplay is on for a game theme unless the visitor turned it off, or never chose and prefers reduced motion. */

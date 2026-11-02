@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { readSections } from '@/site/content';
 import {
   colorModes,
+  gameTheme,
   gameThemes,
   isColorMode,
   isThemeId,
@@ -77,4 +79,33 @@ await test('the boot script falls back to defaults when storage is blocked', () 
 
 await test('gameplay never turns on for the default theme', () => {
   assert.equal(resolvePlay('default', 'on', false), false);
+});
+
+await test('gameplay follows the stored choice, then reduced motion, for a game theme', () => {
+  assert.equal(resolvePlay('minecraft', 'on', true), true);
+  assert.equal(resolvePlay('minecraft', 'off', false), false);
+  assert.equal(resolvePlay('minecraft', 'auto', false), true);
+  assert.equal(resolvePlay('minecraft', 'auto', true), false);
+});
+
+await test('every game theme has its credits written', async () => {
+  for (const theme of gameThemes) {
+    const sections = await readSections(`credits/${theme.id}`);
+    assert.ok(
+      sections.some((section) => section.body.trim() !== ''),
+      `content/credits/${theme.id}/ has no credits written`,
+    );
+  }
+});
+
+// Mojang's usage guidelines require this exact wording on fan sites, so the
+// footer notice and the credits page both carry it verbatim.
+await test('the Minecraft notice uses the wording Mojang requires', async () => {
+  const required = 'NOT AN OFFICIAL MINECRAFT WEBSITE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.';
+  assert.equal(gameTheme('minecraft').notice, required);
+  const credits = await readSections('credits/minecraft');
+  assert.ok(
+    credits.some((section) => section.body.includes(required)),
+    'content/credits/minecraft/ carries the notice',
+  );
 });
