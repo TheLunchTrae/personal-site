@@ -18,8 +18,12 @@ Install [mise](https://mise.jdx.dev/getting-started.html), then:
 ```sh
 mise install
 mise run ts:install
-bun run dev            # http://localhost:3000
+mise exec -- bun run dev   # http://localhost:3000
 ```
+
+`mise exec --` puts the pinned Bun on `PATH`; with [mise activated](https://mise.jdx.dev/getting-started.html#activate-mise) in your shell, plain `bun run dev` works too.
+
+The tasks are verified on Linux, where CI runs. On Windows, use Git Bash with mise activated, or WSL. The mise lockfile pins checksums for Linux only, so `MISE_LOCKED=1` (as CI sets it) works only there.
 
 Project workflows run through mise:
 
@@ -29,7 +33,7 @@ Project workflows run through mise:
 | `mise run standards:check` | The CI gate: secrets, hygiene, lint, types, format, audit, knip, build |
 | `mise run ts:build`        | Static export to `out/`                                                |
 | `mise run ts:lint`         | Suppression-form check, then Oxlint                                    |
-| `mise run ts:type`         | Generates Next.js route types, then `tsc`                              |
+| `mise run ts:type`         | `tsc`, after generating the Next.js route types                        |
 | `mise run ts:lock`         | Refreshes `bun.lock` after a dependency change                         |
 
 `mise tasks` lists the rest. To preview the production build, serve `out/` with any static server, for example `bunx serve out`.
@@ -52,6 +56,6 @@ Do step 1 before the first merge to `main`, otherwise the first `Pages` run fail
 1. In the repo's Settings → Pages, set **Source** to **GitHub Actions**.
 2. In the same page, set **Custom domain** to the site's domain. With Actions-based deployment GitHub ignores a `CNAME` file, so the domain lives only in this setting. Turn on **Enforce HTTPS** once the certificate is issued.
 3. At the DNS provider (Porkbun), point the apex at `thelunchtrae.github.io` with an `ALIAS` record and add a `CNAME` for `www` to the same host. Verifying the domain in your GitHub account settings (Settings → Pages) is recommended to prevent takeover.
-4. Protect `main` with a ruleset that requires the `quality` check and Code Owner review, dismisses stale approvals on new commits, and allows no bypass. Committed files cannot configure these settings.
+4. Protect `main` with a ruleset that requires a pull request and the `quality` check, and blocks force pushes and deletion. Committed files cannot configure these settings. Leave **Require review from Code Owners** off while the repo has a single owner: GitHub doesn't let authors approve their own pull requests, so with no bypass nothing could merge. Turn it on, with stale approvals dismissed on new commits, once a second reviewer exists.
 
 The site is served from the domain root, so no `basePath` is configured. If it is ever served from `thelunchtrae.github.io/personal-site/` instead, set `basePath: "/personal-site"` in `next.config.ts`.

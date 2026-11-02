@@ -15,7 +15,8 @@
     "lint": "bun run directives:check && oxlint .",
     "lint:fix": "bun run directives:check && oxlint --fix .",
     "standards": "bun run lint:fix && bun run format",
-    "typecheck": "next typegen && tsc --pretty -p tsconfig.json"
+    "typecheck": "tsc --pretty -p tsconfig.json",
+    "typegen": "next typegen"
   },
   "dependencies": {
     "next": "16.4.3",

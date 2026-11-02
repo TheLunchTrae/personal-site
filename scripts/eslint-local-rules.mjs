@@ -1,5 +1,3 @@
-const processBoundaryModules = new Set(['cluster', 'node:cluster', 'node:worker_threads', 'worker_threads']);
-const timerModules = new Set(['node:timers', 'node:timers/promises', 'timers', 'timers/promises']);
 const objectMutationMethods = new Set([
   'assign',
   'defineProperties',
@@ -16,7 +14,6 @@ const reflectMutationMethods = new Set([
   'set',
   'setPrototypeOf',
 ]);
-const timerMethods = new Set(['setImmediate', 'setInterval', 'setTimeout']);
 
 function exportedName(node) {
   return node.type === 'Identifier' ? node.name : String(node.value);
@@ -288,12 +285,6 @@ function mutationTarget(call, sourceCode) {
   return undefined;
 }
 
-function objectPatternContainsTimer(pattern, sourceCode) {
-  return pattern.properties.some(
-    (property) => property.type === 'Property' && timerMethods.has(propertyKeyName(property, sourceCode)),
-  );
-}
-
 const noGlobalMutation = {
   meta: {
     type: 'problem',
@@ -362,52 +353,6 @@ const noGlobalMutation = {
           context.report({ node, messageId: 'alias' });
         }
       },
-    };
-  },
-};
-
-const noAmbientRuntime = {
-  meta: {
-    type: 'problem',
-    schema: [],
-    messages: {
-      processBoundary:
-        'Dynamic process or worker imports are out of profile. Keep one runtime owner, or message-pass through a justified adapter.',
-      timerModule:
-        'Timer-module imports expose unowned scheduling. Use Effect scheduling under the owning fiber, or a scoped signal-aware adapter.',
-      timer:
-        'Unowned timer work escapes structured ownership. Use Effect scheduling under the owning fiber, or a scoped signal-aware adapter.',
-    },
-  },
-  create(context) {
-    const { sourceCode } = context;
-    const reportTimerAlias = (node, pattern, value) => {
-      if (
-        pattern.type === 'ObjectPattern' &&
-        objectPatternContainsTimer(pattern, sourceCode) &&
-        isAmbientGlobal(value, sourceCode)
-      ) {
-        context.report({ node, messageId: 'timer' });
-      }
-    };
-
-    return {
-      AssignmentExpression: (node) => reportTimerAlias(node, node.left, node.right),
-      AssignmentPattern: (node) => reportTimerAlias(node, node.left, node.right),
-      ImportExpression(node) {
-        const source = staticString(node.source, sourceCode);
-        if (source !== undefined && timerModules.has(source)) {
-          context.report({ node, messageId: 'timerModule' });
-        } else if (source !== undefined && processBoundaryModules.has(source)) {
-          context.report({ node, messageId: 'processBoundary' });
-        }
-      },
-      MemberExpression(node) {
-        if (isAmbientGlobal(node.object, sourceCode) && timerMethods.has(memberName(node, sourceCode))) {
-          context.report({ node, messageId: 'timer' });
-        }
-      },
-      VariableDeclarator: (node) => reportTimerAlias(node, node.id, node.init),
     };
   },
 };
@@ -553,7 +498,6 @@ const standardsPlugin = {
   meta: { name: 'standards-local', version: '1.0.0' },
   rules: {
     'esm-only': esmOnly,
-    'no-ambient-runtime': noAmbientRuntime,
     'no-default-export': noDefaultExport,
     'no-global-mutation': noGlobalMutation,
     'no-module-mutable-binding': noModuleMutableBinding,

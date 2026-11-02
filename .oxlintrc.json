@@ -247,7 +247,7 @@
       }
     },
     {
-      "files": ["src/**/*.tsx"],
+      "files": ["src/**/*.{ts,tsx}"],
       "plugins": ["react", "nextjs"],
       "rules": {
         "react/rules-of-hooks": "error",

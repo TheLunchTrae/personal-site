@@ -18,6 +18,8 @@ if [ ! -f bun.lock ]; then
   exit 1
 fi
 """
+# mise runs inline tasks with cmd on Windows, so the POSIX check needs its own form.
+run_windows = "if not exist bun.lock (echo bun.lock is required for TypeScript/JavaScript CI. Run mise run ts:lock and commit the generated lockfile. 1>&2 & exit /b 1)"
 
 [tasks."ts:fmt"]
 description = "Format TypeScript/JavaScript"
@@ -29,14 +31,20 @@ description = "Check TypeScript/JavaScript formatting"
 depends = ["ts:install"]
 run = "bun run format:check"
 
+[tasks."ts:typegen"]
+description = "Generate Next.js route types into .next/types"
+depends = ["ts:install"]
+run = "bun run typegen"
+
 [tasks."ts:lint"]
 description = "Lint TypeScript/JavaScript"
-depends = ["ts:install"]
+# Type-aware lint rules read the generated route types.
+depends = ["ts:typegen"]
 run = "bun run lint"
 
 [tasks."ts:type"]
 description = "Run TypeScript type checks"
-depends = ["ts:install"]
+depends = ["ts:typegen"]
 run = "bun run typecheck"
 
 [tasks."ts:audit"]
@@ -61,7 +69,7 @@ run = "bun run standards"
 
 [tasks."ts:standards:check"]
 description = "Run the TypeScript/JavaScript standards CI gate"
-# The static checks run in parallel; the build runs after them because
-# `next typegen` and `next build` both write .next/.
+# Typegen runs once before lint and type; the build runs after the static
+# checks because `next typegen` and `next build` both write .next/.
 depends = ["ts:lint", "ts:type", "ts:fmt:check", "ts:audit", "ts:knip"]
 run = "bun run build"

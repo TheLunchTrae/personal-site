@@ -144,9 +144,10 @@ dependencies exactly and holds back versions younger than three days; an
 exception goes in `minimumReleaseAgeExcludes` and needs the owner's approval.
 
 Source uses `.ts` or `.tsx` so the type, lint, and knip checks cover the same
-files. Use named exports; Next.js route files (`page`, `layout`, and the other
-App Router conventions) and `next.config.ts` are the only default exports, and
-`.oxlintrc.json` lists them. Keep module bindings immutable.
+files. Use named exports. Next.js route files (`page`, `layout`, and the other
+App Router conventions) and `next.config.ts` need default exports, and
+`.oxlintrc.json` lists them; any other default export needs a lint exception.
+Keep module bindings immutable.
 
 ### Exceptions
 
@@ -154,6 +155,8 @@ App Router conventions) and `next.config.ts` are the only default exports, and
   exceptions use `// @ts-expect-error -- <reason>`. `scripts/check-directives.mjs`
   enforces the forms, and Oxlint rejects stale exceptions. A reason names the
   invariant and why restructuring loses.
+- Review changes to `.oxlintrc.json`, `tsconfig.json`, the scripts, and the
+  mise tasks for lost coverage, and justify every relaxation.
 - A behavior change needs a test that fails without it. The site has no test
   runner yet; add one with the first logic worth testing.
 
