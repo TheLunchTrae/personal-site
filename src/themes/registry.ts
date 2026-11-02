@@ -8,8 +8,8 @@
 /**
  * Every game theme's id. A theme's id goes here and its entry goes in
  * `gameThemes`; `players` in play-layer.tsx is keyed by this type, so the
- * build fails until the theme's gameplay plugs in. No game theme is
- * registered yet.
+ * build fails until the theme's gameplay plugs in. While no game theme is
+ * registered, it is `never`.
  */
 export type GameThemeId = never;
 
@@ -70,6 +70,8 @@ export function gameTheme(id: GameThemeId): GameTheme {
 }
 
 export function storyHref(id: GameThemeId): string {
+  // String() only satisfies restrict-template-expressions while GameThemeId is
+  // never; no-unnecessary-type-conversion flags it once a theme is registered.
   return `/influences/${String(id)}/`;
 }
 

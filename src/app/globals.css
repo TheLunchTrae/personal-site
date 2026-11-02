@@ -49,7 +49,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--foreground);
   outline-offset: 2px;
 }
 
@@ -131,108 +131,85 @@ body {
   padding: 6rem 1.5rem;
 }
 
-.prose-page[data-section='home'] /* Influence blurbs render as plain elements inside .influence-section. Tailwind's
-   reset strips list markers and link styling, so restore them here using only
-   the theme tokens; fonts and everything else come from the active theme. */
-.influence-section ul,
-.influence-section ol {
+.prose-page[data-section='home'] .button {
+  align-self: flex-start;
+}
+
+.prose-page h1 {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 40rem) {
+  .prose-page h1 {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.prose-page h2 {
+  margin-top: 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.prose-page p {
+  margin-top: 1rem;
+}
+
+/* The home intro's text under the name is the lede. */
+.prose-page[data-section='home'] [data-content='intro'] p {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--muted);
+}
+
+.prose-page[data-section='home'] .content-section + .content-section {
+  margin-top: 4rem;
+}
+
+/* Markdown content renders as plain elements inside .content-section.
+   Tailwind's reset strips list markers and link styling, so restore them here
+   using only the theme tokens; fonts and everything else come from the active
+   theme. */
+.content-section ul,
+.content-section ol {
   margin-top: 1rem;
   padding-left: 1.5rem;
 }
 
-.influence-section ul {
+.content-section ul {
   list-style: disc;
 }
 
-.influence-section ol {
+.content-section ol {
   list-style: decimal;
 }
 
-.influence-section a {
+.content-section a:not(.button) {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-.influence-section blockquote {
+.content-section blockquote {
   margin-top: 1rem;
   padding-left: 1rem;
   border-left: 2px solid var(--border);
   color: var(--muted);
 }
 
-.influence-section table {
+.content-section table {
   margin-top: 1rem;
   border-collapse: collapse;
 }
 
-.influence-section th,
-.influence-section td {
+.content-section th,
+.content-section td {
   padding: 0.25rem 0.75rem;
   border: 1px solid var(--border);
-}
-
-.button {
-  align-self: flex-start;
-}
-
-.prose-page h1 {
-  font-size: clamp(2.25rem, 6vw, 3rem);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.prose-page h2 {
-  margin-top: 2.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.prose-page p {
-  margin-top: 1rem;
-}
-
-.prose-page .lede {
-  font-size: 1.125rem;
-  color: var(--muted);
-}
-
-.button {
-  align-self: flex-start;
-}
-
-.prose-page h1 {
-  font-size: clamp(2.25rem, 6vw, 3rem);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.prose-page h2 {
-  margin-top: 2.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.prose-page p {
-  margin-top: 1rem;
-}
-
-.prose-page .lede {
-  font-size: 1.125rem;
-  color: var(--muted);
-}
-
-.prose-page .aside {
-  margin-top: 3rem;
-  font-size: 0.875rem;
-  color: var(--muted);
-}
-
-.prose-page .aside a {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 .button {
@@ -243,8 +220,10 @@ body {
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-weight: 500;
+  line-height: 1.25rem;
   text-decoration: none;
   color: var(--foreground);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .button:hover {
@@ -252,16 +231,18 @@ body {
 }
 
 .site-footer {
-  padding: 1rem 1.5rem 1.5rem;
   color: var(--muted);
   font-size: 0.8125rem;
 }
 
-/* A game theme's credit line shows only while that theme is on; its stylesheet reveals it. */
+/* A game theme's credit line shows only while that theme is on; its stylesheet
+   reveals it. The padding sits on the credit, so the footer takes no space on
+   the default look. */
 .theme-credit {
   display: none;
-  max-width: 40rem;
+  max-width: 43rem;
   margin: 0 auto;
+  padding: 1rem 1.5rem 1.5rem;
 }
 
 .theme-credit__short {
@@ -279,10 +260,6 @@ body {
   border: 2px solid var(--border);
   background: var(--surface);
   color: var(--foreground);
-}
-
-.home-tour {
-  margin-top: 4rem;
 }
 
 .theme-tour {

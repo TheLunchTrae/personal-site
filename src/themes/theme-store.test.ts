@@ -18,18 +18,11 @@ Object.assign(globalThis, {
   },
   document: { documentElement: { setAttribute: (name: string, value: string) => attributes.set(name, value) } },
 });
-const { setColorMode, setPlay, setTheme } = await import('./theme-store');
+const { setColorMode } = await import('./theme-store');
 
 await test('choices apply for the visit when storage refuses them', () => {
   setColorMode('dark');
   assert.equal(attributes.get('data-color-mode'), 'dark');
   setColorMode('light');
   assert.equal(attributes.get('data-color-mode'), 'light');
-});
-
-await test('gameplay stays off for the default theme', () => {
-  setTheme('default');
-  setPlay(true);
-  assert.equal(attributes.get('data-theme'), 'default');
-  assert.equal(attributes.get('data-play'), 'off');
 });

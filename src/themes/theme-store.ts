@@ -39,7 +39,18 @@ const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
 
 const listeners = new Set<() => void>();
 // The visitor's choices live here, so they apply for the visit even when storage refuses them.
-const memory: { choices?: Choices; failed: ThemeState['failed']; snapshot?: ThemeState } = { failed: null };
+const memory: {
+  choices?: Choices;
+  failed: ThemeState['failed'];
+  snapshot?: ThemeState;
+  media?: MediaQueryList;
+} = { failed: null };
+
+// One list for the visit, so the listener is removed from the list it was added to.
+function reducedMotionMedia(): MediaQueryList {
+  memory.media ??= window.matchMedia(reducedMotionQuery);
+  return memory.media;
+}
 
 function readStorage(key: string): string | null {
   try {
@@ -75,7 +86,7 @@ function choices(): Choices {
 
 function computeState(): ThemeState {
   const { theme, colorMode, play } = choices();
-  const reducedMotion = window.matchMedia(reducedMotionQuery).matches;
+  const reducedMotion = reducedMotionMedia().matches;
   return {
     theme,
     colorMode,
@@ -107,7 +118,7 @@ function onStorage(event: StorageEvent): void {
 }
 
 function subscribe(listener: () => void): () => void {
-  const media = window.matchMedia(reducedMotionQuery);
+  const media = reducedMotionMedia();
   if (listeners.size === 0) {
     media.addEventListener('change', publish);
     window.addEventListener('storage', onStorage);

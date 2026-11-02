@@ -41,7 +41,7 @@ function runBootScript(stored: Stored, reducedMotion: boolean): Map<string, stri
   return attributes;
 }
 
-await test('the boot script resolves theme, color mode and gameplay like the theme store', () => {
+await test('the boot script resolves theme, color mode and gameplay like the registry helpers', () => {
   const themes = ['default', ...gameThemes.map((theme) => theme.id), 'retired-theme', null];
   const modes = [...colorModes, 'sepia', null];
   const plays = ['on', 'off', null] as const;

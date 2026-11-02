@@ -5,13 +5,13 @@ after the game that inspired it, restyles every page, and offers gameplay
 navigation that the visitor can turn off. With gameplay off, the site stays in
 the theme.
 
-No game theme is registered yet. Until one is, the site shows only the
-default look and its color mode control: the theme picker, the home page tour
-and the footer credits render nothing.
+While no game theme is registered, the site shows only the default look and
+its color mode control: the theme picker, the home page's theme invite and
+tour, and the footer credits render nothing.
 
 ## State
 
-Three attributes on `<html>` hold the whole state. The head script in
+Three attributes on `<html>` hold the visitor's choices. The head script in
 `src/themes/registry.ts` sets them from `localStorage` before first paint, and
 `src/themes/theme-store.ts` keeps them current after hydration.
 
@@ -29,9 +29,11 @@ Three attributes on `<html>` hold the whole state. The head script in
 - A theme whose gameplay cannot run (no WebGL, a failed chunk, a render
   error) has gameplay off for the rest of the visit without changing the
   stored choice. Turning gameplay back on retries it.
-- Choices apply for the visit even when the browser refuses storage.
+- Choices apply for the visit even when the browser refuses storage. A
+  gameplay failure is kept in memory for the visit only.
 - `src/themes/registry.test.ts` checks that the head script resolves state like
-  the registry helpers, and `src/themes/theme-store.test.ts` covers the store.
+  the registry helpers, and `src/themes/theme-store.test.ts` checks that
+  choices apply when storage refuses them.
 
 ## Shell
 
@@ -42,11 +44,12 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
   `--surface`, and `color-scheme`.
 - `.site-header`, which holds `.theme-controls` with its `select` elements and
   `.theme-controls__play` (`aria-pressed`).
-- `.page`, `.prose-page` with `h1`, `h2`, `p`, `.lede`;
-  `.influence-section` holds each influence blurb on a theme's influence page;
+- `.page`, `.prose-page` with `h1`, `h2`, `p`;
   `.prose-page[data-section='home']` is the home page.
-- `.button`, `.home-tour`, `.theme-tour__card`, `.theme-tour__name`,
-  `.theme-tour__actions`, `.theme-tour__story`.
+- `.content-section[data-content='<file name>']`, one per Markdown file from
+  `content/`; see [Content](#content).
+- `.button`, `.theme-tour__card`, `.theme-tour__name`, `.theme-tour__actions`,
+  `.theme-tour__story`.
 - `.game-notice`, the shared notice shown when a theme's gameplay cannot
   start.
 - `.play-layer`, the slot that holds gameplay between the header and the page.
@@ -55,13 +58,16 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
 - `.site-footer` and `.theme-credit[data-credit-for='<id>']`, which each theme
   reveals for itself. The credit holds `.theme-credit__full` and
   `.theme-credit__short` (hidden by default, and the same text when the
-  owner's wording is required) for gameplay that covers the page. Keep one of them visible in every state, gameplay on or off.
+  owner's wording is required) for gameplay that covers the page. Keep one of
+  them visible in every state, gameplay on or off.
 
 ## Order
 
 `gameThemes` in `src/themes/registry.ts` is the one place that sets the order
 of the game themes. The home page tour, the theme picker and the footer
-credits all follow it, so reordering its entries reorders the site.
+credits all follow it, so reordering its entries reorders the site. The order
+of the home page's sections is set by the `order` front matter of the files in
+`content/home/`; see `content/README.md`.
 
 ## Add a game theme
 
@@ -72,8 +78,8 @@ credits all follow it, so reordering its entries reorders the site.
    shorter form for gameplay that covers the page, or the same text when the
    wording is required), `pitch` (one line for the tour), and `storyTitle`.
    While no theme is registered, `GameThemeId` is `never`, and a few lint and
-   type exceptions say so; the first theme makes them fail as unused, so
-   delete them with it.
+   type exceptions, plus a `String()` in `storyHref`, say so; the first theme
+   makes them fail as unused, so delete them with it.
 2. Create `src/themes/<id>/` with:
    - `<id>.css`: every rule scoped under `:root[data-theme='<id>']`, including
      `.theme-credit[data-credit-for='<id>'] { display: block; }`. Import it in
@@ -84,12 +90,13 @@ credits all follow it, so reordering its entries reorders the site.
    `next/dynamic` and `ssr: false`. The map is typed by the registry, so the
    build fails until this step is done.
 4. Add the influence page at `src/app/influences/<id>/page.tsx`: a server
-   component that renders an `<article className="prose-page">` with the
-   page's `h1`, then `<InfluenceSections sections={await readInfluence('<id>')} />`
-   from `src/site/influence.tsx`. The blurbs themselves are Markdown files;
-   see [Influence blurbs](#influence-blurbs). The tour, the theme picker, the
-   footer credit, and the gameplay's last destination pick the theme up from
-   the registry.
+   component that renders an `<article className="prose-page">` holding a
+   `ContentBlock` from `src/site/content.tsx` for each section that
+   `readSections('influences/<id>')` returns. Create
+   `content/influences/<id>/` with the theme's blurb files, left empty for
+   Trae to write, and list them in `content/README.md`. The tour, the theme
+   picker, the footer credit, and the gameplay's last destination pick the
+   theme up from the registry.
 5. Load any display font with `next/font` and `preload: false`, and expose it
    as a CSS variable on `<html>` in `src/app/layout.tsx`. Use only fonts whose
    license allows web embedding. A self-hosted font lives in
@@ -99,53 +106,29 @@ credits all follow it, so reordering its entries reorders the site.
    the font file itself. Declare only the weights the font ships, and use only
    those in CSS.
 
-## Influence blurbs
+## Content
 
-Each theme's influence page reads its text from Markdown files in
-`content/influences/<id>/`, one file per section, so each blurb can be written
-and edited on its own. A theme with several sections, such as one per game in
-a series, has one file for each. A theme with no files yet shows an empty
-influence page.
+The site's prose, including each theme's influence blurbs, is written in
+Markdown files under `content/`. `content/README.md` maps each file to where it
+appears and describes the format. Markdown is only how the text is written;
+the theme decides how it looks.
 
-A file can start with front matter that sets its heading and its place on the
-page:
-
-```md
----
-title: Black Ops 1
-order: 1
----
-
-The blurb, in GitHub-flavored Markdown.
-```
-
-- `title` becomes the section's heading. Leave it out for a section without
-  one.
-- `order` is a whole number; sections sort by it, then by file name. A file
-  without one has order 0.
-- Front matter takes only those two keys, so a typo fails the build instead of
-  disappearing.
-- Raw HTML in a blurb is not rendered.
-
-Markdown is only how a blurb is written; the theme decides how it looks.
-`InfluenceSections` renders plain semantic elements (`h2`, `p`, `ul`, `em`,
-`blockquote`, `table`) inside one `section.influence-section` per file, with
-no prose styles of its own. `globals.css` only restores list markers, link
-underlines and table borders, drawn from the theme tokens. A theme styles the
-blurbs with its fonts, colors and panels under
-`:root[data-theme='<id>'] .influence-section`. When CSS is not enough, such as
-a heading that needs extra markup, the influence page passes `components` to
-`InfluenceSections` to replace the element for that Markdown node.
-
-Server components read and render the files when the site builds, so no
-Markdown parser reaches the browser.
+`ContentBlock` renders a file as plain semantic elements (`h1`, `h2`, `p`,
+`ul`, `em`, `blockquote`, `table`) inside one `section.content-section`, with
+`data-content` set to the file name and no prose styles of its own.
+`globals.css` only restores list markers, link underlines and table borders,
+drawn from the theme tokens. A theme styles the content with its fonts,
+colors and panels under `:root[data-theme='<id>'] .content-section`. When CSS
+is not enough, such as a heading that needs extra markup, the page passes
+`components` to `ContentBlock` to replace the element for that Markdown node.
 
 ## Gameplay contract
 
 `PlayProps` gives the component:
 
-- `sections`: the pages gameplay can reach, in order: the site's pages (Home,
-  for now), then the theme's own influence page with id `story`. Navigate with
+- `sections`: the pages gameplay can reach, in order: the site's pages (Home),
+  then the theme's own influence page with id `story`. Each has an `href`, a
+  `label`, and a short uppercase `tag` for in-game signage. Navigate with
   `useRouter().push(section.href)`; read the current page with
   `usePathname()`.
 - `reducedMotion`: whether the visitor prefers reduced motion.

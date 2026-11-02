@@ -4,13 +4,8 @@ import Link from 'next/link';
 import { gameThemes, storyHref } from './registry';
 import { setTheme, useThemeState } from './theme-store';
 
-interface ThemeTourProps {
-  /** Heading level of each card title, one below the heading the tour sits under. */
-  readonly heading: 'h2' | 'h3';
-}
-
 /** The game themes as a tour: switch into each one, then read what that game taught me. */
-export function ThemeTour({ heading: Heading }: ThemeTourProps) {
+export function ThemeTour() {
   const { theme: active } = useThemeState();
 
   return (
@@ -18,8 +13,8 @@ export function ThemeTour({ heading: Heading }: ThemeTourProps) {
       {gameThemes.map((theme) => {
         const on = theme.id === active;
         return (
-          <li key={theme.id} className="theme-tour__card" data-tour-theme={theme.id}>
-            <Heading className="theme-tour__name">{theme.name}</Heading>
+          <li key={theme.id} className="theme-tour__card">
+            <h3 className="theme-tour__name">{theme.name}</h3>
             <p>{theme.pitch}</p>
             <div className="theme-tour__actions">
               <button
