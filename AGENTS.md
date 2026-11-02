@@ -134,7 +134,7 @@ Select checks for the change:
 
 | Change                  | First checks                                     |
 | ----------------------- | ------------------------------------------------ |
-| Source                  | `ts:lint`, `ts:type`, `ts:build`                 |
+| Source                  | `ts:lint`, `ts:type`, `ts:test`, `ts:build`      |
 | Dependencies or exports | `ts:audit`, `ts:knip`                            |
 | Formatting              | `ts:fmt:check`; `ts:standards` applies autofixes |
 
@@ -157,8 +157,9 @@ Keep module bindings immutable.
   invariant and why restructuring loses.
 - Review changes to `.oxlintrc.json`, `tsconfig.json`, the scripts, and the
   mise tasks for lost coverage, and justify every relaxation.
-- A behavior change needs a test that fails without it. The site has no test
-  runner yet; add one with the first logic worth testing.
+- A behavior change needs a test that fails without it. Tests run with
+  `bun test` (`mise run ts:test`); write them with `node:test` and
+  `node:assert`, and put each `*.test.ts` file next to the module it covers.
 
 ## Git
 

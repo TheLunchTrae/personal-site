@@ -27,16 +27,21 @@ The tasks are verified on Linux, where CI runs. On Windows, use Git Bash with mi
 
 Project workflows run through mise:
 
-| Task                       | What it does                                                           |
-| -------------------------- | ---------------------------------------------------------------------- |
-| `mise run standards`       | Applies lint autofixes and formats the tree                            |
-| `mise run standards:check` | The CI gate: secrets, hygiene, lint, types, format, audit, knip, build |
-| `mise run ts:build`        | Static export to `out/`                                                |
-| `mise run ts:lint`         | Suppression-form check, then Oxlint                                    |
-| `mise run ts:type`         | `tsc`, after generating the Next.js route types                        |
-| `mise run ts:lock`         | Refreshes `bun.lock` after a dependency change                         |
+| Task                       | What it does                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------- |
+| `mise run standards`       | Applies lint autofixes and formats the tree                                   |
+| `mise run standards:check` | The CI gate: secrets, hygiene, lint, types, format, audit, knip, tests, build |
+| `mise run ts:build`        | Static export to `out/`                                                       |
+| `mise run ts:lint`         | Suppression-form check, then Oxlint                                           |
+| `mise run ts:type`         | `tsc`, after generating the Next.js route types                               |
+| `mise run ts:test`         | `bun test`                                                                    |
+| `mise run ts:lock`         | Refreshes `bun.lock` after a dependency change                                |
 
 `mise tasks` lists the rest. To preview the production build, serve `out/` with any static server, for example `bunx serve out`.
+
+### Content and themes
+
+The site's text lives in Markdown files under `content/`; `content/README.md` maps each file to where it appears. `docs/themes.md` describes the theme system: the color mode control and how a game theme plugs in.
 
 ### Static export limits
 

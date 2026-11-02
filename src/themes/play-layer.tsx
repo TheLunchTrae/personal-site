@@ -1,0 +1,82 @@
+'use client';
+
+import { Component, type ComponentType, type ReactNode } from 'react';
+import { type GameSection, gameSections } from '@/site/sections';
+import { gameTheme, type GameThemeId, isGameThemeId } from './registry';
+import { markGameplayFailed, setPlay, useThemeState } from './theme-store';
+
+/** What every game theme's gameplay component receives. docs/themes.md describes the contract. */
+export interface PlayProps {
+  /** The pages gameplay can reach, in order: the core pages, then the theme's own influence page. */
+  readonly sections: readonly GameSection[];
+  /** Whether the visitor prefers reduced motion. Gameplay starts only when they turn it on themselves. */
+  readonly reducedMotion: boolean;
+  /** Turns gameplay off from inside the game. The plain site stays themed. */
+  readonly onExit: () => void;
+  /** Reports that the game cannot run here, so gameplay turns off for this visit and a notice explains it. */
+  readonly onFail: () => void;
+}
+
+/*
+ * Each game theme's gameplay loads only while that theme is on with gameplay
+ * on, through `next/dynamic` with `ssr: false`, so its engine never reaches
+ * other visitors. The Record type makes a game theme added to the registry
+ * fail to compile until it plugs in here.
+ */
+const players: Record<GameThemeId, ComponentType<PlayProps>> = {};
+
+interface BoundaryState {
+  readonly failed: boolean;
+}
+
+// A game that fails to load or start never takes the page down with it: the
+// page renders without the game, and gameplay turns off.
+class GameBoundary extends Component<{ readonly children: ReactNode; readonly onFail: () => void }, BoundaryState> {
+  override state: BoundaryState = { failed: false };
+
+  static getDerivedStateFromError(): BoundaryState {
+    return { failed: true };
+  }
+
+  override componentDidCatch(): void {
+    this.props.onFail();
+  }
+
+  override render(): ReactNode {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
+/** Mounts the active game theme's gameplay, or a notice while that theme's gameplay could not start. */
+export function PlayLayer() {
+  const { theme, play, reducedMotion, failed } = useThemeState();
+  if (!isGameThemeId(theme)) {
+    return null;
+  }
+  // eslint-disable-next-line typescript/no-unnecessary-condition -- no game theme is registered, so `theme` is never here; this exception fails as unused once one is.
+  if (failed === theme) {
+    return (
+      <p className="game-notice" role="status">
+        {gameTheme(theme).name} gameplay couldn&apos;t start in this browser, so it&apos;s off. Everything on the site
+        works without it.
+      </p>
+    );
+  }
+  if (!play) {
+    return null;
+  }
+  const Player = players[theme];
+  const fail = () => markGameplayFailed(theme);
+  const exit = () => {
+    setPlay(false);
+    // The game's own controls unmount, so focus moves to the switch that brings them back.
+    document.querySelector<HTMLElement>('.theme-controls__play')?.focus();
+  };
+  // @ts-expect-error -- no game theme is registered, so `Player` is never; this exception fails as unused once one is.
+  const game = <Player sections={gameSections(theme)} reducedMotion={reducedMotion} onExit={exit} onFail={fail} />;
+  return (
+    <GameBoundary key={theme} onFail={fail}>
+      {game}
+    </GameBoundary>
+  );
+}

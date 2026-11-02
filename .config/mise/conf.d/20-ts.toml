@@ -57,6 +57,11 @@ description = "Fail on unused dependencies, exports, and files"
 depends = ["ts:install"]
 run = "bun run knip"
 
+[tasks."ts:test"]
+description = "Run TypeScript/JavaScript tests"
+depends = ["ts:install"]
+run = "bun run test"
+
 [tasks."ts:build"]
 description = "Build the static export into out/"
 depends = ["ts:install"]
@@ -71,5 +76,5 @@ run = "bun run standards"
 description = "Run the TypeScript/JavaScript standards CI gate"
 # Typegen runs once before lint and type; the build runs after the static
 # checks because `next typegen` and `next build` both write .next/.
-depends = ["ts:lint", "ts:type", "ts:fmt:check", "ts:audit", "ts:knip"]
+depends = ["ts:lint", "ts:type", "ts:fmt:check", "ts:audit", "ts:knip", "ts:test"]
 run = "bun run build"

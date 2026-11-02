@@ -1,8 +1,38 @@
 @import 'tailwindcss';
 
+/* Theme tokens. `data-theme` on <html> picks the look. The default look
+   follows `data-color-mode` (system, light or dark); each game theme sets
+   these same tokens in its own stylesheet and ignores the color mode. */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --muted: #5c5c5c;
+  --border: #d9d9d9;
+  --accent: #1f4fd1;
+  --surface: #f5f5f5;
+  color-scheme: light;
+}
+
+:root[data-theme='default'][data-color-mode='dark'] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #a3a3a3;
+  --border: #2e2e2e;
+  --accent: #8fb0ff;
+  --surface: #161616;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme='default'][data-color-mode='system'] {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --muted: #a3a3a3;
+    --border: #2e2e2e;
+    --accent: #8fb0ff;
+    --surface: #161616;
+    color-scheme: dark;
+  }
 }
 
 @theme inline {
@@ -12,15 +42,276 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+.page:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 0.75rem;
+  background: var(--background);
+  color: var(--foreground);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+}
+
+.theme-controls:not([data-hydrated]) {
+  visibility: hidden;
+}
+
+.theme-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.theme-controls__field {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--muted);
+}
+
+.theme-controls select,
+.theme-controls__play {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--surface);
+  color: var(--foreground);
+  font: inherit;
+}
+
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.prose-page {
+  width: 100%;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+  line-height: 1.65;
+}
+
+.prose-page[data-section='home'] {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 48rem;
+  padding: 6rem 1.5rem;
+}
+
+.prose-page h1 {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 40rem) {
+  .prose-page h1 {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.prose-page h2 {
+  margin-top: 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.prose-page p {
+  margin-top: 1rem;
+}
+
+/* The home intro's text under the name is the lede. */
+.prose-page[data-section='home'] [data-content='intro'] p {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--muted);
+}
+
+.prose-page[data-section='home'] .content-section + .content-section {
+  margin-top: 4rem;
+}
+
+/* Markdown content renders as plain elements inside .content-section.
+   Tailwind's reset strips list markers and link styling, so these base rules
+   restore markers, spacing and borders from the theme tokens. :where() keeps
+   them at zero specificity, so unlayered component rules (the theme tour) and
+   every theme's own rules win without a fight. A section's first element
+   drops its top margin, over the .prose-page heading and paragraph rules. */
+.content-section > :first-child {
+  margin-top: 0;
+}
+
+:where(.content-section) :where(ul, ol) {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+:where(.content-section) :where(ul) {
+  list-style: disc;
+}
+
+:where(.content-section) :where(ol) {
+  list-style: decimal;
+}
+
+:where(.content-section) :where(a:not(.button)) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+:where(.content-section) :where(blockquote) {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--border);
+  color: var(--muted);
+}
+
+:where(.content-section) :where(table) {
+  margin-top: 1rem;
+  border-collapse: collapse;
+}
+
+:where(.content-section) :where(th, td) {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-decoration: none;
+  color: var(--foreground);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button:hover {
+  background: var(--surface);
+}
+
+.site-footer {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+/* A game theme's credit line shows only while that theme is on; its stylesheet
+   reveals it. The padding sits on the credit, so the footer takes no space on
+   the default look. */
+.theme-credit {
+  display: none;
+  max-width: 43rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.theme-credit__short {
+  display: none;
+}
+
+/* Shown by the shared gameplay layer when a theme's gameplay cannot start. */
+.game-notice {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 30;
+  max-width: 22rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.theme-tour {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 40rem) {
+  .theme-tour {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.theme-tour__card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+
+.theme-tour__name {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.prose-page .theme-tour__card p {
+  margin-top: 0.5rem;
+  flex: 1;
+  color: var(--muted);
+}
+
+.theme-tour__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.theme-tour__actions .button {
+  margin-top: 0;
+  background: var(--background);
+  cursor: pointer;
+}
+
+.theme-tour__story {
+  font-size: 0.875rem;
+  color: var(--accent);
+  text-underline-offset: 0.2em;
 }
