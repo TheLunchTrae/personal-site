@@ -1,0 +1,17 @@
+# The enforcement surface. The leading catch-all is deliberate: lint and type
+# suppressions can live anywhere, so every change needs the owner's review.
+# CODEOWNERS alone does not dismiss stale approvals or prevent bypass; see the
+# branch protection checklist in README.md. Linter config patterns are
+# unanchored because a nested config can shadow the wall for its subtree.
+* @TheLunchTrae
+.oxfmtrc.* @TheLunchTrae
+.oxlintrc.* @TheLunchTrae
+/.config/mise/ @TheLunchTrae
+/.github/ @TheLunchTrae
+/AGENTS.md @TheLunchTrae
+/bunfig.toml @TheLunchTrae
+/knip.jsonc @TheLunchTrae
+/next.config.ts @TheLunchTrae
+/package.json @TheLunchTrae
+/scripts/ @TheLunchTrae
+/tsconfig.json @TheLunchTrae
