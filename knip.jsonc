@@ -1,0 +1,8 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  // Knip's Next.js plugin supplies the app router entries and next.config.ts.
+  "entry": ["scripts/*.mjs"],
+  "project": ["src/**/*.{cts,mts,ts,tsx,css}", "scripts/**/*.mjs"],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": true,
+}

@@ -1,0 +1,75 @@
+[tools]
+bun = "1.4.4"
+
+[tasks."ts:install"]
+description = "Install Bun-managed TypeScript/JavaScript dependencies"
+depends = ["ts:lock:check"]
+run = "bun install --frozen-lockfile"
+
+[tasks."ts:lock"]
+description = "Refresh the Bun lockfile"
+run = "bun install"
+
+[tasks."ts:lock:check"]
+description = "Ensure the Bun lockfile is present"
+run = """
+if [ ! -f bun.lock ]; then
+  echo "bun.lock is required for TypeScript/JavaScript CI. Run mise run ts:lock and commit the generated lockfile." >&2
+  exit 1
+fi
+"""
+# mise runs inline tasks with cmd on Windows, so the POSIX check needs its own form.
+run_windows = "if not exist bun.lock (echo bun.lock is required for TypeScript/JavaScript CI. Run mise run ts:lock and commit the generated lockfile. 1>&2 & exit /b 1)"
+
+[tasks."ts:fmt"]
+description = "Format TypeScript/JavaScript"
+depends = ["ts:install"]
+run = "bun run format"
+
+[tasks."ts:fmt:check"]
+description = "Check TypeScript/JavaScript formatting"
+depends = ["ts:install"]
+run = "bun run format:check"
+
+[tasks."ts:typegen"]
+description = "Generate Next.js route types into .next/types"
+depends = ["ts:install"]
+run = "bun run typegen"
+
+[tasks."ts:lint"]
+description = "Lint TypeScript/JavaScript"
+# Type-aware lint rules read the generated route types.
+depends = ["ts:typegen"]
+run = "bun run lint"
+
+[tasks."ts:type"]
+description = "Run TypeScript type checks"
+depends = ["ts:typegen"]
+run = "bun run typecheck"
+
+[tasks."ts:audit"]
+description = "Audit TypeScript/JavaScript dependencies"
+depends = ["ts:install"]
+run = "bun run audit"
+
+[tasks."ts:knip"]
+description = "Fail on unused dependencies, exports, and files"
+depends = ["ts:install"]
+run = "bun run knip"
+
+[tasks."ts:build"]
+description = "Build the static export into out/"
+depends = ["ts:install"]
+run = "bun run build"
+
+[tasks."ts:standards"]
+description = "Run the TypeScript/JavaScript standards workflow with autofixes"
+depends = ["ts:install"]
+run = "bun run standards"
+
+[tasks."ts:standards:check"]
+description = "Run the TypeScript/JavaScript standards CI gate"
+# Typegen runs once before lint and type; the build runs after the static
+# checks because `next typegen` and `next build` both write .next/.
+depends = ["ts:lint", "ts:type", "ts:fmt:check", "ts:audit", "ts:knip"]
+run = "bun run build"
