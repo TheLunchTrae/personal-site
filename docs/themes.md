@@ -43,6 +43,7 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
 - `.site-header`, which holds `.theme-controls` with its `select` elements and
   `.theme-controls__play` (`aria-pressed`).
 - `.page`, `.prose-page` with `h1`, `h2`, `p`, `.lede`;
+  `.influence-section` holds each influence blurb on a theme's influence page;
   `.prose-page[data-section='home']` is the home page.
 - `.button`, `.home-tour`, `.theme-tour__card`, `.theme-tour__name`,
   `.theme-tour__actions`, `.theme-tour__story`.
@@ -82,9 +83,13 @@ credits all follow it, so reordering its entries reorders the site.
 3. Register the component in `players` in `src/themes/play-layer.tsx` with
    `next/dynamic` and `ssr: false`. The map is typed by the registry, so the
    build fails until this step is done.
-4. Add the influence page at `src/app/influences/<id>/page.tsx` using
-   `.prose-page`. The tour, the theme picker, the footer credit, and the
-   gameplay's last destination pick the theme up from the registry.
+4. Add the influence page at `src/app/influences/<id>/page.tsx`: a server
+   component that renders an `<article className="prose-page">` with the
+   page's `h1`, then `<InfluenceSections sections={await readInfluence('<id>')} />`
+   from `src/site/influence.tsx`. The blurbs themselves are Markdown files;
+   see [Influence blurbs](#influence-blurbs). The tour, the theme picker, the
+   footer credit, and the gameplay's last destination pick the theme up from
+   the registry.
 5. Load any display font with `next/font` and `preload: false`, and expose it
    as a CSS variable on `<html>` in `src/app/layout.tsx`. Use only fonts whose
    license allows web embedding. A self-hosted font lives in
@@ -93,6 +98,47 @@ credits all follow it, so reordering its entries reorders the site.
    font with a link to that license on the theme's influence page; never link
    the font file itself. Declare only the weights the font ships, and use only
    those in CSS.
+
+## Influence blurbs
+
+Each theme's influence page reads its text from Markdown files in
+`content/influences/<id>/`, one file per section, so each blurb can be written
+and edited on its own. A theme with several sections, such as one per game in
+a series, has one file for each. A theme with no files yet shows an empty
+influence page.
+
+A file can start with front matter that sets its heading and its place on the
+page:
+
+```md
+---
+title: Black Ops 1
+order: 1
+---
+
+The blurb, in GitHub-flavored Markdown.
+```
+
+- `title` becomes the section's heading. Leave it out for a section without
+  one.
+- `order` is a whole number; sections sort by it, then by file name. A file
+  without one has order 0.
+- Front matter takes only those two keys, so a typo fails the build instead of
+  disappearing.
+- Raw HTML in a blurb is not rendered.
+
+Markdown is only how a blurb is written; the theme decides how it looks.
+`InfluenceSections` renders plain semantic elements (`h2`, `p`, `ul`, `em`,
+`blockquote`, `table`) inside one `section.influence-section` per file, with
+no prose styles of its own. `globals.css` only restores list markers, link
+underlines and table borders, drawn from the theme tokens. A theme styles the
+blurbs with its fonts, colors and panels under
+`:root[data-theme='<id>'] .influence-section`. When CSS is not enough, such as
+a heading that needs extra markup, the influence page passes `components` to
+`InfluenceSections` to replace the element for that Markdown node.
+
+Server components read and render the files when the site builds, so no
+Markdown parser reaches the browser.
 
 ## Gameplay contract
 
