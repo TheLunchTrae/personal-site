@@ -3,6 +3,22 @@
 Read `CONTEXT.md` first if it exists. Then read the docs that own the change
 before changing architecture or domain language.
 
+## Project Docs
+
+This is a personal site, so `README.md` stays intentionally minimal: what the
+site is and where it lives. Do not add setup, workflow, or architecture notes
+to it. Put context that agents need in this file, and general developer docs
+for people and agents in `docs/`.
+
+- [docs/development.md](docs/development.md): stack, local setup, mise tasks,
+  and static export limits.
+- [docs/deployment.md](docs/deployment.md): CI and Pages workflows, one-time
+  repository and DNS setup, and the base path.
+- [docs/themes.md](docs/themes.md): the theme system, color mode, and how a
+  game theme plugs in.
+- [content/README.md](content/README.md): where each content file appears and
+  its Markdown format.
+
 ## Commands
 
 `mise run` is the entry point for project workflows; tasks wrap the toolchain.
