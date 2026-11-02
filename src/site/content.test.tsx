@@ -22,7 +22,7 @@ async function read(files: Record<string, string>, folder = 'page'): Promise<rea
 
 await test('sections read in front matter order, then by file name', async () => {
   const sections = await read({
-    'page/black-ops-2.md': '﻿---\r\norder: 2\r\n--- \r\nSecond.\r\n',
+    'page/black-ops-2.md': '\uFEFF---\r\norder: 2\r\n--- \r\nSecond.\r\n',
     'page/black-ops-1.md': '---\norder: 1\n---\nFirst.\n',
     'page/intro.md': 'No front matter.\n',
     'page/empty.md': '---\n---\nEmpty front matter.\n',

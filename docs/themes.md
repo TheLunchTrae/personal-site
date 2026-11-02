@@ -118,9 +118,10 @@ the theme decides how it looks.
 `data-content` set to the file name and no prose styles of its own.
 `globals.css` adds only base spacing, list markers, link underlines and
 borders, drawn from the theme tokens and wrapped in `:where()` so any theme or
-component rule overrides them. It also styles the home intro's text as the
-lede and spaces the home sections apart. A theme styles the content with its fonts,
-colors and panels under `:root[data-theme='<id>'] .content-section`. When CSS
+component rule overrides them. A section's first element drops its top
+margin. It also styles the home intro's text as the lede and spaces the home
+sections apart. A theme styles the content with its fonts, colors and panels
+under `:root[data-theme='<id>'] .content-section`. When CSS
 is not enough, such as a heading that needs extra markup, the page passes
 `components` to `ContentBlock` to replace the element for that Markdown node.
 

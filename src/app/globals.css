@@ -169,9 +169,10 @@ body {
 /* Markdown content renders as plain elements inside .content-section.
    Tailwind's reset strips list markers and link styling, so these base rules
    restore markers, spacing and borders from the theme tokens. :where() keeps
-   them at zero specificity, so component rules (the theme tour) and every
-   theme's own rules win without a fight. */
-:where(.content-section) > :first-child {
+   them at zero specificity, so unlayered component rules (the theme tour) and
+   every theme's own rules win without a fight. A section's first element
+   drops its top margin, over the .prose-page heading and paragraph rules. */
+.content-section > :first-child {
   margin-top: 0;
 }
 

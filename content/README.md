@@ -15,8 +15,8 @@ the Mode control, stay in code.
 ## Format
 
 Write GitHub-flavored Markdown: headings, paragraphs, lists, links, tables.
-Raw HTML shows as literal text. The active theme styles the text, so write only the
-words and structure.
+Raw HTML shows as literal text. The active theme styles the text, so write
+only the words and structure.
 
 A file can start with front matter that sets its place among the other files
 in its folder:
