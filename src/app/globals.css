@@ -131,10 +131,6 @@ body {
   padding: 6rem 1.5rem;
 }
 
-.prose-page[data-section='home'] .button {
-  align-self: flex-start;
-}
-
 .prose-page h1 {
   font-size: 2.25rem;
   font-weight: 600;
@@ -171,43 +167,46 @@ body {
 }
 
 /* Markdown content renders as plain elements inside .content-section.
-   Tailwind's reset strips list markers and link styling, so restore them here
-   using only the theme tokens; fonts and everything else come from the active
-   theme. */
-.content-section ul,
-.content-section ol {
+   Tailwind's reset strips list markers and link styling, so these base rules
+   restore markers, spacing and borders from the theme tokens. :where() keeps
+   them at zero specificity, so component rules (the theme tour) and every
+   theme's own rules win without a fight. */
+:where(.content-section) > :first-child {
+  margin-top: 0;
+}
+
+:where(.content-section) :where(ul, ol) {
   margin-top: 1rem;
   padding-left: 1.5rem;
 }
 
-.content-section ul {
+:where(.content-section) :where(ul) {
   list-style: disc;
 }
 
-.content-section ol {
+:where(.content-section) :where(ol) {
   list-style: decimal;
 }
 
-.content-section a:not(.button) {
+:where(.content-section) :where(a:not(.button)) {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-.content-section blockquote {
+:where(.content-section) :where(blockquote) {
   margin-top: 1rem;
   padding-left: 1rem;
   border-left: 2px solid var(--border);
   color: var(--muted);
 }
 
-.content-section table {
+:where(.content-section) :where(table) {
   margin-top: 1rem;
   border-collapse: collapse;
 }
 
-.content-section th,
-.content-section td {
+:where(.content-section) :where(th, td) {
   padding: 0.25rem 0.75rem;
   border: 1px solid var(--border);
 }

@@ -116,8 +116,10 @@ the theme decides how it looks.
 `ContentBlock` renders a file as plain semantic elements (`h1`, `h2`, `p`,
 `ul`, `em`, `blockquote`, `table`) inside one `section.content-section`, with
 `data-content` set to the file name and no prose styles of its own.
-`globals.css` only restores list markers, link underlines and table borders,
-drawn from the theme tokens. A theme styles the content with its fonts,
+`globals.css` adds only base spacing, list markers, link underlines and
+borders, drawn from the theme tokens and wrapped in `:where()` so any theme or
+component rule overrides them. It also styles the home intro's text as the
+lede and spaces the home sections apart. A theme styles the content with its fonts,
 colors and panels under `:root[data-theme='<id>'] .content-section`. When CSS
 is not enough, such as a heading that needs extra markup, the page passes
 `components` to `ContentBlock` to replace the element for that Markdown node.

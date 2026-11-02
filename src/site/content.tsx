@@ -21,22 +21,25 @@ export interface ContentSection {
 }
 
 const contentRoot = path.join(process.cwd(), 'content');
-const frontMatter = /^---\n([\s\S]*?)\n---(?:\n|$)/u;
+const frontMatter = /^---[ \t]*\n(?:([\s\S]*?)\n)?---[ \t]*(?:\n|$)/u;
 
 function parseSection(slug: string, source: string, file: string): ContentSection {
-  // Files written on Windows use CRLF line endings.
-  const text = source.replaceAll('\r\n', '\n');
+  // Editors on Windows can save CRLF line endings and a byte order mark.
+  const text = source.replace(/^\uFEFF/u, '').replaceAll('\r\n', '\n');
   const match = frontMatter.exec(text);
-  let order = 0;
+  if (match === null && text.startsWith('---')) {
+    throw new Error(`${file}: front matter opens with --- but never closes with a --- line.`);
+  }
+  let order: number | undefined;
   for (const line of (match?.[1] ?? '').split('\n')) {
     const value = /^order:\s*(-?\d+)\s*$/u.exec(line)?.[1];
-    if (value !== undefined) {
+    if (value !== undefined && order === undefined) {
       order = Number(value);
     } else if (line.trim() !== '') {
-      throw new Error(`${file}: front matter takes only "order: <whole number>", not "${line}".`);
+      throw new Error(`${file}: front matter takes one "order: <whole number>" line, not "${line}".`);
     }
   }
-  return { slug, order, body: match === null ? text : text.slice(match[0].length) };
+  return { slug, order: order ?? 0, body: match === null ? text : text.slice(match[0].length) };
 }
 
 /** Reads the sections in a folder under content/, in order. A folder that does not exist has none. */
@@ -53,7 +56,7 @@ export async function readSections(folder: string, root = contentRoot): Promise<
   }
   const sections = await Promise.all(
     names
-      .filter((name) => name.endsWith('.md') && name !== 'README.md')
+      .filter((name) => name.endsWith('.md') && name.toLowerCase() !== 'readme.md')
       .map(async (name) => {
         const file = path.join(directory, name);
         return parseSection(name.slice(0, -'.md'.length), await readFile(file, 'utf8'), file);
@@ -73,7 +76,7 @@ interface ContentBlockProps {
 /**
  * Renders one section as GitHub-flavored Markdown: plain semantic elements
  * (`h1`, `p`, `ul`, `em`) inside `section.content-section`, which the active
- * theme styles. Raw HTML in a file is not rendered.
+ * theme styles. Raw HTML in a file shows as literal text.
  */
 export function ContentBlock({ section, components, children }: ContentBlockProps) {
   return (

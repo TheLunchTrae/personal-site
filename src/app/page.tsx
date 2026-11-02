@@ -13,15 +13,19 @@ const displays: Readonly<Record<string, ReactNode>> = {
   themes: <ThemeTour />,
 };
 
-// The theme invite has nothing to offer until a game theme is registered.
-const hidden = new Set(gameThemes.length > 0 ? [] : ['themes']);
-
 export default async function Home() {
   const sections = await readSections('home');
+  // A renamed file would silently drop its display, so the build fails instead.
+  for (const slug of Object.keys(displays)) {
+    if (!sections.some((section) => section.slug === slug)) {
+      throw new Error(`content/home/${slug}.md is missing; src/app/page.tsx shows a display after it.`);
+    }
+  }
   return (
     <article className="prose-page" data-section="home">
       {sections
-        .filter((section) => !hidden.has(section.slug))
+        // The theme invite has nothing to offer until a game theme is registered.
+        .filter((section) => section.slug !== 'themes' || gameThemes.length > 0)
         .map((section) => (
           <ContentBlock key={section.slug} section={section}>
             {displays[section.slug]}
