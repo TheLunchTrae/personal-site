@@ -1,10 +1,11 @@
 # Deployment
 
 The site is served at [traejks.dev](https://traejks.dev) from GitHub Pages. Two
-workflows in `.github/workflows` build and check it:
+workflows in `.github/workflows` check and deploy it:
 
 - `quality.yml` runs `mise run standards:check` on every pull request,
-  merge-queue group, and push to `main`. Its job is named `quality`.
+  merge-queue group, and push to `main` (it can also be run manually). Its job
+  is named `quality`.
 - `pages.yml` builds the site and deploys `out/` to GitHub Pages on every push
   to `main` (it can also be run manually).
 
