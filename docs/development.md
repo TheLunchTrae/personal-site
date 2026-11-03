@@ -59,7 +59,7 @@ how a game theme plugs in.
 
 [AGENTS.md](../AGENTS.md#traes-own-writing) lists the files that agents change
 only with Trae's explicit permission.
-Each tool's config repeats that list, so a change to it updates all three.
+Each tool's config repeats that list, so a change to the list updates all three configs.
 Each tool enforces what it can:
 
 - Claude Code: `ask` rules in `.claude/settings.json` prompt before Claude's
