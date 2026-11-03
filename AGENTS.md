@@ -179,19 +179,20 @@ Keep module bindings immutable.
 
 ## CSS Layout
 
-Let content and the viewport size the layout. Hardcode a layout or style value
-only where intrinsic sizing cannot express it.
+Let content and the viewport size the layout. Hardcode a size, position, or
+offset only where flex, grid, and relative sizing cannot express it.
 
 - Use flex for a single row or column and grid for layouts in two axes. Space
   items with `gap` rather than margins on each child.
 - Size with intrinsic and relative values: `auto`, `fr`, `min-content`,
-  `max-content`, percentages, `rem`, `ch`, viewport units, and `min()`,
-  `max()`, `clamp()`, and `minmax()`.
-- Use fixed pixel sizes, absolute or fixed positioning, and hand-tuned offsets
-  only where the design needs them, such as a pixel-art asset, an overlay, or
-  a game scene. Give each one a comment that says what it matches.
-- Prefer one fluid rule over a media query per breakpoint. Add a breakpoint
-  where the layout itself has to change.
+  `max-content`, percentages, `rem`, `ch`, small or dynamic viewport units
+  (`svh`, `dvh`), and `min()`, `max()`, `clamp()`, and `minmax()`.
+- Use fixed widths and heights, absolute or fixed positioning, and hand-tuned
+  offsets only where the design needs them, such as a pixel-art asset, an
+  overlay, or a game scene. Comment a value when its source is not obvious.
+  Pixel borders, outlines, and shadows are fine as they are.
+- Prefer fluid sizing over stacked breakpoints. Add a media query where the
+  layout itself has to change.
 
 ## Git
 
