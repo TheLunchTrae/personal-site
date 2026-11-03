@@ -74,9 +74,9 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
 of the game themes, which is the story order: a theme's place in the list is
 its chapter number (`chapterLabel`). The home page chapters, the picker and
 the footer credits all follow it, so reordering its entries reorders the site
-and renumbers the chapters. The order
-of the home page's sections is set by the `order` front matter of the files in
-`content/home/`; see `content/README.md`.
+and renumbers the chapters. The order of the home page's sections is set by
+the `order` front matter of the files in `content/home/`; see
+`content/README.md`.
 
 ## Add a game theme
 

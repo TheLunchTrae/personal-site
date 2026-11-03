@@ -35,7 +35,7 @@ export function ThemeControls() {
             }
           }}
         >
-          <option value="default">None</option>
+          <option value="default">Plain site</option>
           {gameThemes.map((option) => (
             <option key={option.id} value={option.id}>
               {option.name}

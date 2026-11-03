@@ -10,7 +10,7 @@ the Chapter and Colors controls, stay in code.
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `home/intro.md`                             | Top of the home page, the Meet Trae intro: your name and the line under it. The resume button follows it. |
 | `home/themes.md`                            | Home page invite to go through your story, followed by a card for each chapter (game).                    |
-| `influences/<theme id>/<section>.md`        | A chapter's story page, one section per file. Each theme adds its own files, left empty.                  |
+| `influences/<theme id>/<section>.md`        | A chapter's story page, one section per file. Each chapter adds its own files, left empty.                |
 | `influences/minecraft/influence.md`         | The Minecraft chapter: how Minecraft inspired you.                                                        |
 | `influences/geometry-dash/influence.md`     | The Geometry Dash chapter: how Geometry Dash inspired you.                                                |
 | `influences/call-of-duty/black-ops-1.md`    | The Call of Duty chapter, under "The TV wall · Black Ops": how Black Ops inspired you.                    |
