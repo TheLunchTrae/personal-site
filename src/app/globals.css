@@ -304,6 +304,16 @@ body {
   margin-top: 1.5rem;
 }
 
+/* A small line above a page's title, such as a story page's chapter. */
+.prose-page .page-kicker {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 /* A closing line under a page's content, such as a link to related pages. */
 .prose-page .page-aside {
   margin-top: 3rem;
@@ -350,6 +360,14 @@ body {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   background: var(--surface);
+}
+
+.theme-tour__chapter {
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .theme-tour__name {

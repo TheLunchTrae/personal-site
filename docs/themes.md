@@ -5,8 +5,12 @@ after the game that inspired it, restyles every page, and offers gameplay
 navigation that the visitor can turn off. With gameplay off, the site stays in
 the theme.
 
-Each game theme has an influence page about what the game meant to Trae and
-a credits page for everything the theme draws on.
+On the site the game themes are framed as the chapters of Trae's story: the
+home page introduces Trae, and each game theme is a phase of Trae's life and
+how that game inspired them as a developer. Visitor-facing copy calls a game
+theme a chapter and its influence page the chapter's story; the code keeps the
+theme names. Each game theme has an influence page about how the game inspired
+Trae and a credits page for everything the theme draws on.
 
 ## State
 
@@ -56,7 +60,8 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
   `.prose-page[data-section='home']` is the home page.
 - `.content-section[data-content='<file name>']`, one per Markdown file from
   `content/`; see [Content](#content).
-- `.button`, `.theme-tour__card`, `.theme-tour__name`, `.theme-tour__wordmark`
+- `.button`, `.theme-tour__card`, `.theme-tour__chapter` (the chapter label),
+  `.theme-tour__name`, `.theme-tour__wordmark`
   (a theme's title image, when it has one), `.theme-tour__actions`,
   `.theme-tour__story`.
 - `.game-notice`, the shared notice shown when a theme's gameplay cannot
@@ -75,10 +80,12 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
 ## Order
 
 `gameThemes` in `src/themes/registry.ts` is the one place that sets the order
-of the game themes. The home page tour, the theme picker and the footer
-credits all follow it, so reordering its entries reorders the site. The order
-of the home page's sections is set by the `order` front matter of the files in
-`content/home/`; see `content/README.md`.
+of the game themes, which is the story order: a theme's place in the list is
+its chapter number (`chapterLabel`). The home page chapters, the picker and
+the footer credits all follow it, so reordering its entries reorders the site
+and renumbers the chapters. The order of the home page's sections is set by
+the `order` front matter of the files in `content/home/`; see
+`content/README.md`.
 
 ## Add a game theme
 
@@ -86,8 +93,9 @@ of the home page's sections is set by the `order` front matter of the files in
    `src/themes/registry.ts`, and add its entry to `gameThemes` at the place it
    should appear: `id`, `name` (the game's name), `notice` (the not-affiliated
    note, in the owner's required wording when it has one), `pitch` (one line
-   for the tour), `storyTitle`, and `pages`, the theme's own pages besides its
-   influence and credits pages, each with an `id`, `href` and tab `label`.
+   for the theme's chapter card), `storyTitle`, and `pages`, the theme's own
+   pages besides its influence and credits pages, each with an `id`, `href` and
+   tab `label`.
 2. Create `src/themes/<id>/` with:
    - `<id>.css`: every rule for the shell scoped under
      `:root[data-theme='<id>']`, including
@@ -108,7 +116,8 @@ of the home page's sections is set by the `order` front matter of the files in
    component that renders an
    `<article className="prose-page" data-credit-for="<id>">` holding a
    `ContentBlock` from `src/site/content.tsx` for each section that
-   `readSections('influences/<id>')` returns. Create
+   `readSections('influences/<id>')` returns, after a `.page-kicker` line with
+   the theme's `chapterLabel` and name and an `h1` with its `storyTitle`. Create
    `content/influences/<id>/` with the theme's blurb files, left empty for
    Trae to write, and list them in `content/README.md`. End the page with a
    link to the theme's credits page (`creditsHref`). The tour, the theme

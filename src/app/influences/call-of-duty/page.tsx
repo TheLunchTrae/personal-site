@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import { ContentBlock, readSections } from '@/site/content';
-import { creditsHref, gameTheme } from '@/themes/registry';
+import { chapterLabel, creditsHref, gameTheme } from '@/themes/registry';
 
 const theme = gameTheme('call-of-duty');
 
@@ -26,6 +26,9 @@ export default async function CallOfDutyInfluence() {
   }
   return (
     <article className="prose-page" data-credit-for="call-of-duty">
+      <p className="page-kicker">
+        {chapterLabel(theme.id)} · {theme.name}
+      </p>
       <h1>{theme.storyTitle}</h1>
       {sections.map((section) => {
         const heading = menus[section.slug];
@@ -42,7 +45,7 @@ export default async function CallOfDutyInfluence() {
         );
       })}
       <p className="page-aside">
-        Fonts, art and other credits for this theme are on its{' '}
+        Fonts, art and other credits for this chapter&apos;s look are on its{' '}
         <Link href={creditsHref('call-of-duty')}>credits page</Link>.
       </p>
     </article>
