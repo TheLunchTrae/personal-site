@@ -51,6 +51,29 @@
   display: block;
 }
 
+/* The site tabs as menu entries; the open page's entry is marked in red. */
+:root[data-theme='call-of-duty'] .site-nav__item[data-nav-for='call-of-duty'] {
+  display: block;
+}
+
+:root[data-theme='call-of-duty'] .site-nav__tab {
+  padding: 0.125rem 0.625rem;
+  border-bottom-width: 2px;
+  font-family: var(--cod-display);
+  font-size: 1.125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+:root[data-theme='call-of-duty'] .site-nav__tab:hover {
+  color: var(--cod-ember);
+}
+
+:root[data-theme='call-of-duty'] .site-nav__tab[aria-current='page'] {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
 :root[data-theme='call-of-duty'] .site-header {
   border-color: var(--border);
   background: rgb(10 9 9 / 0.85);

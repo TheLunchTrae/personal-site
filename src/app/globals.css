@@ -76,8 +76,43 @@ body {
   position: relative;
   z-index: 20;
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem 1.5rem;
+}
+
+/* The site's tabs. Home shows in every theme. The default theme shows each
+   game theme's influence page; a game theme hides those and its stylesheet
+   reveals its own tabs (see docs/themes.md). The :where() keeps these rules
+   below a theme's reveal rule. */
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+:where(.site-nav__item[data-nav-scope='theme']),
+:where(:root:not([data-theme='default']) .site-nav__item[data-nav-scope='story']) {
+  display: none;
+}
+
+.site-nav__tab {
+  display: block;
+  padding: 0.25rem 0.625rem;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+}
+
+.site-nav__tab:hover {
+  color: var(--foreground);
+}
+
+.site-nav__tab[aria-current='page'] {
+  border-bottom-color: var(--accent);
+  color: var(--foreground);
 }
 
 .theme-controls:not([data-hydrated]) {
