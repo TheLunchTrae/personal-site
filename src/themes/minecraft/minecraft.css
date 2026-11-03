@@ -338,8 +338,13 @@ body:has(.blocks-close) .blocks-help {
   visibility: hidden;
 }
 
+/* The help and the touch controls span the page's room and the cue row, so
+   they sit at the bottom of the cue row without making it taller: an item
+   that spans the page's flexible row does not size the rows it spans. The
+   page keeps its room, and the controls stay put when the prompt shows. */
 .blocks-help {
-  grid-area: cue;
+  grid-row: page-start / cue-end;
+  grid-column: page;
   z-index: 15;
   align-self: end;
   justify-self: start;
@@ -377,7 +382,7 @@ body:has(.blocks-close) .blocks-help {
   justify-self: center;
 }
 
-/* At the open page's top right corner. */
+/* At the top right of the page's room, under the header. */
 .blocks-close {
   grid-area: page;
   align-self: start;
@@ -438,7 +443,7 @@ body:has(.blocks-close) .blocks-help {
   outline-offset: 1px;
 }
 
-/* The slot's number sits in its top left corner, over the icon's padding. */
+/* The slot's number sits in its top left corner, above the icon. */
 .blocks-hotbar__key {
   position: absolute;
   top: 1px;
@@ -473,10 +478,11 @@ body:has(.blocks-close) .blocks-help {
     clip-path: inset(50%);
   }
 
-  /* The stick and the jump button sit at the bottom corners of the page's
-     room, above the hotbar. */
+  /* The stick and the jump button sit at the bottom corners, above the
+     hotbar; see the help above for why they span two rows. */
   .blocks-touch {
-    grid-area: page;
+    grid-row: page-start / cue-end;
+    grid-column: page;
     z-index: 25;
     align-self: end;
     display: flex;
@@ -606,8 +612,8 @@ body:has(.blocks-close) .blocks-help {
     margin-inline-start: 0.25rem;
   }
 
-  /* The open page's corner is too narrow here, so the button sits on one
-     line between the page and the hotbar, and the page ends above it. */
+  /* The header's corner is too crowded here, so the button sits on one line
+     between the page and the hotbar, and the page ends above it. */
   .blocks-close {
     grid-area: cue;
     align-self: end;

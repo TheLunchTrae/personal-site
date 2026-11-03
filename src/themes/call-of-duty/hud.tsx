@@ -55,7 +55,7 @@ export function CallOfDutyHud({ sections, onExit }: { sections: readonly GameSec
   }, [progress.newRound]);
 
   return (
-    <div className="cod-hud">
+    <section className="cod-hud" aria-label="Game HUD">
       <div className="cod-hud-round" aria-hidden="true">
         <Tally round={round} />
       </div>
@@ -111,6 +111,6 @@ export function CallOfDutyHud({ sections, onExit }: { sections: readonly GameSec
           </>
         )}
       </div>
-    </div>
+    </section>
   );
 }

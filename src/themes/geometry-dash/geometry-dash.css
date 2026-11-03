@@ -173,7 +173,7 @@
 }
 
 /* The runner's strip. The level is drawn to fit its height, which scales
-   with the screen's width within limits; the placeholders above match it. */
+   with the screen's width within limits; the placeholders match it. */
 .dash-frame {
   position: relative;
   height: clamp(190px, 32vw, 300px);

@@ -434,7 +434,7 @@ export function CallOfDutyPlay({ sections, reducedMotion, onExit, onFail }: Play
   // Leaving the theme closes its audio, so a background tab never wakes it.
   useEffect(() => releaseSound, []);
 
-  // The HUD sits outside the stage, so it can pin to the bottom of the page itself.
+  // A sticky element stays inside its parent, so the HUD sits outside the stage to stick to the screen.
   return (
     <>
       <section className="cod-menu-stage" data-home={current === 'home'} aria-label="Page menu">
