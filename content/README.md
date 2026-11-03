@@ -6,11 +6,13 @@ the Mode control, stay in code.
 
 ## Where each file appears
 
-| File                                 | Where it appears                                                                                  |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `home/intro.md`                      | Top of the home page: your name and the line under it. The resume button follows it.              |
-| `home/themes.md`                     | Home page invite to try each game theme, followed by the theme tour. Hidden until a theme exists. |
-| `influences/<theme id>/<section>.md` | A theme's influence page, one section per file. Each theme adds its own files, left empty.        |
+| File                                 | Where it appears                                                                               |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `home/intro.md`                      | Top of the home page: your name and the line under it. The resume button follows it.           |
+| `home/themes.md`                     | Home page invite to try each game theme, followed by the theme tour.                           |
+| `influences/<theme id>/<section>.md` | A theme's influence page, one section per file. Each theme adds its own files, left empty.     |
+| `influences/minecraft/influence.md`  | The Minecraft influence page: what Minecraft meant to you.                                     |
+| `credits/<theme id>/<section>.md`    | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses. |
 
 ## Format
 

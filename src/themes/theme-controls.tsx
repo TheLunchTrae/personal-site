@@ -9,9 +9,9 @@ const subscribeNever = () => () => undefined;
 const colorModeLabels = { system: 'System', light: 'Light', dark: 'Dark' } as const;
 
 /**
- * The always-present theme controls. The theme picker shows once a game theme
- * is registered. Color mode belongs to the default look, so it shows only
- * there; the gameplay switch shows only for game themes.
+ * The always-present theme controls: the theme picker, then the color mode,
+ * which belongs to the default look and shows only there, or the gameplay
+ * switch, which shows only for game themes.
  */
 export function ThemeControls() {
   const { theme, colorMode, play } = useThemeState();
@@ -24,27 +24,25 @@ export function ThemeControls() {
 
   return (
     <div className="theme-controls" data-hydrated={hydrated ? '' : undefined}>
-      {gameThemes.length > 0 ? (
-        <label className="theme-controls__field">
-          <span>Theme</span>
-          <select
-            value={theme}
-            onChange={(event) => {
-              const next = event.currentTarget.value;
-              if (isThemeId(next)) {
-                setTheme(next);
-              }
-            }}
-          >
-            <option value="default">Default</option>
-            {gameThemes.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.name}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : null}
+      <label className="theme-controls__field">
+        <span>Theme</span>
+        <select
+          value={theme}
+          onChange={(event) => {
+            const next = event.currentTarget.value;
+            if (isThemeId(next)) {
+              setTheme(next);
+            }
+          }}
+        >
+          <option value="default">Default</option>
+          {gameThemes.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+      </label>
       {isGameThemeId(theme) ? (
         <button type="button" className="theme-controls__play" aria-pressed={play} onClick={() => setPlay(!play)}>
           Gameplay{' '}

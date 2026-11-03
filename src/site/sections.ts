@@ -12,6 +12,8 @@ export interface GameSection {
   readonly tag: string;
 }
 
+export type GameSectionId = GameSection['id'];
+
 const sitePages: readonly GameSection[] = [{ id: 'home', href: '/', label: 'Home', tag: 'HOME' }];
 
 // One stable list per theme, so gameplay effects keyed on it do not restart on every render.
@@ -25,4 +27,9 @@ export function gameSections(theme: GameThemeId): readonly GameSection[] {
     gameSectionLists.set(theme, list);
   }
   return list;
+}
+
+/** Normalizes a pathname to the trailing-slash form that `trailingSlash: true` serves. */
+export function sectionHref(pathname: string): string {
+  return pathname.endsWith('/') ? pathname : `${pathname}/`;
 }

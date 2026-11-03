@@ -235,18 +235,45 @@ body {
   font-size: 0.8125rem;
 }
 
-/* A game theme's credit line shows only while that theme is on; its stylesheet
-   reveals it. The padding sits on the credit, so the footer takes no space on
-   the default look. */
+/* A game theme's footer line: its short not-affiliated note and a link to its
+   credits. Small and quiet, but at least WCAG AA contrast so it stays legible.
+   The theme's stylesheet reveals it while that theme is on, and on the
+   theme's own influence and credits pages whatever theme is on. The padding
+   sits on the line, so the footer takes no space on the default look. */
 .theme-credit {
   display: none;
   max-width: 43rem;
   margin: 0 auto;
   padding: 1rem 1.5rem 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
-.theme-credit__short {
-  display: none;
+.theme-credit a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.theme-credit a:hover {
+  color: var(--foreground);
+}
+
+/* A page whose title sits outside its Markdown spaces the first section from it. */
+.prose-page > h1 + .content-section {
+  margin-top: 1.5rem;
+}
+
+/* A closing line under a page's content, such as a link to related pages. */
+.prose-page .page-aside {
+  margin-top: 3rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.prose-page .page-aside a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* Shown by the shared gameplay layer when a theme's gameplay cannot start. */

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { ContentBlock, readSections } from '@/site/content';
-import { gameThemes } from '@/themes/registry';
 import { ThemeTour } from '@/themes/theme-tour';
 
 // What the home page shows after a section's text, keyed by the section's file name in content/home/.
@@ -23,14 +22,11 @@ export default async function Home() {
   }
   return (
     <article className="prose-page" data-section="home">
-      {sections
-        // The theme invite has nothing to offer until a game theme is registered.
-        .filter((section) => section.slug !== 'themes' || gameThemes.length > 0)
-        .map((section) => (
-          <ContentBlock key={section.slug} section={section}>
-            {displays[section.slug]}
-          </ContentBlock>
-        ))}
+      {sections.map((section) => (
+        <ContentBlock key={section.slug} section={section}>
+          {displays[section.slug]}
+        </ContentBlock>
+      ))}
     </article>
   );
 }
