@@ -2,14 +2,13 @@
 // AGENTS.md states the rule and lists the paths; keep this list matching it.
 // A path ending in `/` covers everything under it.
 //
-// Run as a script, this is the Codex PreToolUse hook in .codex/hooks.json: it
-// denies an apply_patch call that adds, updates, deletes, or moves a file here.
-// Codex lets a call through when its hook fails, so a hook error exits 2, which
-// blocks the call.
-import { realpathSync } from 'node:fs';
+// This is the Codex PreToolUse hook in .codex/hooks.json: it denies an
+// apply_patch call that adds, updates, deletes, or moves a file here. Codex lets
+// a call through when its hook fails, so a hook error exits 2, which blocks the
+// call.
 import path from 'node:path';
-import { argv, exit, stderr, stdin, stdout } from 'node:process';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { exit, stderr, stdin, stdout } from 'node:process';
+import { fileURLToPath } from 'node:url';
 
 const personalContent = ['content/home/', 'content/influences/', 'content/levels/', 'public/TraeStevens_Resume.pdf'];
 
@@ -28,9 +27,9 @@ function isPersonalContent(relativePath) {
 
 // Patch paths are relative to the session's working directory unless absolute.
 // Returns the repository-relative paths that the patch would change.
-export function personalContentInPatch(patch, cwd, root = repositoryRoot) {
+function personalContentInPatch(patch, cwd) {
   return [...patch.matchAll(patchPath)]
-    .map((match) => path.relative(root, path.resolve(cwd, match[1].trim())).replaceAll('\\', '/'))
+    .map((match) => path.relative(repositoryRoot, path.resolve(cwd, match[1].trim())).replaceAll('\\', '/'))
     .filter(isPersonalContent);
 }
 
@@ -63,20 +62,9 @@ async function main() {
   );
 }
 
-// Node gives import.meta.url the real path, so resolve links in the script path too.
-function isEntryPoint() {
-  try {
-    return argv[1] !== undefined && pathToFileURL(realpathSync(argv[1])).href === import.meta.url;
-  } catch {
-    return false;
-  }
-}
-
-if (isEntryPoint()) {
-  try {
-    await main();
-  } catch (error) {
-    stderr.write(`personal-content hook failed, so the edit is blocked: ${String(error)}\n`);
-    exit(2);
-  }
+try {
+  await main();
+} catch (error) {
+  stderr.write(`personal-content hook failed, so the edit is blocked: ${String(error)}\n`);
+  exit(2);
 }
