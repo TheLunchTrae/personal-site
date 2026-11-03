@@ -4,8 +4,9 @@ The site's text lives here as Markdown, one file per section, so each piece
 can be written on its own. Short interface labels, such as button text and
 the Mode control, stay in code.
 
-This writing is all rights reserved, not under the repo's MIT license (see
-`NOTICE.md`).
+The site's text in these files is all rights reserved, not under the repo's
+MIT license; third-party names and links in it belong to their owners. This
+README is under the MIT license. See [NOTICE.md](../NOTICE.md).
 
 ## Where each file appears
 
