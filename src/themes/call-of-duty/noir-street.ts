@@ -404,7 +404,6 @@ export class NoirStreet {
   private readonly wormGlow: THREE.Sprite;
   private readonly settings: TierSettings;
   private composer: EffectComposer | null = null;
-  private bloom: UnrealBloomPass | null = null;
   private chosen: string | null = null;
   private effects: boolean;
   private readonly size = new THREE.Vector2(1, 1);
@@ -511,25 +510,40 @@ export class NoirStreet {
   }
 
   /**
-   * Loads the street for a tier. Resolves null when cancelled() turns true
-   * before the scene is built; rejects when a file fails to load.
+   * Loads the street for a tier. Aborting the signal cancels the model's
+   * download; the load then rejects, or resolves null when the files were
+   * already in. Rejects when a file fails to load.
    */
   static async load(
     scene: THREE.Scene,
     renderer: THREE.WebGLRenderer,
     tier: Quality,
     effects: boolean,
-    cancelled: () => boolean,
+    signal: AbortSignal,
   ): Promise<NoirStreet | null> {
-    const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+    signal.throwIfAborted();
+    // The model is fetched here rather than through GLTFLoader.load, whose
+    // FileLoader shares one request per URL across every loader: aborting a
+    // street torn down as the next one starts would cancel the next one's
+    // download too. The textures load through <img>, which can't be
+    // cancelled, but they are small next to the model.
+    const file = `${BASE}/${TIERS[tier].file}`;
+    const model = fetch(file, { signal })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`${file} answered ${response.status}.`);
+        }
+        return response.arrayBuffer();
+      })
+      .then(async (data) => new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(data, `${BASE}/`));
     const textures = new THREE.TextureLoader();
     const [gltf, equirect, backdrop, sky] = await Promise.all([
-      loader.loadAsync(`${BASE}/${TIERS[tier].file}`),
+      model,
       textures.loadAsync(`${BASE}/environment.webp`),
       textures.loadAsync(`${BASE}/${TIERS[tier].backdrop}`),
       textures.loadAsync(`${BASE}/sky.webp`),
     ]);
-    if (cancelled()) {
+    if (signal.aborted) {
       equirect.dispose();
       backdrop.dispose();
       sky.dispose();
@@ -591,8 +605,7 @@ export class NoirStreet {
       const composer = new EffectComposer(this.renderer, target);
       composer.addPass(new RenderPass(this.scene, new THREE.PerspectiveCamera()));
       // Only the neon and lamp glass run brighter than 1, so the threshold keeps the bloom on them.
-      this.bloom = new UnrealBloomPass(this.size.clone(), 0.55, 0.45, 1.0);
-      composer.addPass(this.bloom);
+      composer.addPass(new UnrealBloomPass(this.size.clone(), 0.55, 0.45, 1.0));
       composer.addPass(new OutputPass());
       this.composer = composer;
       this.setSize(this.size.x, this.size.y);
@@ -667,7 +680,6 @@ export class NoirStreet {
     }
     this.composer?.dispose();
     this.composer = null;
-    this.bloom = null;
   }
 
   private timedUniform(): THREE.IUniform<number> {

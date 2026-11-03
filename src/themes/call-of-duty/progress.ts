@@ -27,6 +27,11 @@ export function roundFor(run: Run): number {
   return run.visited.length + 1;
 }
 
+/** How many of these sections the run has found; ids saved for pages that are gone don't count. */
+export function foundAmong(run: Run, sectionIds: readonly string[]): number {
+  return run.visited.filter((id) => sectionIds.includes(id)).length;
+}
+
 function parseSaved(raw: string | null): Run {
   try {
     const saved: unknown = JSON.parse(raw ?? 'null');

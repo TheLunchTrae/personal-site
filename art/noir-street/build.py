@@ -48,7 +48,8 @@ LEFT_LANE = (12.0, 16.0)
 RIGHT_LANE = (15.0, 19.0)
 PILLAR = (-1.18, 0.78, 1.3)  # center x, center y, width
 
-# Page signs: id, text, font, gum color (matches GUM_COLORS), side, y, z, size, vertical.
+# Page signs: id, text, font, neon color, side, y, z, size, vertical. The home and story
+# signs' colors match GUM_COLORS in gumball-scene.ts; the others are scenery.
 SIGNS = [
     ("about", "About", "Pacifico", "#3fd8c8", 1, 10.5, 4.6, 0.9, False),
     ("projects", "Projects", "Pacifico", "#ff4f9a", 1, 21.0, 6.4, 1.1, False),

@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
 // Small saved choices that belong to the Call of Duty theme alone: which menu
-// the home page shows, whether sound is on, and how the gumball street draws:
+// style the stage shows, whether sound is on, and how the gumball street draws:
 // its glow and weather, and its graphics preset. Each one is a single store
 // instance so every component reads the same value.
 

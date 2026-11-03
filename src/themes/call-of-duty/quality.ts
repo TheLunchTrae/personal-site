@@ -2,8 +2,6 @@
 // chosen one for. A guess from what the browser reports: the GPU's name where
 // it shares one, the device's memory, and whether it is a small touch screen.
 
-import type { QualityChoice } from './settings';
-
 export type Quality = 'low' | 'medium' | 'high';
 
 /** GPU names that mean software drawing: always the light preset. */
@@ -45,23 +43,16 @@ export function presetFor({ gpu, memory, smallTouch }: DeviceReport): Quality {
 }
 
 /** The device's preset, worked out on first use; a device doesn't change mid-visit. */
-const cache = new Map<'device', Quality>();
+const device: { preset: Quality | null } = { preset: null };
 
 /** The preset for this device, worked out once per visit. */
 export function deviceQuality(): Quality {
-  const known = cache.get('device');
-  if (known !== undefined) {
-    return known;
+  if (device.preset !== null) {
+    return device.preset;
   }
   const memory = 'deviceMemory' in navigator && typeof navigator.deviceMemory === 'number' ? navigator.deviceMemory : 8;
   const smallTouch =
     window.matchMedia('(pointer: coarse)').matches && Math.min(window.screen.width, window.screen.height) < 820;
-  const preset = presetFor({ gpu: rendererName(), memory, smallTouch });
-  cache.set('device', preset);
-  return preset;
-}
-
-/** The preset in force: the visitor's choice, or the device's when they left it on Auto. */
-export function resolveQuality(choice: QualityChoice): Quality {
-  return choice === 'auto' ? deviceQuality() : choice;
+  device.preset = presetFor({ gpu: rendererName(), memory, smallTouch });
+  return device.preset;
 }

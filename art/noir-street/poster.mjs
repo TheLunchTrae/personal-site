@@ -36,7 +36,7 @@ for (const [name, options] of views) {
   await page.goto(site);
   // The stage drops its loading mark once the street is drawn.
   await page.waitForFunction(
-    "document.querySelector('.menu-scene[data-scene=machine]:not([data-loading])') !== null",
+    "document.querySelector('.cod-menu-scene[data-scene=machine]:not([data-loading])') !== null",
     null,
     {
       timeout: 180_000,
@@ -45,12 +45,12 @@ for (const [name, options] of views) {
   // Only the scene: no controls over it, no poster behind it, no fade in.
   await page.addStyleTag({
     content:
-      '.menu-bar, .menu-switch, .hud { visibility: hidden !important; } ' +
-      '.menu-scene { background-image: none !important; } ' +
-      '.menu-canvas { transition: none !important; opacity: 1 !important; }',
+      '.cod-menu-bar, .cod-menu-switch, .cod-hud { visibility: hidden !important; } ' +
+      '.cod-menu-scene { background-image: none !important; } ' +
+      '.cod-menu-canvas { transition: none !important; opacity: 1 !important; }',
   });
   await page.waitForTimeout(3000);
-  const shot = await page.locator('.menu-canvas').screenshot();
+  const shot = await page.locator('.cod-menu-canvas').screenshot();
   const info = await sharp(shot).webp({ quality: 80 }).toFile(`${to}/${name}.webp`);
   stdout.write(`${name} ${info.width}x${info.height} ${Math.round(info.size / 1024)} KB\n`);
   await context.close();

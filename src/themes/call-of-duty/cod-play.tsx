@@ -13,12 +13,12 @@ import {
 } from 'react';
 import { type GameSection, sectionHref } from '@/site/sections';
 import type { PlayProps } from '../play-layer';
-import { playEnter, playStatic, playTick, unlockSound } from './audio';
+import { playEnter, playStatic, playTick, releaseSound, unlockSound } from './audio';
 import { GlobeScene } from './globe-scene';
 import { GumballScene, gumColor } from './gumball-scene';
 import { CallOfDutyHud } from './hud';
 import { run } from './progress';
-import { type Quality, resolveQuality } from './quality';
+import { deviceQuality, type Quality } from './quality';
 import type { MenuCallbacks, MenuScene, MenuTarget } from './scene-kit';
 import { effects, MENU_STYLES, menuStyle, QUALITY_OPTIONS, quality, type QualityChoice, useChoice } from './settings';
 import { TvWallScene } from './tv-wall-scene';
@@ -177,14 +177,14 @@ function TvWallMenu(props: MenuProps) {
   );
 
   return (
-    <div ref={stage} className="menu-scene" data-scene="screens">
-      <div className="menu-flash" aria-hidden="true" />
-      <div className="menu-bar" role="group" aria-label="Channels">
+    <div ref={stage} className="cod-menu-scene" data-scene="screens">
+      <div className="cod-menu-flash" aria-hidden="true" />
+      <div className="cod-menu-bar" role="group" aria-label="Channels">
         {sections.map((section, i) => (
           <Link
             key={section.id}
             href={section.href}
-            className="menu-link"
+            className="cod-menu-link"
             aria-current={section.id === current ? 'page' : undefined}
             data-selected={section.id === selected}
             onKeyDown={moveFocus}
@@ -198,7 +198,7 @@ function TvWallMenu(props: MenuProps) {
             }}
             onClick={(event) => enterWith(scene.current, section.id, current, event)}
           >
-            <span className="menu-link-number" aria-hidden="true">
+            <span className="cod-menu-link-number" aria-hidden="true">
               CH {String(i + 1).padStart(2, '0')}
             </span>
             {section.label}
@@ -248,6 +248,10 @@ function GlobeMenu(props: MenuProps) {
 
   const step = (direction: 1 | -1) => {
     const globe = scene.current;
+    // Mid-exit the globe holds its course, so the bar keeps showing the page it opens.
+    if (globe?.isEntering === true) {
+      return;
+    }
     const next = globe === null ? sections.at((index + direction) % sections.length)?.id : globe.step(direction);
     if (next !== undefined && next !== null) {
       setSelected(next);
@@ -256,26 +260,26 @@ function GlobeMenu(props: MenuProps) {
   };
 
   return (
-    <div ref={stage} className="menu-scene" data-scene="globe">
-      <div className="menu-flash" aria-hidden="true" />
-      <div ref={tag} className="globe-tag" aria-hidden="true">
-        <span className="globe-tag-name">{shown?.label}</span>
+    <div ref={stage} className="cod-menu-scene" data-scene="globe">
+      <div className="cod-menu-flash" aria-hidden="true" />
+      <div ref={tag} className="cod-globe-tag" aria-hidden="true">
+        <span className="cod-globe-tag-name">{shown?.label}</span>
       </div>
       {shown === undefined ? null : (
-        <div className="menu-bar globe-bar" role="group" aria-label="Locations">
-          <button type="button" className="globe-step" aria-label="Previous location" onClick={() => step(-1)}>
+        <div className="cod-menu-bar cod-globe-bar" role="group" aria-label="Locations">
+          <button type="button" className="cod-globe-step" aria-label="Previous location" onClick={() => step(-1)}>
             <span aria-hidden="true">‹</span>
           </button>
           <p className="sr-only" aria-live="polite">
             {announced}
           </p>
-          <div className="globe-info">
-            <span className="globe-info-count" aria-hidden="true">
+          <div className="cod-globe-info">
+            <span className="cod-globe-info-count" aria-hidden="true">
               Site {index + 1} of {sections.length}
             </span>
             <Link
               href={shown.href}
-              className="menu-link globe-go"
+              className="cod-menu-link cod-globe-go"
               aria-current={shown.id === current ? 'page' : undefined}
               onKeyDown={(event) => {
                 if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
@@ -286,12 +290,12 @@ function GlobeMenu(props: MenuProps) {
               onClick={(event) => enterWith(scene.current, shown.id, current, event)}
             >
               {shown.label}
-              <span className="globe-go-cue" aria-hidden="true">
+              <span className="cod-globe-go-cue" aria-hidden="true">
                 Travel ›
               </span>
             </Link>
           </div>
-          <button type="button" className="globe-step" aria-label="Next location" onClick={() => step(1)}>
+          <button type="button" className="cod-globe-step" aria-label="Next location" onClick={() => step(1)}>
             <span aria-hidden="true">›</span>
           </button>
         </div>
@@ -353,18 +357,18 @@ function MachineMenu(props: MenuProps & { quality: Quality }) {
   const choose = (id: string) => scene.current?.select(id);
 
   return (
-    <div ref={stage} className="menu-scene" data-scene="machine">
-      <div className="menu-flash" aria-hidden="true" />
+    <div ref={stage} className="cod-menu-scene" data-scene="machine">
+      <div className="cod-menu-flash" aria-hidden="true" />
       <p className="sr-only" aria-live="polite">
         {/* A fresh node per roll, so a screen reader reads a repeat pick again. */}
         {rolled === null ? null : <span key={rolled.count}>The machine picked {rolled.label}</span>}
       </p>
-      <div className="menu-bar" role="group" aria-label="Pages">
+      <div className="cod-menu-bar" role="group" aria-label="Pages">
         {sections.map((section) => (
           <Link
             key={section.id}
             href={section.href}
-            className="menu-link"
+            className="cod-menu-link"
             aria-current={section.id === current ? 'page' : undefined}
             data-selected={section.id === selected}
             onKeyDown={moveFocus}
@@ -372,15 +376,51 @@ function MachineMenu(props: MenuProps & { quality: Quality }) {
             onMouseEnter={() => choose(section.id)}
             onClick={(event) => enterWith(scene.current, section.id, current, event)}
           >
-            <span className="menu-gum" aria-hidden="true" style={{ background: gumColor(section.id) }} />
+            <span className="cod-menu-gum" aria-hidden="true" style={{ background: gumColor(section.id) }} />
             {section.label}
           </Link>
         ))}
-        <button type="button" className="menu-link menu-roll" onKeyDown={moveFocus} onClick={roll}>
+        <button type="button" className="cod-menu-link cod-menu-roll" onKeyDown={moveFocus} onClick={roll}>
           Surprise me
         </button>
       </div>
     </div>
+  );
+}
+
+/** The gumball menu with its graphics presets, which only this menu has. */
+function GumballStage(menu: MenuProps) {
+  const preset = useChoice(quality);
+  // Asked once, when the gumball menu first shows, so the other menus never
+  // probe the GPU; a device doesn't change mid-visit.
+  const [device] = useState(deviceQuality);
+  const resolved = preset === 'auto' ? device : preset;
+  const label = (id: QualityChoice) => QUALITY_OPTIONS.find((option) => option.id === id)?.label ?? id;
+
+  return (
+    <>
+      {/* Outside the menu, so the pressed preset keeps focus while the street reloads. */}
+      <div className="cod-menu-switch cod-menu-presets" role="group" aria-label="Graphics">
+        <span className="cod-menu-presets-label" aria-hidden="true">
+          Graphics
+        </span>
+        {QUALITY_OPTIONS.map((option) => (
+          <button
+            key={option.id}
+            type="button"
+            className="cod-menu-switch-option"
+            aria-pressed={preset === option.id}
+            onClick={() => quality.set(option.id)}
+          >
+            {/* Auto says what it picked, so the visitor knows what they're seeing. */}
+            {option.id === 'auto' ? `Auto (${label(device)})` : option.label}
+          </button>
+        ))}
+      </div>
+      {/* A new preset is a new street, so the gumball menu starts over with it. Keyed on
+          the preset in force, so picking the one Auto already chose reloads nothing. */}
+      <MachineMenu key={`machine-${resolved}`} {...menu} quality={resolved} />
+    </>
   );
 }
 
@@ -390,19 +430,18 @@ export function CallOfDutyPlay({ sections, reducedMotion, onExit, onFail }: Play
   const path = sectionHref(usePathname());
   const current = sections.find((section) => section.href === path)?.id ?? null;
   const menu: MenuProps = { sections, current, reducedMotion, onFail };
-  const preset = useChoice(quality);
-  // Only the gumball menu asks the device, so the other menus never probe its GPU.
-  const resolved = style === 'machine' ? resolveQuality(preset) : null;
-  const label = (id: QualityChoice) => QUALITY_OPTIONS.find((option) => option.id === id)?.label ?? id;
+
+  // Leaving the theme closes its audio, so a background tab never wakes it.
+  useEffect(() => releaseSound, []);
 
   return (
-    <section className="menu-stage" data-home={current === 'home'} aria-label="Call of Duty menu">
-      <div className="menu-switch" role="group" aria-label="Menu style">
+    <section className="cod-menu-stage" data-home={current === 'home'} aria-label="Page menu">
+      <div className="cod-menu-switch" role="group" aria-label="Menu style">
         {MENU_STYLES.map((option) => (
           <button
             key={option.id}
             type="button"
-            className="menu-switch-option"
+            className="cod-menu-switch-option"
             aria-pressed={style === option.id}
             onClick={() => menuStyle.set(option.id)}
           >
@@ -412,29 +451,7 @@ export function CallOfDutyPlay({ sections, reducedMotion, onExit, onFail }: Play
       </div>
       {style === 'screens' ? <TvWallMenu key="screens" {...menu} /> : null}
       {style === 'globe' ? <GlobeMenu key="globe" {...menu} /> : null}
-      {style === 'machine' ? (
-        // Outside the menu, so the pressed preset keeps focus while the street reloads.
-        <div className="menu-switch menu-presets" role="group" aria-label="Graphics">
-          <span className="menu-presets-label" aria-hidden="true">
-            Graphics
-          </span>
-          {QUALITY_OPTIONS.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              className="menu-switch-option"
-              aria-pressed={preset === option.id}
-              onClick={() => quality.set(option.id)}
-            >
-              {/* Auto says what it picked, so the visitor knows what they're seeing. */}
-              {option.id === 'auto' && resolved !== null ? `Auto (${label(resolved)})` : option.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-      {/* A new preset is a new street, so the gumball menu starts over with it. Keyed on
-          the preset in force, so picking the one Auto already chose reloads nothing. */}
-      {resolved === null ? null : <MachineMenu key={`machine-${resolved}`} {...menu} quality={resolved} />}
+      {style === 'machine' ? <GumballStage key="machine" {...menu} /> : null}
       <CallOfDutyHud sections={sections} onExit={onExit} />
     </section>
   );

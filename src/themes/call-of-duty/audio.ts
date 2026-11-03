@@ -6,6 +6,8 @@ import { sound } from './settings';
 interface Voice {
   context: AudioContext;
   out: GainNode;
+  /** Removes the listeners that follow the sound switch and the tab's visibility. */
+  release: () => void;
 }
 
 const voice: { current: Voice | null } = { current: null };
@@ -37,9 +39,8 @@ export function unlockSound(): void {
     const out = context.createGain();
     out.gain.value = 0.35;
     out.connect(context.destination);
-    voice.current = { context, out };
     // Turning sound off releases the audio device until it is turned on again.
-    sound.subscribe(() => {
+    const unsubscribe = sound.subscribe(() => {
       if (sound.snapshot() === 'off') {
         quietly(context.suspend());
       } else {
@@ -47,15 +48,42 @@ export function unlockSound(): void {
       }
     });
     // Nothing plays in a hidden tab.
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        quietly(context.suspend());
-      } else {
-        wake(context);
-      }
-    });
+    const listening = new AbortController();
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+        if (document.hidden) {
+          quietly(context.suspend());
+        } else {
+          wake(context);
+        }
+      },
+      { signal: listening.signal },
+    );
+    voice.current = {
+      context,
+      out,
+      release: () => {
+        unsubscribe();
+        listening.abort();
+      },
+    };
   }
   wake(voice.current.context);
+}
+
+/**
+ * Closes the audio context and drops its listeners, for when gameplay
+ * unmounts. The next unlockSound() builds a fresh one.
+ */
+export function releaseSound(): void {
+  const current = voice.current;
+  if (current === null) {
+    return;
+  }
+  voice.current = null;
+  current.release();
+  quietly(current.context.close());
 }
 
 // A sound asked for while the context is still waiting for a gesture is

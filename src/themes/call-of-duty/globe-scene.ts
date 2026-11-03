@@ -170,7 +170,7 @@ export class GlobeScene extends MenuScene {
     super(container, callbacks, reducedMotion);
     this.targets = targets;
     this.onAnchor = callbacks.onAnchor;
-    this.canvas.classList.add('is-draggable');
+    this.canvas.classList.add('cod-draggable');
     this.scene.background = new THREE.Color('#060506');
     this.scene.add(this.globe);
     this.haze = { strength: { value: 0.9 }, rimColor: { value: new THREE.Color(RED) } };
@@ -203,8 +203,12 @@ export class GlobeScene extends MenuScene {
     }
   }
 
-  /** Turns to the next or previous site, for the arrow buttons and keys. */
+  /** Turns to the next or previous site, for the arrow buttons and keys; null mid-exit. */
   step(direction: 1 | -1): string | null {
+    // Mid-exit the globe holds its course to the page it opens.
+    if (this.entering !== null) {
+      return null;
+    }
     const index = this.sites.findIndex((site) => site.target.id === this.selectedId);
     const next = this.sites.at((index + direction) % this.sites.length);
     if (next === undefined) {

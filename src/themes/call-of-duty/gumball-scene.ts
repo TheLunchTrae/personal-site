@@ -275,7 +275,7 @@ export class GumballScene extends MenuScene {
     void import('./noir-street')
       .then(
         async ({ NoirStreet }) => {
-          const street = await NoirStreet.load(this.scene, this.renderer, this.quality, this.effects, () => this.gone);
+          const street = await NoirStreet.load(this.scene, this.renderer, this.quality, this.effects, this.signal);
           if (street === null) {
             return;
           }

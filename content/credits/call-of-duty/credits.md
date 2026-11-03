@@ -1,6 +1,6 @@
 Fan-made Call of Duty homage. Not affiliated with or endorsed by Activision.
 
-Call of Duty is a trademark of Activision Publishing, Inc. The Call of Duty theme is a fan tribute built from scratch, and no files from the games are used. The gumball machine's plaza, a tribute to the Junction in Shadows of Evil, was modeled, textured and lit from scratch in Blender, with no game assets. The TV wall, the globe and the HUD are drawn in code, and every sound is synthesized in code as it plays.
+Call of Duty, Black Ops and Shadows of Evil are trademarks of Activision Publishing, Inc. The Call of Duty theme is a fan tribute built from scratch, and no files from the games are used. The gumball machine's plaza, a tribute to the Junction in Shadows of Evil, was modeled, textured and lit from scratch in Blender, with no game assets. The TV wall, the globe and the HUD are drawn in code, and every sound is synthesized in code as it plays.
 
 ## Fonts
 

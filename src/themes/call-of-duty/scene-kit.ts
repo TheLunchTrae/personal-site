@@ -150,7 +150,7 @@ export abstract class MenuScene {
     // dispose() already released.
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default' });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-    canvas.className = 'menu-canvas';
+    canvas.className = 'cod-menu-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     container.prepend(canvas);
     this.timer.connect(document);
@@ -274,8 +274,9 @@ export abstract class MenuScene {
   /**
    * Moves the camera back until a box of the given size fits inside a region
    * of the view, and aims the box at the region's center. The region is the
-   * part of the hero the copy and link bar leave free, given as fractions of
-   * the view's width and height and a center in normalized device units.
+   * part of the stage the link bar and menu switch leave free, given as
+   * fractions of the view's width and height and a center in normalized
+   * device units.
    */
   protected frameBox(center: THREE.Vector3, size: { width: number; height: number }, region: ViewRegion): void {
     const tan = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
