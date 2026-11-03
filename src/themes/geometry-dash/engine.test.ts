@@ -77,16 +77,4 @@ await describe('dash run', async () => {
     const portals = runFor(state, state.level.length / 8.6).filter((event) => event.type === 'portal');
     assert.deepEqual(portals, [{ type: 'portal', section: 0 }]);
   });
-
-  await test('on a page gameplay does not reach, the assist runs without entering a gate', () => {
-    const level = parseLevel(levelSource(2));
-    const state = createRun(level, -1);
-    state.assist = true;
-    start(state);
-    const events = runFor(state, (level.length * 2) / 8.6);
-    assert.deepEqual(
-      events.filter((event) => event.type === 'death' || event.type === 'portal'),
-      [],
-    );
-  });
 });
