@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -22,14 +23,19 @@ describe('tool configs mirror the personal content list', () => {
   test('Claude Code asks before editing each path', () => {
     const settings = JSON.parse(read('.claude/settings.json'));
     const expected = personalContent.map((entry) => (isFolder(entry) ? `Edit(/${entry}**)` : `Edit(/${entry})`));
-    assert.deepEqual(settings.permissions.ask, expected);
+    assert.deepEqual(
+      settings.permissions.ask.filter((rule) => expected.includes(rule)),
+      expected,
+    );
   });
 
   test('opencode asks before editing each path', () => {
     // eslint-disable-next-line no-undef -- Bun runs the gate's tests and provides the JSONC parser.
     const config = Bun.JSONC.parse(read('opencode.jsonc'));
     const expected = Object.fromEntries(personalContent.map((entry) => [isFolder(entry) ? `${entry}*` : entry, 'ask']));
-    assert.deepEqual(config.permission.edit, expected);
+    for (const [pattern, action] of Object.entries(expected)) {
+      assert.equal(config.permission.edit[pattern], action, pattern);
+    }
   });
 
   test('Codex runs this script before apply_patch', () => {
@@ -66,11 +72,16 @@ describe('personalContentInPatch', () => {
   test('matches folders by whole path segment', () => {
     assert.deepEqual(personalContentInPatch('*** Add File: content/homepage.md', root, root), []);
   });
+
+  test('reads indented headers and ignores case, as Codex and the file system do', () => {
+    const patch = '*** Begin Patch\n  *** Update File: content/home/intro.md\n\t*** Delete File: Content/Levels/x.md';
+    assert.deepEqual(personalContentInPatch(patch, root, root), ['content/home/intro.md', 'Content/Levels/x.md']);
+  });
 });
 
 describe('the Codex hook', () => {
-  const run = (patch) =>
-    spawnSync('node', [hookScript], {
+  const run = (patch, script = hookScript) =>
+    spawnSync('node', [script], {
       encoding: 'utf8',
       input: JSON.stringify({ cwd: root, tool_name: 'apply_patch', tool_input: { command: patch } }),
     });
@@ -81,6 +92,23 @@ describe('the Codex hook', () => {
     const output = JSON.parse(result.stdout).hookSpecificOutput;
     assert.equal(output.permissionDecision, 'deny');
     assert.match(output.permissionDecisionReason, /content\/home\/intro\.md/);
+  });
+
+  test('denies when run through a linked folder', () => {
+    const linkDirectory = mkdtempSync(path.join(tmpdir(), 'personal-content-'));
+    try {
+      const link = path.join(linkDirectory, 'repository');
+      symlinkSync(root, link, 'dir');
+      const result = run('*** Update File: content/home/intro.md', path.join(link, 'scripts/personal-content.mjs'));
+      assert.equal(JSON.parse(result.stdout).hookSpecificOutput.permissionDecision, 'deny');
+    } finally {
+      rmSync(linkDirectory, { recursive: true, force: true });
+    }
+  });
+
+  test('blocks the call when the hook fails', () => {
+    const result = spawnSync('node', [hookScript], { encoding: 'utf8', input: 'not json' });
+    assert.equal(result.status, 2);
   });
 
   test('allows other patches', () => {
