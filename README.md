@@ -1,3 +1,5 @@
+[![Latest Deployment](https://github.com/TheLunchTrae/personal-site/actions/workflows/pages.yml/badge.svg?event=push)](https://github.com/TheLunchTrae/personal-site/actions/workflows/pages.yml)
+
 # personal-site
 
 Trae's personal site, live at [traejks.dev](https://traejks.dev). Next.js (App Router) exported as a static site and hosted on GitHub Pages.
