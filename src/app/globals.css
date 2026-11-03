@@ -85,7 +85,7 @@ body {
 
 /* A narrow screen shows the menu button in the bar and the theme controls in
    its panel; a wide screen shows the controls in the bar. SiteMenu closes the
-   panel at the same width. */
+   panel when this rule hides the menu. */
 .site-header > .theme-controls {
   display: none;
 }
@@ -114,8 +114,12 @@ body {
   font-size: 0.875rem;
 }
 
-/* The menu button shows only its icon; aria-label names it. */
+/* The menu button shows only its icon, which aria-label names, in a square
+   the size of a comfortable touch target. */
 .site-menu__button {
+  justify-content: center;
+  min-inline-size: 2.75rem;
+  min-block-size: 2.75rem;
   padding: 0.5rem;
 }
 
@@ -175,7 +179,10 @@ body {
   overflow: hidden;
 }
 
+/* The body fills the panel, so a press anywhere on the panel lands inside it
+   and only a press on the backdrop reaches the dialog itself. */
 .site-menu__body {
+  min-block-size: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

@@ -6,6 +6,16 @@ import { setColorMode, setPlay, setTheme, useThemeState } from './theme-store';
 
 const subscribeNever = () => () => undefined;
 
+/**
+ * Focuses the first visible match for a theme control. The bar and the menu
+ * panel each hold a copy, and on a narrow screen the bar's copy is hidden and
+ * the panel is closed, so focus goes to the menu button that opens it.
+ */
+export function focusThemeControl(selector: string): void {
+  const visible = [...document.querySelectorAll<HTMLElement>(selector)].find((control) => control.checkVisibility());
+  (visible ?? document.querySelector<HTMLElement>('.site-menu__button'))?.focus();
+}
+
 const colorModeLabels = { system: 'System', light: 'Light', dark: 'Dark' } as const;
 
 /**

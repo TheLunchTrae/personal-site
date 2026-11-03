@@ -56,17 +56,11 @@
   background: rgb(10 9 9 / 0.85);
 }
 
-:root[data-theme='call-of-duty'] .site-menu__title {
-  font-family: var(--cod-title);
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
 :root[data-theme='call-of-duty'] .prose-page h1,
 :root[data-theme='call-of-duty'] .prose-page h2,
 :root[data-theme='call-of-duty'] .content-section :is(h3, h4, h5, h6),
-:root[data-theme='call-of-duty'] .theme-tour__name {
+:root[data-theme='call-of-duty'] .theme-tour__name,
+:root[data-theme='call-of-duty'] .site-menu__title {
   font-family: var(--cod-title);
   font-weight: 400;
   letter-spacing: 0.03em;

@@ -523,7 +523,7 @@ body:has(.blocks-close) .blocks-help {
 
 /* On phones the header holds only the menu button, and the not-affiliated
    line can wrap to three rows. */
-@media (max-width: 40rem) {
+@media (width < 40rem) {
   :root[data-theme='minecraft'][data-play='on'] body {
     --world-gutter: 0.5rem;
   }
@@ -556,7 +556,6 @@ body:has(.blocks-close) .blocks-help {
   }
 
   :root[data-theme='minecraft'][data-play='on'] .site-header {
-    gap: 0.5rem 0.75rem;
     padding: 0.625rem 0.75rem;
   }
 

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { chapterLabel, gameThemes, storyHref } from './registry';
+import { focusThemeControl } from './theme-controls';
 import { setTheme, useThemeState } from './theme-store';
 import { wordmarks } from './wordmarks';
 
@@ -38,7 +39,7 @@ export function ThemeTour() {
                   // A theme's gameplay can cover the tour; keep focus on a control the visitor can see.
                   requestAnimationFrame(() => {
                     if (button.offsetParent === null) {
-                      document.querySelector<HTMLElement>('.theme-controls select')?.focus();
+                      focusThemeControl('.theme-controls select');
                     }
                   });
                 }}

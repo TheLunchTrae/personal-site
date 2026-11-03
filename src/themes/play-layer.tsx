@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { Component, type ComponentType, type ReactNode } from 'react';
 import { type GameSection, gameSections } from '@/site/sections';
 import { gameTheme, type GameThemeId, isGameThemeId } from './registry';
+import { focusThemeControl } from './theme-controls';
 import { markGameplayFailed, setPlay, useThemeState } from './theme-store';
 
 /** What every game theme's gameplay component receives. docs/themes.md describes the contract. */
@@ -82,7 +83,7 @@ export function PlayLayer() {
   const exit = () => {
     setPlay(false);
     // The game's own controls unmount, so focus moves to the switch that brings them back.
-    document.querySelector<HTMLElement>('.theme-controls__play')?.focus();
+    focusThemeControl('.theme-controls__play');
   };
   const game = <Player sections={gameSections(theme)} reducedMotion={reducedMotion} onExit={exit} onFail={fail} />;
   return (
