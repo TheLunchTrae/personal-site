@@ -612,8 +612,8 @@ body:has(.blocks-close) .blocks-help {
     margin-inline-start: 0.25rem;
   }
 
-  /* The header's corner is too crowded here, so the button sits on one line
-     between the page and the hotbar, and the page ends above it. */
+  /* The page fills the width here, so the button would cover its top; it sits
+     on one line between the page and the hotbar, and the page ends above it. */
   .blocks-close {
     grid-area: cue;
     align-self: end;

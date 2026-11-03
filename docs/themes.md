@@ -186,9 +186,8 @@ theme's stylesheet can set `.play-layer` to `display: contents` while gameplay
 is on, so the controls join the body's layout: the Minecraft theme makes the
 body a grid the size of the viewport with a row for the hotbar, and the Call of
 Duty HUD is ordered last in the body's column and sticks to the bottom of the
-screen. Lay
-these out by the [CSS layout rule](../AGENTS.md#css-layout) rather than with
-offsets tuned to other elements' sizes. In any layout:
+screen. Lay these out by the [CSS layout rule](../AGENTS.md#css-layout) rather
+than with offsets tuned to other elements' sizes. In any layout:
 
 - The site tabs stay visible and work, so gameplay never replaces a link. Never
   cover the header.
