@@ -58,7 +58,6 @@
 
 :root[data-theme='call-of-duty'] .site-nav__tab {
   padding: 0.125rem 0.625rem;
-  border-bottom-width: 2px;
   font-family: var(--cod-display);
   font-size: 1.125rem;
   letter-spacing: 0.05em;

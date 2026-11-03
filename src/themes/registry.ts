@@ -35,7 +35,7 @@ export interface GameTheme {
 }
 
 /** One of a game theme's own pages, which lives under its influence page. */
-export interface ThemePage {
+interface ThemePage {
   readonly id: string;
   readonly href: string;
   /** The page's tab label in the site navigation. */

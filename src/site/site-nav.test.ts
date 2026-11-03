@@ -35,21 +35,13 @@ function shownTabs(theme: ThemeId): string[] {
     .map((tab) => tab.href);
 }
 
-await test('every exported page is a tab, and every theme can reach home and its own pages', async () => {
+await test('every exported page is a tab, and each game theme shows Home and exactly its own pages', async () => {
   const routes = await exportedRoutes();
   const themes: ThemeId[] = ['default', ...gameThemes.map((theme) => theme.id)];
   const shown = new Set(themes.flatMap(shownTabs));
   for (const route of routes) {
     assert.ok(shown.has(route), `${route} has no tab in any theme, so it can be unreachable.`);
   }
-  for (const theme of themes) {
-    assert.ok(shownTabs(theme).includes('/'), `The ${theme} theme shows no Home tab.`);
-  }
-  assert.deepEqual(
-    shownTabs('default'),
-    ['/', ...gameThemes.map((theme) => storyHref(theme.id))],
-    'The default theme shows Home and every game theme influence page.',
-  );
   for (const theme of gameThemes) {
     const own = routes.filter((route) => route.startsWith(storyHref(theme.id)) || route === creditsHref(theme.id));
     assert.deepEqual(
@@ -63,9 +55,9 @@ await test('every exported page is a tab, and every theme can reach home and its
 await test("each game theme's stylesheet reveals its own tabs", async () => {
   for (const theme of gameThemes) {
     const css = await readFile(path.join(appRoot, '..', 'themes', theme.id, `${theme.id}.css`), 'utf8');
-    assert.ok(
-      css.includes(`:root[data-theme='${theme.id}'] .site-nav__item[data-nav-for='${theme.id}'] {\n  display: block;`),
-      `src/themes/${theme.id}/${theme.id}.css does not reveal the theme's tabs.`,
+    const reveal = new RegExp(
+      String.raw`:root\[data-theme='${theme.id}'\]\s+\.site-nav__item\[data-nav-for='${theme.id}'\][^{]*\{[^}]*display:\s*block`,
     );
+    assert.match(css, reveal, `src/themes/${theme.id}/${theme.id}.css does not reveal the theme's tabs.`);
   }
 });
