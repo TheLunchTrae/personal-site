@@ -25,7 +25,7 @@ export function ThemeControls() {
   return (
     <div className="theme-controls" data-hydrated={hydrated ? '' : undefined}>
       <label className="theme-controls__field">
-        <span>Theme</span>
+        <span>Chapter</span>
         <select
           value={theme}
           onChange={(event) => {
@@ -35,7 +35,7 @@ export function ThemeControls() {
             }
           }}
         >
-          <option value="default">Default</option>
+          <option value="default">None</option>
           {gameThemes.map((option) => (
             <option key={option.id} value={option.id}>
               {option.name}
@@ -52,7 +52,7 @@ export function ThemeControls() {
         </button>
       ) : (
         <label className="theme-controls__field">
-          <span>Mode</span>
+          <span>Colors</span>
           <select
             value={colorMode}
             onChange={(event) => {

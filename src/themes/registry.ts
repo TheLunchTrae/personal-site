@@ -23,16 +23,17 @@ export interface GameTheme {
    * belongs in the theme's credits under content/credits/<id>/.
    */
   readonly notice: string;
-  /** One line for the home page tour. */
+  /** One line for the theme's chapter card on the home page. */
   readonly pitch: string;
-  /** Title of the theme's influence page. */
+  /** Title of the theme's influence page, the chapter of Trae's story that the game inspired. */
   readonly storyTitle: string;
 }
 
 /**
- * The game themes, in the order the site shows them: the home page tour, the
- * theme picker, and the footer credits all follow this list. Reorder the
- * entries to change that order.
+ * The game themes in story order: each one is a chapter of Trae's story, and
+ * its place here is its chapter number. The home page chapters, the picker,
+ * and the footer credits all follow this list. Reorder the entries to change
+ * that order.
  */
 export const gameThemes: readonly GameTheme[] = [
   {
@@ -41,7 +42,7 @@ export const gameThemes: readonly GameTheme[] = [
     // Mojang's usage guidelines require this exact wording on fan websites.
     notice: 'NOT AN OFFICIAL MINECRAFT WEBSITE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.',
     pitch: 'Walk a voxel island and mine your way around it.',
-    storyTitle: 'What Minecraft taught me',
+    storyTitle: 'How Minecraft inspired me',
   },
   {
     id: 'geometry-dash',
@@ -49,7 +50,7 @@ export const gameThemes: readonly GameTheme[] = [
     // RobTop Games publishes no required wording, so this states the relationship plainly.
     notice: 'Fan-made Geometry Dash homage. Not affiliated with or endorsed by RobTop Games.',
     pitch: 'Run a neon level and jump through its gates to move between pages.',
-    storyTitle: 'Rhythm and reflexes',
+    storyTitle: 'How Geometry Dash inspired me',
   },
   {
     id: 'call-of-duty',
@@ -57,7 +58,7 @@ export const gameThemes: readonly GameTheme[] = [
     // Activision publishes no required wording for fan sites, so this states the relationship plainly.
     notice: 'Fan-made Call of Duty homage. Not affiliated with or endorsed by Activision.',
     pitch: 'Tune a wall of old TVs, turn a globe, or crank a gumball machine to pick your next page.',
-    storyTitle: 'What Zombies taught me',
+    storyTitle: 'How Zombies inspired me',
   },
 ];
 
@@ -94,6 +95,11 @@ export function gameTheme(id: GameThemeId): GameTheme {
     throw new Error('A game theme id has no entry in gameThemes.');
   }
   return theme;
+}
+
+/** The theme's chapter label, from its place in `gameThemes`. */
+export function chapterLabel(id: GameThemeId): string {
+  return `Chapter ${gameThemes.indexOf(gameTheme(id)) + 1}`;
 }
 
 export function storyHref(id: GameThemeId): string {
