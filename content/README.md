@@ -13,6 +13,9 @@ the Mode control, stay in code.
 | `influences/<theme id>/<section>.md`        | A theme's influence page, one section per file. Each theme adds its own files, left empty.     |
 | `influences/minecraft/influence.md`         | The Minecraft influence page: what Minecraft meant to you.                                     |
 | `influences/geometry-dash/influence.md`     | The Geometry Dash influence page: what Geometry Dash meant to you.                             |
+| `influences/call-of-duty/black-ops-1.md`    | The Call of Duty influence page, under "The TV wall · Black Ops": what Black Ops meant to you. |
+| `influences/call-of-duty/black-ops-2.md`    | The same page, under "The globe · Black Ops II".                                               |
+| `influences/call-of-duty/black-ops-3.md`    | The same page, under "The gumball machine · Black Ops III".                                    |
 | `credits/<theme id>/<section>.md`           | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses. |
 | `levels/progress.md`, `levels/favorites.md` | The Geometry Dash favorite levels page: the text above each list.                              |
 | `levels/progress/<level>.md`                | One line of the "Where I'm at" list. See [Level files](#level-files).                          |
@@ -47,6 +50,10 @@ Some text.
   change. A button or other display after a section's text is set in
   `src/app/page.tsx` by file name, so renaming `intro.md` or `themes.md`
   fails the build until that file is updated too.
+- The Call of Duty influence page sets each blurb's heading by file name in
+  `src/app/influences/call-of-duty/page.tsx`. A heading shows on its own
+  until its file has text, and renaming a file fails the build until that
+  page is updated too.
 
 ## Level files
 

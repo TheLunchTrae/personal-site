@@ -33,6 +33,9 @@ const players: Record<GameThemeId, ComponentType<PlayProps>> = {
     ssr: false,
     loading: () => <div className="dash-stage-placeholder" aria-hidden="true" />,
   }),
+  'call-of-duty': dynamic(() => import('./call-of-duty/cod-play').then((module) => module.CallOfDutyPlay), {
+    ssr: false,
+  }),
 };
 
 interface BoundaryState {

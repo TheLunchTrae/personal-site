@@ -10,7 +10,7 @@
  * `gameThemes`; `players` in play-layer.tsx is keyed by this type, so the
  * build fails until the theme's gameplay plugs in.
  */
-export type GameThemeId = 'minecraft' | 'geometry-dash';
+export type GameThemeId = 'minecraft' | 'geometry-dash' | 'call-of-duty';
 
 export interface GameTheme {
   /** Value of `html[data-theme]`, the theme's folder under src/themes/, and its influence page slug. */
@@ -50,6 +50,14 @@ export const gameThemes: readonly GameTheme[] = [
     notice: 'Fan-made Geometry Dash homage. Not affiliated with or endorsed by RobTop Games.',
     pitch: 'Run a neon level and jump through its gates to move between pages.',
     storyTitle: 'Rhythm and reflexes',
+  },
+  {
+    id: 'call-of-duty',
+    name: 'Call of Duty',
+    // Activision publishes no required wording for fan sites, so this states the relationship plainly.
+    notice: 'Fan-made Call of Duty homage. Not affiliated with or endorsed by Activision.',
+    pitch: 'Tune a wall of old TVs, turn a globe, or crank a gumball machine to pick your next page.',
+    storyTitle: 'What Zombies taught me',
   },
 ];
 

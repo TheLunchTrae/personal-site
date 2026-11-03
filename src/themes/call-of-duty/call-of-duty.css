@@ -1,0 +1,732 @@
+/* Call of Duty: a theme inspired by the Zombies menus, built only from
+   original work: open-licensed fonts, shapes and shaders drawn in code, and
+   synthesized sound. Tokens and the site shell come first, then the menu
+   stage and HUD that render only with gameplay on. Those use the theme's own
+   class prefixes (.menu-, .globe-, .hud-) under the theme attribute. */
+
+:root[data-theme='call-of-duty'] {
+  color-scheme: dark;
+  --background: #0c0b0b;
+  --foreground: #e9e4da;
+  --muted: #b3aca0;
+  --border: rgb(233 228 218 / 0.14);
+  --accent: #e5554a;
+  --surface: #161413;
+  --cod-ember: #f0a35c;
+  --cod-line: rgb(233 228 218 / 0.16);
+  --cod-title: var(--font-call-of-duty-title), Impact, 'Arial Black', ui-sans-serif, sans-serif;
+  --cod-display: var(--font-call-of-duty), 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
+  --cod-type: var(--font-call-of-duty-type), ui-monospace, 'Courier New', monospace;
+}
+
+:root[data-theme='call-of-duty'] body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgb(120 28 22 / 0.35), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgb(240 163 92 / 0.06), transparent 70%), var(--background);
+  background-attachment: fixed;
+}
+
+/* Film grain and faint scanlines over everything, from an original SVG
+   noise filter. It never takes pointer input. */
+:root[data-theme='call-of-duty'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.09;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgb(0 0 0 / 0.55) 2px 3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+:root[data-theme='call-of-duty'] .theme-credit[data-credit-for='call-of-duty'] {
+  display: block;
+  font-family: var(--cod-type);
+}
+
+/* The theme's own influence and credits pages keep its footer line in any theme. */
+:root:has(.prose-page[data-credit-for='call-of-duty']) .theme-credit[data-credit-for='call-of-duty'] {
+  display: block;
+}
+
+:root[data-theme='call-of-duty'] .site-header {
+  border-color: var(--border);
+  background: rgb(10 9 9 / 0.85);
+}
+
+:root[data-theme='call-of-duty'] .prose-page h1,
+:root[data-theme='call-of-duty'] .prose-page h2,
+:root[data-theme='call-of-duty'] .content-section :is(h3, h4, h5, h6),
+:root[data-theme='call-of-duty'] .theme-tour__name {
+  font-family: var(--cod-title);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+:root[data-theme='call-of-duty'] .menu-link,
+:root[data-theme='call-of-duty'] .menu-switch-option {
+  font-family: var(--cod-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+:root[data-theme='call-of-duty'] .theme-controls select,
+:root[data-theme='call-of-duty'] .theme-controls__play,
+:root[data-theme='call-of-duty'] .button {
+  border-radius: 2px;
+  font-family: var(--cod-type);
+  /* Special Elite ships one weight. */
+  font-weight: 400;
+}
+
+:root[data-theme='call-of-duty'] .theme-controls__play[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+:root[data-theme='call-of-duty'] .prose-page h1 {
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 24px rgb(229 85 74 / 0.25);
+}
+
+:root[data-theme='call-of-duty'] .prose-page h2 {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+/* The influence page's menu headings, in any theme: a written blurb sits
+   just under its heading. */
+.cod-menu-heading + .content-section {
+  margin-top: 0.75rem;
+}
+
+:root[data-theme='call-of-duty'] .cod-menu-game {
+  color: var(--muted);
+  font-family: var(--cod-display);
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+}
+
+:root[data-theme='call-of-duty'] .content-section li::marker {
+  color: var(--accent);
+}
+
+:root[data-theme='call-of-duty'] .content-section blockquote {
+  border-left-color: var(--accent);
+  font-family: var(--cod-type);
+}
+
+:root[data-theme='call-of-duty'] .content-section :is(pre, th, td) {
+  border-color: var(--cod-line);
+}
+
+:root[data-theme='call-of-duty'] .prose-page .page-aside {
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+  font-family: var(--cod-type);
+}
+
+:root[data-theme='call-of-duty'] .button:hover {
+  border-color: var(--accent);
+  background: rgb(229 85 74 / 0.1);
+}
+
+:root[data-theme='call-of-duty'] .theme-tour__card {
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgb(229 85 74 / 0.07), transparent 40%), var(--surface);
+}
+
+:root[data-theme='call-of-duty'] .game-notice {
+  border-color: var(--accent);
+  font-family: var(--cod-type);
+}
+
+/* Holds the menu's height before it mounts, so the page does not jump. */
+:root[data-theme='call-of-duty'][data-play='on'] .play-layer:empty {
+  min-height: clamp(260px, 40svh, 380px);
+}
+
+:root[data-theme='call-of-duty'][data-play='on'] body:has(.prose-page[data-section='home']) .play-layer:empty {
+  min-height: clamp(380px, 64svh, 620px);
+}
+
+/* Room under the page for the HUD strip. */
+:root[data-theme='call-of-duty'][data-play='on'] body {
+  padding-bottom: 5.5rem;
+}
+
+:root[data-theme='call-of-duty'] .menu-stage {
+  position: relative;
+  height: clamp(260px, 40svh, 380px);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: #070607;
+}
+
+:root[data-theme='call-of-duty'] .menu-stage[data-home='true'] {
+  height: clamp(380px, 64svh, 620px);
+}
+
+:root[data-theme='call-of-duty'] .menu-scene {
+  position: absolute;
+  inset: 0;
+}
+
+:root[data-theme='call-of-duty'] .menu-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+}
+
+:root[data-theme='call-of-duty'] .menu-canvas.is-draggable {
+  /* Sideways drags turn the globe; vertical swipes still scroll the page. */
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+}
+
+/* A white-out as the camera enters a screen or a site. */
+:root[data-theme='call-of-duty'] .menu-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(circle at 60% 50%, #fff6ea, #f0a35c 40%, #2a0806 80%);
+  opacity: 0;
+}
+
+:root[data-theme='call-of-duty'] .menu-scene[data-entering='true'] .menu-flash {
+  animation: menu-flash 640ms ease-in forwards;
+}
+
+/* The gumball's crank, drop, and ticket play first; the white-out comes last. */
+:root[data-theme='call-of-duty'] .menu-scene[data-scene='machine'][data-entering='true'] .menu-flash {
+  animation-delay: 1.65s;
+}
+
+@keyframes menu-flash {
+  0%,
+  45% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.92;
+  }
+}
+
+:root[data-theme='call-of-duty'] .menu-switch {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 5;
+  display: flex;
+  border: 1px solid var(--cod-line);
+  border-radius: 3px;
+  background: rgb(12 11 11 / 0.96);
+}
+
+:root[data-theme='call-of-duty'] .menu-switch-option {
+  padding: 0.35rem 0.8rem;
+  color: rgb(233 228 218 / 0.7);
+  font-size: 1rem;
+}
+
+:root[data-theme='call-of-duty'] .menu-switch-option[aria-pressed='true'] {
+  background: var(--accent);
+  color: #120707;
+}
+
+/* The gumball street's graphics presets, under the menu switch. */
+:root[data-theme='call-of-duty'] .menu-presets {
+  top: 3.6rem;
+  align-items: center;
+}
+
+:root[data-theme='call-of-duty'] .menu-presets-label {
+  padding: 0 0.4rem 0 0.7rem;
+  color: rgb(233 228 218 / 0.55);
+  font-family: var(--cod-type);
+  font-size: 0.75rem;
+}
+
+:root[data-theme='call-of-duty'] .menu-presets .menu-switch-option {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+:root[data-theme='call-of-duty'] .menu-bar {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+:root[data-theme='call-of-duty'] .menu-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--cod-line);
+  border-radius: 3px;
+  background: rgb(12 11 11 / 0.82);
+  font-size: 1.25rem;
+}
+
+:root[data-theme='call-of-duty'] .menu-link[data-selected='true'],
+:root[data-theme='call-of-duty'] .menu-link:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgb(229 85 74 / 0.3);
+}
+
+:root[data-theme='call-of-duty'] .menu-gum {
+  display: inline-block;
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  align-self: center;
+  border-radius: 50%;
+  box-shadow:
+    inset -2px -2px 3px rgb(0 0 0 / 0.35),
+    0 0 6px rgb(255 255 255 / 0.15);
+}
+
+:root[data-theme='call-of-duty'] .menu-roll {
+  border-color: rgb(255 79 154 / 0.55);
+  color: #ffd2e4;
+  cursor: pointer;
+}
+
+:root[data-theme='call-of-duty'] .menu-roll:hover,
+:root[data-theme='call-of-duty'] .menu-roll:focus-visible {
+  border-color: #ff4f9a;
+  box-shadow: 0 0 18px rgb(255 79 154 / 0.35);
+}
+
+:root[data-theme='call-of-duty'] .menu-link-number {
+  color: var(--accent);
+  font-family: var(--cod-type);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+:root[data-theme='call-of-duty'] .globe-bar {
+  left: auto;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: min(26rem, calc(100% - 2rem));
+}
+
+:root[data-theme='call-of-duty'] .globe-step {
+  flex: none;
+  width: 2.75rem;
+  border: 1px solid var(--cod-line);
+  border-radius: 3px;
+  background: rgb(12 11 11 / 0.82);
+  color: var(--accent);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+:root[data-theme='call-of-duty'] .globe-step:hover {
+  border-color: var(--accent);
+}
+
+:root[data-theme='call-of-duty'] .globe-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--cod-line);
+  border-radius: 3px;
+  background: rgb(12 11 11 / 0.86);
+}
+
+:root[data-theme='call-of-duty'] .globe-info-count {
+  color: var(--accent);
+  font-family: var(--cod-type);
+  font-size: 0.75rem;
+}
+
+:root[data-theme='call-of-duty'] .globe-go {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.4rem;
+}
+
+:root[data-theme='call-of-duty'] .globe-go-cue {
+  margin-left: 0.6rem;
+  color: var(--cod-ember);
+  font-family: var(--cod-type);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+:root[data-theme='call-of-duty'] .globe-go:hover {
+  box-shadow: none;
+  color: var(--accent);
+}
+
+:root[data-theme='call-of-duty'] .globe-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+:root[data-theme='call-of-duty'] .globe-tag[data-visible='true'] {
+  opacity: 1;
+}
+
+:root[data-theme='call-of-duty'] .globe-tag-name {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 0.9rem;
+  padding: 0.15rem 0.5rem;
+  border-left: 2px solid var(--accent);
+  background: rgb(12 11 11 / 0.96);
+  font-family: var(--cod-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The HUD: round tally at the lower left, points at the lower right. */
+:root[data-theme='call-of-duty'] .hud {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  pointer-events: none;
+  background: none;
+}
+
+:root[data-theme='call-of-duty'] .hud-round {
+  min-width: 3rem;
+}
+
+:root[data-theme='call-of-duty'] .hud-tally {
+  display: block;
+  width: 3rem;
+  height: 3.2rem;
+  filter: drop-shadow(0 0 6px rgb(200 30 20 / 0.6));
+}
+
+:root[data-theme='call-of-duty'] .hud-tally-stroke {
+  fill: none;
+  stroke: #c3271c;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  animation: hud-stroke-in 500ms ease-out both;
+}
+
+@keyframes hud-stroke-in {
+  from {
+    stroke-dasharray: 0 60;
+  }
+  to {
+    stroke-dasharray: 60 0;
+  }
+}
+
+:root[data-theme='call-of-duty'] .hud-round-number {
+  color: #c3271c;
+  font-family: var(--cod-display);
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+:root[data-theme='call-of-duty'] .hud-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+
+:root[data-theme='call-of-duty'] .hud-points {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+:root[data-theme='call-of-duty'] .hud-points-value {
+  min-width: 5.5rem;
+  padding: 0.1rem 0.6rem;
+  border: 1px solid rgb(240 163 92 / 0.4);
+  background: rgb(12 11 11 / 0.96);
+  color: var(--cod-ember);
+  font-family: var(--cod-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+:root[data-theme='call-of-duty'] .hud-awards {
+  position: absolute;
+  right: 100%;
+  bottom: 0;
+  margin-right: 0.5rem;
+}
+
+:root[data-theme='call-of-duty'] .hud-award {
+  color: #f6c68a;
+  font-family: var(--cod-display);
+  font-weight: 600;
+  animation: hud-award 1.1s ease-out forwards;
+}
+
+@keyframes hud-award {
+  from {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-1.5rem, -1.8rem);
+  }
+}
+
+:root[data-theme='call-of-duty'] .hud-meta {
+  color: rgb(233 228 218 / 0.65);
+  font-family: var(--cod-type);
+  font-size: 0.75rem;
+}
+
+:root[data-theme='call-of-duty'] .hud-actions {
+  display: flex;
+  gap: 0.4rem;
+  pointer-events: auto;
+}
+
+:root[data-theme='call-of-duty'] .hud-button {
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--cod-line);
+  border-radius: 2px;
+  background: rgb(12 11 11 / 0.96);
+  color: rgb(233 228 218 / 0.75);
+  font-family: var(--cod-type);
+  font-size: 0.75rem;
+}
+
+:root[data-theme='call-of-duty'] .hud-button[aria-pressed='true'] {
+  border-color: var(--cod-ember);
+  color: var(--cod-ember);
+}
+
+:root[data-theme='call-of-duty'] .hud-button:hover {
+  color: var(--foreground);
+}
+
+:root[data-theme='call-of-duty'] .hud-banner {
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: max-content;
+  max-width: 100vw;
+  padding: 2rem 4rem;
+  text-align: center;
+  /* A dark pool behind the text keeps it readable over any page. */
+  background: radial-gradient(closest-side, rgb(7 6 7 / 0.92), rgb(7 6 7 / 0.7) 60%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.96);
+  transition:
+    opacity 400ms,
+    transform 400ms;
+}
+
+:root[data-theme='call-of-duty'] .hud-banner[data-visible='true'] {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+:root[data-theme='call-of-duty'] .hud-banner-kicker {
+  color: #c3271c;
+  font-family: var(--cod-title);
+  font-size: clamp(2rem, 9vw, 4.5rem);
+  white-space: nowrap;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 30px rgb(195 39 28 / 0.7);
+  text-transform: uppercase;
+}
+
+:root[data-theme='call-of-duty'] .hud-banner-found {
+  color: var(--foreground);
+  font-family: var(--cod-type);
+  text-shadow: 0 1px 10px #000;
+}
+
+@media (width < 640px) {
+  /* Keep the random roll in sight at the start of the scrolling row. */
+  :root[data-theme='call-of-duty'] .menu-roll {
+    order: -1;
+  }
+
+  /* On a phone the HUD is a solid bar, and the page keeps room above it. */
+  :root[data-theme='call-of-duty'] .hud {
+    border-top: 1px solid var(--border);
+    background: rgb(10 9 9 / 0.97);
+  }
+
+  :root[data-theme='call-of-duty'][data-play='on'] body {
+    padding-bottom: 4.5rem;
+  }
+
+  :root[data-theme='call-of-duty'] .menu-stage[data-home='true'] {
+    height: clamp(360px, 58svh, 520px);
+  }
+
+  :root[data-theme='call-of-duty'][data-play='on'] body:has(.prose-page[data-section='home']) .play-layer:empty {
+    min-height: clamp(360px, 58svh, 520px);
+  }
+
+  :root[data-theme='call-of-duty'] .menu-switch {
+    top: 0.6rem;
+    right: 0.6rem;
+  }
+
+  :root[data-theme='call-of-duty'] .menu-switch-option {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  :root[data-theme='call-of-duty'] .menu-presets {
+    top: 2.9rem;
+  }
+
+  :root[data-theme='call-of-duty'] .menu-presets .menu-switch-option {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* One row of channels that scrolls sideways. */
+  :root[data-theme='call-of-duty'] .menu-bar {
+    right: 0;
+    bottom: 0.6rem;
+    left: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 0 0.6rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  :root[data-theme='call-of-duty'] .globe-bar {
+    right: 0.6rem;
+    left: 0.6rem;
+    width: auto;
+    padding: 0;
+  }
+
+  :root[data-theme='call-of-duty'] .menu-link {
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.95rem;
+  }
+
+  :root[data-theme='call-of-duty'] .globe-go {
+    flex-direction: row;
+    align-items: baseline;
+    padding: 0;
+  }
+
+  :root[data-theme='call-of-duty'] .hud {
+    align-items: center;
+    padding: 0.4rem 0.75rem;
+  }
+
+  :root[data-theme='call-of-duty'] .hud-tally {
+    width: 2rem;
+    height: 2.1rem;
+  }
+
+  :root[data-theme='call-of-duty'] .hud-round-number {
+    font-size: 2rem;
+  }
+
+  :root[data-theme='call-of-duty'] .hud-side {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  :root[data-theme='call-of-duty'] .hud-meta {
+    display: none;
+  }
+
+  :root[data-theme='call-of-duty'] .hud-points-value {
+    min-width: 4rem;
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme='call-of-duty'] .hud *,
+  :root[data-theme='call-of-duty'] .hud-banner,
+  :root[data-theme='call-of-duty'] .menu-flash,
+  :root[data-theme='call-of-duty'] .globe-tag {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Awards fade out by animation, so without it they never show. */
+  :root[data-theme='call-of-duty'] .hud-awards {
+    display: none;
+  }
+}
+
+/* The gumball street loads on demand; a poster frame of it holds the stage meanwhile. */
+:root[data-theme='call-of-duty'] .menu-scene[data-scene='machine'] {
+  background-color: #0b0d16;
+  background-position: center;
+  background-size: cover;
+}
+
+:root[data-theme='call-of-duty'] .menu-scene[data-scene='machine'] .menu-canvas {
+  transition: opacity 600ms ease-out;
+}
+
+:root[data-theme='call-of-duty'] .menu-scene[data-scene='machine'][data-loading='true'] .menu-canvas {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme='call-of-duty'] .menu-scene[data-scene='machine'] .menu-canvas {
+    transition: none;
+  }
+}
