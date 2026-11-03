@@ -5,8 +5,8 @@ after the game that inspired it, restyles every page, and offers gameplay
 navigation that the visitor can turn off. With gameplay off, the site stays in
 the theme.
 
-The game themes are Minecraft. Each one has an influence page about what the
-game meant to Trae and a credits page for everything the theme draws on.
+Each game theme has an influence page about what the game meant to Trae and
+a credits page for everything the theme draws on.
 
 ## State
 
@@ -78,10 +78,14 @@ of the home page's sections is set by the `order` front matter of the files in
    note, in the owner's required wording when it has one), `pitch` (one line
    for the tour), and `storyTitle`.
 2. Create `src/themes/<id>/` with:
-   - `<id>.css`: every rule scoped under `:root[data-theme='<id>']`, including
+   - `<id>.css`: every rule for the shell scoped under
+     `:root[data-theme='<id>']`, including
      `.theme-credit[data-credit-for='<id>'] { display: block; }`, plus the
      same rule under `:root:has(.prose-page[data-credit-for='<id>'])` so the
-     theme's own pages show it. Import it in `src/app/layout.tsx`.
+     theme's own pages show it. Rules for the gameplay component's own
+     classes, which exist only while it is mounted, use a prefix of the
+     theme's own (Minecraft uses `.blocks-`) instead. Import it in
+     `src/app/layout.tsx`.
    - A gameplay component that takes `PlayProps` from
      `src/themes/play-layer.tsx`.
 3. Register the component in `players` in `src/themes/play-layer.tsx` with
@@ -99,9 +103,10 @@ of the home page's sections is set by the `order` front matter of the files in
    theme up from the registry.
 5. Write the theme's credits in `content/credits/<id>/`: the owner's notice,
    then every font, library and other work the theme uses, with its author
-   and license. `src/app/credits/[theme]/page.tsx` builds a credits page for
-   each registered theme, and the build fails when a theme has no credits
-   written.
+   and license, linking any license text that has to ship with the code
+   under `public/licenses/`. `src/app/credits/[theme]/page.tsx` builds a
+   credits page for each registered theme, and the build fails when a theme
+   has no credits written.
 6. Load any display font with `next/font` and `preload: false`, and expose it
    as a CSS variable on `<html>` in `src/app/layout.tsx`. Use only fonts whose
    license allows web embedding. A self-hosted font lives in
@@ -160,5 +165,5 @@ such as a world to walk through. Either way:
 - Heavy engines, such as three.js, load only inside the component, so they
   stay out of every other theme's bundle.
 - Art and sound are original. Fonts are original, or third-party under a
-  license that allows web embedding and credited in the theme's credits. Never take files from the game itself. Reference the game by name
-  only.
+  license that allows web embedding and credited in the theme's credits.
+  Never take files from the game itself. Reference the game by name only.

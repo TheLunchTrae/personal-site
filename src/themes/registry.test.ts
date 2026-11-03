@@ -88,16 +88,6 @@ await test('gameplay follows the stored choice, then reduced motion, for a game 
   assert.equal(resolvePlay('minecraft', 'auto', true), false);
 });
 
-await test('every game theme has its credits written', async () => {
-  for (const theme of gameThemes) {
-    const sections = await readSections(`credits/${theme.id}`);
-    assert.ok(
-      sections.some((section) => section.body.trim() !== ''),
-      `content/credits/${theme.id}/ has no credits written`,
-    );
-  }
-});
-
 // Mojang's usage guidelines require this exact wording on fan sites, so the
 // footer notice and the credits page both carry it verbatim.
 await test('the Minecraft notice uses the wording Mojang requires', async () => {

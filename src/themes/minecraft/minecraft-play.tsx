@@ -14,15 +14,12 @@ const SECTION_ICON_TILES: Record<GameSectionId, readonly [number, number]> = {
   story: [T.codeOre, T.codeOre],
 };
 
-const gameSectionIds: readonly GameSectionId[] = ['home', 'story'];
-
 const STICK_RADIUS = 44;
 
 function paintIcons() {
   const atlas = paintAtlas();
-  const sections = new Map<GameSectionId, string>();
-  for (const id of gameSectionIds) {
-    const [top, side] = SECTION_ICON_TILES[id];
+  const sections = new Map<string, string>();
+  for (const [id, [top, side]] of Object.entries(SECTION_ICON_TILES)) {
     sections.set(id, paintBlockIcon(atlas, top, side));
   }
   return { atlas, sections };
@@ -134,7 +131,11 @@ export function MinecraftPlay({ sections, reducedMotion, onFail }: PlayProps) {
       return;
     }
     if (onPage) {
-      document.getElementById('content')?.focus({ preventScroll: true });
+      // The page panel is what scrolls over the world, so it takes focus for
+      // Space, Page Down and the arrow keys to scroll it.
+      const panel = document.querySelector<HTMLElement>('#content > .prose-page');
+      panel?.setAttribute('tabindex', '-1');
+      (panel ?? document.getElementById('content'))?.focus({ preventScroll: true });
     } else {
       hostRef.current?.focus({ preventScroll: true });
     }
@@ -185,6 +186,8 @@ export function MinecraftPlay({ sections, reducedMotion, onFail }: PlayProps) {
         className="blocks-world"
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the world is a keyboard-driven widget and needs focus to receive movement keys
         tabIndex={0}
+        // While a page is open the world is paused behind it, so it leaves the tab order.
+        inert={onPage}
         role="application"
         aria-label="Minecraft-inspired world"
         aria-describedby="blocks-help"
@@ -211,9 +214,9 @@ export function MinecraftPlay({ sections, reducedMotion, onFail }: PlayProps) {
       </div>
 
       <p id="blocks-help" className="blocks-help">
-        Click the world or tab to it, then walk with WASD or the arrow keys and drag to look. Press E at a door to open
-        it, or press 1 to {sections.length} or pick a page from the hotbar to walk there. Click a block to mine it,
-        right-click to place it, and press R to rebuild the world.
+        Click the world or tab to it, then walk with WASD or the arrow keys, and drag or press Page Up and Page Down to
+        look. Press E at a door to open it, or press 1 to {sections.length} or pick a page from the hotbar to walk
+        there. Click or press F to mine a block, right-click or press G to place it, and press R to rebuild the world.
       </p>
 
       {nearby !== null && !onPage ? (

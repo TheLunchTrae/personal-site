@@ -35,10 +35,8 @@ export interface Engine {
   placeAt: (section: GameSectionId) => void;
   setPaused: (paused: boolean) => void;
   setMoveInput: (strafe: number, forward: number) => void;
-  look: (dx: number, dy: number) => void;
   jump: () => void;
   enterNearby: () => void;
-  reset: () => void;
   dispose: () => void;
 }
 
@@ -401,6 +399,12 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
     if (keys.has('ArrowRight')) {
       yaw -= dt * 2.2;
     }
+    if (keys.has('PageUp')) {
+      pitch = Math.min(1.45, pitch + dt * 1.6);
+    }
+    if (keys.has('PageDown')) {
+      pitch = Math.max(-1.45, pitch - dt * 1.6);
+    }
     if (route !== null && (forward !== 0 || strafe !== 0)) {
       route = null;
     }
@@ -486,9 +490,6 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
       placePlayer(SPAWN, { x: SPAWN.x, z: SPAWN.z - 4 });
     }
 
-    camera.position.set(position.x, position.y + EYE, position.z);
-    camera.rotation.set(pitch, yaw, 0);
-
     if (!options.reducedMotion) {
       for (const cloud of clouds) {
         cloud.position.x += dt * 0.6;
@@ -515,17 +516,28 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
   };
-  const observer = new ResizeObserver(resize);
-  observer.observe(host);
   resize();
 
   let paused = false;
   let frame = 0;
   let last = performance.now();
+  // The camera follows the player at render time, so a frame drawn while
+  // paused, such as after placePlayer or a resize, shows where they stand.
   const render = () => {
+    camera.position.set(position.x, position.y + EYE, position.z);
+    camera.rotation.set(pitch, yaw, 0);
     renderer.render(scene, camera);
     updateLabels(width, height);
   };
+  // A paused world draws no frames, so a resize redraws it once.
+  const observer = new ResizeObserver(() => {
+    resize();
+    if (paused) {
+      render();
+    }
+  });
+  observer.observe(host);
+
   const loop = (now: number) => {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
@@ -574,6 +586,8 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
     'ArrowDown',
     'ArrowLeft',
     'ArrowRight',
+    'PageUp',
+    'PageDown',
     'Space',
   ]);
   const onKeyDown = (event: KeyboardEvent) => {
@@ -585,6 +599,10 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
       event.preventDefault();
     } else if (event.code === 'KeyE' || event.code === 'Enter') {
       enterNearby();
+    } else if (event.code === 'KeyF') {
+      breakTarget();
+    } else if (event.code === 'KeyG') {
+      placeHeld();
     } else if (event.code === 'KeyR') {
       reset();
     }
@@ -614,7 +632,8 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
     look(dx, dy);
   };
   const onPointerUp = (event: PointerEvent) => {
-    if (drag !== null && drag.moved < 6 && event.pointerType === 'mouse') {
+    if (drag !== null && drag.moved < 6 && event.type === 'pointerup') {
+      // A tap without a drag mines, on touch as with the mouse.
       if (drag.button === 0) {
         breakTarget();
       } else if (drag.button === 2) {
@@ -640,11 +659,6 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
       if (landmark === undefined) {
         return;
       }
-      if (options.reducedMotion) {
-        placeAt(section);
-        options.onArrive(section);
-        return;
-      }
       route = { section, waypoints: planRoute(landmark), lastDistance: Infinity, stalled: 0 };
       host.focus({ preventScroll: true });
     },
@@ -663,12 +677,10 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
       stick.strafe = strafe;
       stick.forward = forward;
     },
-    look,
     jump: () => {
       jumpQueued = true;
     },
     enterNearby,
-    reset,
     dispose: () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
@@ -690,6 +702,7 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
       }
       atlas.dispose();
       renderer.dispose();
+      renderer.forceContextLoss();
     },
   };
 
