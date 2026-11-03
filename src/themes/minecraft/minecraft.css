@@ -610,7 +610,9 @@ body:has(.blocks-close) .blocks-help {
   }
 
   /* Between the open page and the hotbar, on one line. The page ends above
-     it so the button never covers the page's last lines. */
+     it so the button never covers the page's last lines: 12rem is the
+     button's 8.75rem bottom, its ~2.75rem height and a 0.5rem gap. Change
+     these together with the hotbar's bottom and slot height above. */
   .blocks-close {
     top: auto;
     right: 50%;
