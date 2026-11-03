@@ -1,8 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { gameThemes, storyHref } from './registry';
 import { setTheme, useThemeState } from './theme-store';
+import { wordmarks } from './wordmarks';
 
 /** The game themes as a tour: switch into each one, then read what that game taught me. */
 export function ThemeTour() {
@@ -12,9 +14,16 @@ export function ThemeTour() {
     <ul className="theme-tour">
       {gameThemes.map((theme) => {
         const on = theme.id === active;
+        const wordmark = wordmarks[theme.id];
         return (
-          <li key={theme.id} className="theme-tour__card">
-            <h3 className="theme-tour__name">{theme.name}</h3>
+          <li key={theme.id} className="theme-tour__card" data-tour-theme={theme.id}>
+            <h3 className="theme-tour__name">
+              {wordmark === undefined ? (
+                theme.name
+              ) : (
+                <Image src={wordmark} alt={theme.name} className="theme-tour__wordmark" />
+              )}
+            </h3>
             <p>{theme.pitch}</p>
             <div className="theme-tour__actions">
               <button

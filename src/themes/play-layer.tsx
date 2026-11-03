@@ -28,6 +28,11 @@ const players: Record<GameThemeId, ComponentType<PlayProps>> = {
   minecraft: dynamic(() => import('./minecraft/minecraft-play').then((module) => module.MinecraftPlay), {
     ssr: false,
   }),
+  // The runner strip sits in the page flow, so a placeholder holds its height while it loads.
+  'geometry-dash': dynamic(() => import('./geometry-dash/dash-play').then((module) => module.DashPlay), {
+    ssr: false,
+    loading: () => <div className="dash-stage-placeholder" aria-hidden="true" />,
+  }),
 };
 
 interface BoundaryState {

@@ -10,7 +10,7 @@
  * `gameThemes`; `players` in play-layer.tsx is keyed by this type, so the
  * build fails until the theme's gameplay plugs in.
  */
-export type GameThemeId = 'minecraft';
+export type GameThemeId = 'minecraft' | 'geometry-dash';
 
 export interface GameTheme {
   /** Value of `html[data-theme]`, the theme's folder under src/themes/, and its influence page slug. */
@@ -42,6 +42,14 @@ export const gameThemes: readonly GameTheme[] = [
     notice: 'NOT AN OFFICIAL MINECRAFT WEBSITE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.',
     pitch: 'Walk a voxel island and mine your way around it.',
     storyTitle: 'What Minecraft taught me',
+  },
+  {
+    id: 'geometry-dash',
+    name: 'Geometry Dash',
+    // RobTop Games publishes no required wording, so this states the relationship plainly.
+    notice: 'Fan-made Geometry Dash homage. Not affiliated with or endorsed by RobTop Games.',
+    pitch: 'Run a neon level and jump through its gates to move between pages.',
+    storyTitle: 'Rhythm and reflexes',
   },
 ];
 

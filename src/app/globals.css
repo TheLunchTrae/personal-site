@@ -155,6 +155,11 @@ body {
   margin-top: 1rem;
 }
 
+/* Sections drop their first heading's margin, so the gap between them is set here. */
+.prose-page .content-section + .content-section {
+  margin-top: 2.5rem;
+}
+
 /* The home intro's text under the name is the lede. */
 .prose-page[data-section='home'] [data-content='intro'] p {
   font-size: 1.125rem;
@@ -315,6 +320,17 @@ body {
 .theme-tour__name {
   font-size: 1.125rem;
   font-weight: 600;
+}
+
+/* A title image that stands in for a theme's name. It is drawn larger than it
+   shows, so the browser only ever scales it down; smooth scaling keeps its thin
+   outlines, even under a theme that sets pixelated rendering on the page. */
+.theme-tour__wordmark {
+  image-rendering: auto;
+  display: block;
+  width: 100%;
+  max-width: 18rem;
+  height: auto;
 }
 
 .prose-page .theme-tour__card p {

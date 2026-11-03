@@ -135,6 +135,13 @@ under `:root[data-theme='<id>'] .content-section`. When CSS
 is not enough, such as a heading that needs extra markup, the page passes
 `components` to `ContentBlock` to replace the element for that Markdown node.
 
+`readSections(folder, { schema })` reads a folder's files. Each file's YAML
+front matter is parsed with `gray-matter` and checked with a `zod` schema that
+extends `sectionFields`, so a bad field fails the build, and only the Markdown
+body reaches `ContentBlock`. A page that lists data, such as the Geometry Dash
+favorite levels in `content/levels/`, keeps one file per item with the item's
+fields in front matter and renders them from `section.fields`.
+
 ## Gameplay contract
 
 `PlayProps` gives the component:
