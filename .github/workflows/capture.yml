@@ -9,14 +9,21 @@ permissions:
 
 jobs:
   capture:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 40
+    env:
+      MISE_LOCKED: '1'
+      MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          bun-version: 1.4.4
-      - run: bun install --frozen-lockfile && bun run build
+          persist-credentials: false
+      - uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+        with:
+          version: '2026.10.19'
+          install: true
+          cache: true
+      - run: mise run ts:build
       - name: Install Playwright
         working-directory: .capture
         run: npm init -y >/dev/null && npm i playwright@1.56.1 && npx playwright install --with-deps chromium
@@ -29,7 +36,7 @@ jobs:
           node audit.mjs > out/audit.json
           node reach.mjs out/audit.json | tee out/reach.txt
           if [ -f shots.mjs ]; then node shots.mjs; fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         if: always()
         with:
           name: capture
