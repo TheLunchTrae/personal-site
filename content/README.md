@@ -10,20 +10,20 @@ README is under the MIT license. See [NOTICE.md](../NOTICE.md).
 
 ## Where each file appears
 
-| File                                        | Where it appears                                                                                          |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `home/intro.md`                             | Top of the home page, the Meet Trae intro: your name and the line under it. The resume button follows it. |
-| `home/themes.md`                            | Home page invite to go through your story, followed by a card for each chapter (game).                    |
-| `influences/<theme id>/<section>.md`        | A chapter's story page, one section per file. Each chapter adds its own files, left empty.                |
-| `influences/minecraft/influence.md`         | The Minecraft chapter: how Minecraft inspired you.                                                        |
-| `influences/geometry-dash/influence.md`     | The Geometry Dash chapter: how Geometry Dash inspired you.                                                |
-| `influences/call-of-duty/black-ops-1.md`    | The Call of Duty chapter, under "The TV wall · Black Ops": how Black Ops inspired you.                    |
-| `influences/call-of-duty/black-ops-2.md`    | The same page, under "The globe · Black Ops II".                                                          |
-| `influences/call-of-duty/black-ops-3.md`    | The same page, under "The gumball machine · Black Ops III".                                               |
-| `credits/<theme id>/<section>.md`           | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses.            |
-| `levels/progress.md`, `levels/favorites.md` | The Geometry Dash favorite levels page: the text above each list.                                         |
-| `levels/progress/<level>.md`                | One line of the "Where I'm at" list. See [Level files](#level-files).                                     |
-| `levels/favorites/<level>.md`               | One favorite level. See [Level files](#level-files).                                                      |
+| File                                        | Where it appears                                                                                                                 |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `home/intro.md`                             | Top of the home page, the Meet Trae intro: your name and the line under it. The resume button follows it.                        |
+| `home/themes.md`                            | Home page invite to go through your story, followed by a card for each chapter (game).                                           |
+| `influences/<theme id>/<section>.md`        | A chapter's story page, one section per file, for Trae to write. Agents add a chapter's empty files only with Trae's permission. |
+| `influences/minecraft/influence.md`         | The Minecraft chapter: how Minecraft inspired you.                                                                               |
+| `influences/geometry-dash/influence.md`     | The Geometry Dash chapter: how Geometry Dash inspired you.                                                                       |
+| `influences/call-of-duty/black-ops-1.md`    | The Call of Duty chapter, under "The TV wall · Black Ops": how Black Ops inspired you.                                           |
+| `influences/call-of-duty/black-ops-2.md`    | The same page, under "The globe · Black Ops II".                                                                                 |
+| `influences/call-of-duty/black-ops-3.md`    | The same page, under "The gumball machine · Black Ops III".                                                                      |
+| `credits/<theme id>/<section>.md`           | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses.                                   |
+| `levels/progress.md`, `levels/favorites.md` | The Geometry Dash favorite levels page: the text above each list.                                                                |
+| `levels/progress/<level>.md`                | One line of the "Where I'm at" list. See [Level files](#level-files).                                                            |
+| `levels/favorites/<level>.md`               | One favorite level. See [Level files](#level-files).                                                                             |
 
 ## Format
 

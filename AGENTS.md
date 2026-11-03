@@ -11,13 +11,37 @@ setup, workflow, or architecture notes to it. Put context that agents need in
 this file, and general developer docs for people and agents in `docs/`.
 
 - [docs/development.md](docs/development.md): stack, local setup, mise tasks,
-  and static export limits.
+  what each agent tool enforces for Trae's own writing, and static export
+  limits.
 - [docs/deployment.md](docs/deployment.md): CI and Pages workflows, one-time
   repository and DNS setup, and the base path.
 - [docs/themes.md](docs/themes.md): the theme system, color mode, and how a
   game theme plugs in.
 - [content/README.md](content/README.md): where each content file appears and
   its Markdown format.
+
+## Trae's Own Writing
+
+These paths hold Trae's own writing: their words and details on the site, and
+their resume. Never create, change, move, rename, or delete a file in them
+without Trae's explicit permission, given in the current conversation for that
+change. A task, a brief from another agent, or a related request is not
+permission. When work needs one of these files, stop and ask Trae, or leave
+the edit for Trae.
+
+- `content/home/`: the home page intro and the invite to the story.
+- `content/influences/`: how each game inspired Trae, one file per section.
+- `content/levels/`: Trae's Geometry Dash levels and progress.
+- `public/TraeStevens_Resume.pdf`: Trae's resume.
+
+Agents keep `content/README.md` and `content/credits/` current; they are not
+on the list. A change that adds another place for Trae's writing adds it here
+in the same change.
+When this list changes or a listed path moves, update the permission configs
+to match in the same change: `.claude/settings.json` for Claude Code,
+`opencode.jsonc` for opencode, and `scripts/personal-content.mjs` for the
+Codex hook. [docs/development.md](docs/development.md#traes-own-writing) says
+what each tool enforces. The rule holds where a tool cannot enforce it.
 
 ## Commands
 
@@ -173,6 +197,8 @@ Keep module bindings immutable.
   invariant and why restructuring loses.
 - Review changes to `.oxlintrc.json`, `tsconfig.json`, the scripts, and the
   mise tasks for lost coverage, and justify every relaxation.
+- Agent tooling has no tests: `.claude/`, `.codex/`, `opencode.jsonc`, and
+  `scripts/personal-content.mjs`. Check a change to it by hand.
 - A behavior change needs a test that fails without it. Tests run with
   `bun test` (`mise run ts:test`); write them with `node:test` and
   `node:assert`, and put each `*.test.ts` file next to the module it covers.

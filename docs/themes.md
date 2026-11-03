@@ -117,9 +117,12 @@ the `order` front matter of the files in `content/home/`; see
    `<article className="prose-page" data-credit-for="<id>">` holding a
    `ContentBlock` from `src/site/content.tsx` for each section that
    `readSections('influences/<id>')` returns, after a `.page-kicker` line with
-   the theme's `chapterLabel` and name and an `h1` with its `storyTitle`. Create
-   `content/influences/<id>/` with the theme's blurb files, left empty for
-   Trae to write, and list them in `content/README.md`. End the page with a
+   the theme's `chapterLabel` and name and an `h1` with its `storyTitle`. The
+   theme's blurb files go in `content/influences/<id>/`, left empty for Trae
+   to write. That folder is
+   [Trae's own writing](../AGENTS.md#traes-own-writing), so ask Trae before
+   you create the files, or leave them for Trae. List them in
+   `content/README.md`. End the page with a
    link to the theme's credits page (`creditsHref`). The tour, the theme
    picker, the site tabs, the footer credit, and the gameplay's last
    destination pick the theme up from the registry.
