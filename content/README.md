@@ -4,6 +4,9 @@ The site's text lives here as Markdown, one file per section, so each piece
 can be written on its own. Short interface labels, such as button text and
 the Mode control, stay in code.
 
+This writing is all rights reserved, not under the repo's MIT license (see
+`NOTICE.md`).
+
 ## Where each file appears
 
 | File                                        | Where it appears                                                                               |
