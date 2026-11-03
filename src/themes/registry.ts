@@ -27,10 +27,7 @@ export interface GameTheme {
   readonly pitch: string;
   /** Title of the theme's influence page, the chapter of Trae's story that the game inspired. */
   readonly storyTitle: string;
-  /**
-   * The theme's own pages besides its influence and credits pages. The site
-   * navigation shows them as tabs between those two while the theme is on.
-   */
+  /** The theme's own pages besides its influence and credits pages. */
   readonly pages: readonly ThemePage[];
 }
 
@@ -38,8 +35,6 @@ export interface GameTheme {
 interface ThemePage {
   readonly id: string;
   readonly href: string;
-  /** The page's tab label in the site navigation. */
-  readonly label: string;
 }
 
 /**
@@ -65,7 +60,7 @@ export const gameThemes: readonly GameTheme[] = [
     notice: 'Fan-made Geometry Dash homage. Not affiliated with or endorsed by RobTop Games.',
     pitch: 'Run a neon level and jump through its gates to move between pages.',
     storyTitle: 'How Geometry Dash inspired me',
-    pages: [{ id: 'levels', href: '/influences/geometry-dash/levels/', label: 'Favorite levels' }],
+    pages: [{ id: 'levels', href: '/influences/geometry-dash/levels/' }],
   },
   {
     id: 'call-of-duty',

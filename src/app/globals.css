@@ -77,43 +77,139 @@ body {
   position: relative;
   z-index: 20;
   display: flex;
-  flex-wrap: wrap;
   gap: 0.75rem 1.5rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 1rem 1.5rem;
 }
 
-/* The site's tabs. Home shows in every theme. The default theme shows each
-   game theme's influence page; a game theme hides those and its stylesheet
-   reveals its own tabs (see docs/themes.md). The :where() keeps these rules
-   below a theme's reveal rule. */
-.site-nav__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-}
-
-:where(.site-nav__item[data-nav-scope='theme']),
-:where(:root:not([data-theme='default']) .site-nav__item[data-nav-scope='story']) {
+/* A narrow screen shows the menu button in the bar and the theme controls in
+   its panel; a wide screen shows the controls in the bar. SiteMenu closes the
+   panel at the same width. */
+.site-header > .theme-controls {
   display: none;
 }
 
-.site-nav__tab {
-  display: block;
-  padding: 0.25rem 0.625rem;
-  border-bottom: 2px solid transparent;
-  color: var(--muted);
+@media (min-width: 40rem) {
+  .site-header > .theme-controls {
+    display: flex;
+  }
+
+  .site-menu {
+    display: none;
+  }
 }
 
-.site-nav__tab:hover {
+.site-menu__button,
+.site-menu__close {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--surface);
   color: var(--foreground);
+  font: inherit;
+  font-size: 0.875rem;
 }
 
-.site-nav__tab[aria-current='page'] {
-  border-bottom-color: var(--accent);
+/* The menu button shows only its icon; aria-label names it. */
+.site-menu__button {
+  padding: 0.5rem;
+}
+
+.site-menu__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* The panel is an overlay pinned to the right edge at the full viewport
+   height, so it is the one place here with fixed positioning. It slides in
+   from off screen. */
+.site-menu__panel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(20rem, 85vw);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-inline-start: 1px solid var(--border);
+  background: var(--background);
   color: var(--foreground);
+  translate: 100% 0;
+  transition:
+    translate 200ms ease-out,
+    overlay 200ms allow-discrete,
+    display 200ms allow-discrete;
+}
+
+.site-menu__panel[open] {
+  translate: 0 0;
+}
+
+@starting-style {
+  .site-menu__panel[open] {
+    translate: 100% 0;
+  }
+}
+
+.site-menu__panel::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-menu__panel {
+    transition: none;
+  }
+}
+
+:root:has(.site-menu__panel[open]) {
+  overflow: hidden;
+}
+
+.site-menu__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+}
+
+.site-menu__top {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-menu__title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* In the panel the controls stack, each label over its control. */
+.site-menu__panel .theme-controls {
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  font-size: 1rem;
+}
+
+.site-menu__panel .theme-controls__field {
+  flex-direction: column;
+  gap: 0.375rem;
+  align-items: stretch;
+}
+
+.site-menu__panel :is(.theme-controls select, .theme-controls__play) {
+  padding: 0.5rem 0.75rem;
 }
 
 .theme-controls:not([data-hydrated]) {

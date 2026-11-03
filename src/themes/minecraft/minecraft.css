@@ -30,12 +30,27 @@
 
 :root[data-theme='minecraft'] .theme-controls select,
 :root[data-theme='minecraft'] .theme-controls__play,
+:root[data-theme='minecraft'] .site-menu__button,
+:root[data-theme='minecraft'] .site-menu__close,
 :root[data-theme='minecraft'] .button {
   border: 2px solid var(--border);
   border-radius: 0;
   box-shadow:
     inset 2px 2px 0 rgb(255 255 255 / 0.18),
     inset -2px -2px 0 rgb(0 0 0 / 0.35);
+}
+
+:root[data-theme='minecraft'] .site-menu__panel {
+  border-inline-start: 3px solid var(--border);
+  background: var(--loam);
+  box-shadow:
+    inset 6px 0 0 #5e8c31,
+    inset 9px 0 0 #3f6420;
+}
+
+:root[data-theme='minecraft'] .site-menu__title {
+  font-family: var(--font-pixel), monospace;
+  font-weight: 700;
 }
 
 :root[data-theme='minecraft'] .theme-controls__play[aria-pressed='true'] {
@@ -120,31 +135,6 @@
 /* The theme's own influence and credits pages keep its footer line in any theme. */
 :root:has(.prose-page[data-credit-for='minecraft']) .theme-credit[data-credit-for='minecraft'] {
   display: block;
-}
-
-/* The site tabs as stone buttons; the open page's tab is grass green. */
-:root[data-theme='minecraft'] .site-nav__item[data-nav-for='minecraft'] {
-  display: block;
-}
-
-:root[data-theme='minecraft'] .site-nav__tab {
-  padding: 0.25rem 0.625rem;
-  border: 2px solid var(--border);
-  background: #6f6f6f;
-  box-shadow:
-    inset 2px 2px 0 rgb(255 255 255 / 0.25),
-    inset -2px -2px 0 rgb(0 0 0 / 0.4);
-  color: #fff;
-  font-family: var(--font-pixel), monospace;
-  text-shadow: 1px 1px 0 #3a3a3a;
-}
-
-:root[data-theme='minecraft'] .site-nav__tab:hover {
-  background: #4f5a9a;
-}
-
-:root[data-theme='minecraft'] .site-nav__tab[aria-current='page'] {
-  background: var(--moss);
 }
 
 :root[data-theme='minecraft'] .theme-tour__card {
@@ -531,8 +521,8 @@ body:has(.blocks-close) .blocks-help {
   }
 }
 
-/* On phones the header can wrap to two rows, the tabs then the theme
-   controls, and the not-affiliated line to three. */
+/* On phones the header holds only the menu button, and the not-affiliated
+   line can wrap to three rows. */
 @media (max-width: 40rem) {
   :root[data-theme='minecraft'][data-play='on'] body {
     --world-gutter: 0.5rem;
@@ -568,24 +558,6 @@ body:has(.blocks-close) .blocks-help {
   :root[data-theme='minecraft'][data-play='on'] .site-header {
     gap: 0.5rem 0.75rem;
     padding: 0.625rem 0.75rem;
-  }
-
-  :root[data-theme='minecraft'][data-play='on'] .site-nav__list {
-    font-size: 0.75rem;
-  }
-
-  :root[data-theme='minecraft'][data-play='on'] .theme-controls {
-    flex: none;
-    gap: 0.375rem;
-    font-size: 0.75rem;
-  }
-
-  :root[data-theme='minecraft'][data-play='on'] .theme-controls__field > span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
   }
 
   :root[data-theme='minecraft'][data-play='on'] .prose-page[data-section='home'] {
