@@ -57,6 +57,7 @@ body {
   outline: none;
 }
 
+/* Off screen until it takes focus, then over the page's top left corner. */
 .skip-link {
   position: absolute;
   top: 0.5rem;
@@ -326,7 +327,8 @@ body {
   text-underline-offset: 0.2em;
 }
 
-/* Shown by the shared gameplay layer when a theme's gameplay cannot start. */
+/* Shown by the shared gameplay layer when a theme's gameplay cannot start. It
+   floats over the bottom left corner of the screen, apart from the page. */
 .game-notice {
   position: fixed;
   bottom: 1rem;

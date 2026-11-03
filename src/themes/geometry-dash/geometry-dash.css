@@ -172,6 +172,8 @@
   border-top: 1px solid var(--border);
 }
 
+/* The runner's strip. The level is drawn to fit its height, which scales
+   with the screen's width within limits; the placeholders above match it. */
 .dash-frame {
   position: relative;
   height: clamp(190px, 32vw, 300px);
@@ -202,6 +204,7 @@
   outline-offset: -3px;
 }
 
+/* A white flash over the runner as it goes through a page gate. */
 .dash-flash {
   position: absolute;
   inset: 0;

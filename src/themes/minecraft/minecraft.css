@@ -166,7 +166,12 @@
   background: var(--moss);
 }
 
-/* Play mode. */
+/* Play mode. The page lays out as a grid the size of the viewport, over the
+   world: the header, the open page in the room left over, a row for the cues
+   above the hotbar (the door prompt and the keyboard help), the hotbar, and
+   the not-affiliated line. Each row takes the height of what is in it, so
+   when the header or the line wraps, the rows under it move with it. The
+   outer columns are the gutter between the page and the screen's edge. */
 :root[data-theme='minecraft'][data-play='on'],
 :root[data-theme='minecraft'][data-play='on'] body {
   height: 100%;
@@ -174,7 +179,22 @@
 }
 
 :root[data-theme='minecraft'][data-play='on'] body {
+  --world-gutter: 1rem;
+  display: grid;
+  grid-template:
+    'header header header' auto
+    '. page .' minmax(0, 1fr)
+    '. cue .' auto
+    '. hotbar .' auto
+    'footer footer footer' auto
+    / var(--world-gutter) minmax(0, 1fr) var(--world-gutter);
+  row-gap: 0.5rem;
   background: linear-gradient(var(--sky), #d7e8f6);
+}
+
+/* The gameplay's controls take their places in the body's grid. */
+:root[data-theme='minecraft'][data-play='on'] .play-layer {
+  display: contents;
 }
 
 /* The home card stays small over the world, so the theme tour stays in the header's theme menu. */
@@ -182,13 +202,12 @@
   display: none;
 }
 
-/* Over the world the page can't scroll, so the footer line sits under the
-   hotbar as a small label sized to its text, not a full-width strip. */
+/* The page can't scroll over the world, so the footer line is a small label
+   sized to its text under the hotbar, not a full-width strip. */
 :root[data-theme='minecraft'][data-play='on'] .site-footer {
-  position: fixed;
-  inset: auto 0 0.375rem;
+  grid-area: footer;
   z-index: 20;
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 0.375rem;
   pointer-events: none;
 }
 
@@ -202,16 +221,18 @@
   pointer-events: auto;
 }
 
+/* The header's grass edge is a 9px box-shadow, which takes no space, so the
+   same margin keeps the page from overlapping it. */
 :root[data-theme='minecraft'][data-play='on'] .site-header {
-  position: fixed;
-  inset: 0 0 auto;
+  grid-area: header;
+  margin-block-end: 9px;
   background: rgb(58 42 31 / 0.88);
 }
 
 :root[data-theme='minecraft'][data-play='on'] .page {
-  position: fixed;
-  inset: 5rem 1rem 9.25rem;
+  grid-area: page;
   z-index: 10;
+  min-height: 0;
   align-items: center;
   pointer-events: none;
 }
@@ -249,6 +270,7 @@
   margin-top: 1rem;
 }
 
+/* The world is the game scene: it fills the screen behind the page. */
 .blocks-world {
   position: fixed;
   inset: 0;
@@ -273,13 +295,13 @@ body:has(.blocks-close) .blocks-world__canvas {
   filter: blur(3px) brightness(0.65);
 }
 
+/* An 18px pixel-art cross, centered on the world. */
 .blocks-world__crosshair {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset: 0;
   width: 18px;
   height: 18px;
-  margin: -9px 0 0 -9px;
+  margin: auto;
   background:
     linear-gradient(#fff, #fff) center / 2px 100% no-repeat,
     linear-gradient(#fff, #fff) center / 100% 2px no-repeat;
@@ -293,6 +315,8 @@ body:has(.blocks-close) .blocks-help {
   display: none;
 }
 
+/* Signs over the world's doors. The engine moves each label to its door's
+   point on screen every frame, from the top left corner. */
 .blocks-world__labels {
   position: absolute;
   inset: 0;
@@ -315,10 +339,10 @@ body:has(.blocks-close) .blocks-help {
 }
 
 .blocks-help {
-  position: fixed;
-  bottom: 7.75rem;
-  left: 1rem;
+  grid-area: cue;
   z-index: 15;
+  align-self: end;
+  justify-self: start;
   max-width: 19rem;
   padding: 0.5rem 0.75rem;
   border: 2px solid var(--border);
@@ -330,8 +354,10 @@ body:has(.blocks-close) .blocks-help {
 
 .blocks-prompt,
 .blocks-close {
-  position: fixed;
   z-index: 30;
+  display: flex;
+  gap: 0.375rem;
+  align-items: baseline;
   padding: 0.5rem 0.875rem;
   border: 2px solid var(--border);
   background: var(--moss);
@@ -346,20 +372,21 @@ body:has(.blocks-close) .blocks-help {
 }
 
 .blocks-prompt {
-  bottom: 8.25rem;
-  left: 50%;
-  transform: translateX(-50%);
+  grid-area: cue;
+  align-self: end;
+  justify-self: center;
 }
 
+/* At the open page's top right corner. */
 .blocks-close {
-  top: 5rem;
-  right: 1rem;
+  grid-area: page;
+  align-self: start;
+  justify-self: end;
   background: var(--loam);
 }
 
 .blocks-prompt kbd,
 .blocks-close kbd {
-  margin-left: 0.375rem;
   padding: 0 0.3rem;
   border: 1px solid rgb(255 255 255 / 0.5);
   font-family: inherit;
@@ -367,22 +394,22 @@ body:has(.blocks-close) .blocks-help {
 }
 
 .blocks-hotbar {
-  position: fixed;
-  bottom: 2.25rem;
-  left: 50%;
+  grid-area: hotbar;
   z-index: 30;
+  justify-self: center;
   display: flex;
   gap: 4px;
   padding: 4px;
   border: 3px solid var(--border);
   background: rgb(29 26 23 / 0.82);
-  transform: translateX(-50%);
 }
 
+/* Inventory slots are fixed squares, like the game's. */
 .blocks-hotbar__slot {
   position: relative;
   display: flex;
   flex-direction: column;
+  gap: 0.125rem;
   align-items: center;
   justify-content: center;
   width: 4.5rem;
@@ -411,6 +438,7 @@ body:has(.blocks-close) .blocks-help {
   outline-offset: 1px;
 }
 
+/* The slot's number sits in its top left corner, over the icon's padding. */
 .blocks-hotbar__key {
   position: absolute;
   top: 1px;
@@ -421,13 +449,13 @@ body:has(.blocks-close) .blocks-help {
 }
 
 .blocks-hotbar__name {
-  margin-top: 0.125rem;
   font-family: var(--font-pixel), monospace;
   font-size: 0.75rem;
 }
 
+/* The mined-block slot stands apart from the page slots. */
 .blocks-hotbar__slot--held {
-  margin-left: 0.5rem;
+  margin-inline-start: 0.5rem;
   border-style: dashed;
 }
 
@@ -436,6 +464,7 @@ body:has(.blocks-close) .blocks-help {
 }
 
 @media (pointer: coarse) {
+  /* Visually hidden: the keyboard help still describes the world to screen readers. */
   .blocks-help {
     position: absolute;
     width: 1px;
@@ -444,15 +473,19 @@ body:has(.blocks-close) .blocks-help {
     clip-path: inset(50%);
   }
 
+  /* The stick and the jump button sit at the bottom corners of the page's
+     room, above the hotbar. */
   .blocks-touch {
-    display: block;
+    grid-area: page;
+    z-index: 25;
+    align-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
   }
 
   .blocks-touch__stick {
-    position: fixed;
-    bottom: 9.5rem;
-    left: 1.25rem;
-    z-index: 25;
     display: grid;
     place-items: center;
     width: 7rem;
@@ -461,6 +494,7 @@ body:has(.blocks-close) .blocks-help {
     border-radius: 50%;
     background: rgb(29 26 23 / 0.35);
     touch-action: none;
+    pointer-events: auto;
   }
 
   .blocks-touch__knob {
@@ -471,10 +505,6 @@ body:has(.blocks-close) .blocks-help {
   }
 
   .blocks-touch__jump {
-    position: fixed;
-    right: 1.25rem;
-    bottom: 10.5rem;
-    z-index: 25;
     width: 4.5rem;
     height: 4.5rem;
     border: 3px solid var(--border);
@@ -482,6 +512,7 @@ body:has(.blocks-close) .blocks-help {
     color: #fff;
     font-family: var(--font-pixel), monospace;
     touch-action: none;
+    pointer-events: auto;
   }
 
   body:has(.blocks-close) .blocks-touch {
@@ -494,48 +525,18 @@ body:has(.blocks-close) .blocks-help {
   }
 }
 
-/* With gameplay on, the header's tabs and theme controls need about 41rem on
-   one row, so below 48rem they can wrap to two rows. The panel and its close
-   button start below both rows there. */
-@media (max-width: 48rem) {
-  :root[data-theme='minecraft'][data-play='on'] .page {
-    inset-block-start: 6rem;
-  }
-
-  .blocks-close {
-    top: 6rem;
-  }
-}
-
-/* The not-affiliated line wraps to two lines below about 44rem, so the hotbar
-   and what sits above it move up to keep the line in view. */
-@media (max-width: 44rem) {
-  .blocks-hotbar {
-    bottom: 3.25rem;
-  }
-
-  .blocks-help {
-    bottom: 9.25rem;
-  }
-
-  .blocks-prompt {
-    bottom: 9.75rem;
-  }
-}
-
-/* On phones the line can wrap to three lines. */
+/* On phones the header can wrap to two rows, the tabs then the theme
+   controls, and the not-affiliated line to three. */
 @media (max-width: 40rem) {
-  /* The header can wrap to two rows here: the tabs, then the theme controls. */
-  :root[data-theme='minecraft'][data-play='on'] .page {
-    inset: 6rem 0.5rem 10rem;
+  :root[data-theme='minecraft'][data-play='on'] body {
+    --world-gutter: 0.5rem;
   }
 
   :root[data-theme='minecraft'][data-play='on'] .site-footer {
-    bottom: 0.25rem;
+    padding-block-end: 0.25rem;
   }
 
   .blocks-hotbar {
-    bottom: 4rem;
     gap: 2px;
   }
 
@@ -602,26 +603,15 @@ body:has(.blocks-close) .blocks-help {
   }
 
   .blocks-hotbar__slot--held {
-    margin-left: 0.25rem;
+    margin-inline-start: 0.25rem;
   }
 
-  .blocks-prompt {
-    bottom: 8.5rem;
-  }
-
-  /* Between the open page and the hotbar, on one line. The page ends above
-     it so the button never covers the page's last lines: 12rem is the
-     button's 8.75rem bottom, its ~2.75rem height and a 0.5rem gap. Change
-     these together with the hotbar's bottom and slot height above. */
+  /* The open page's corner is too narrow here, so the button sits on one
+     line between the page and the hotbar, and the page ends above it. */
   .blocks-close {
-    top: auto;
-    right: 50%;
-    bottom: 8.75rem;
-    transform: translateX(50%);
+    grid-area: cue;
+    align-self: end;
+    justify-self: center;
     white-space: nowrap;
-  }
-
-  :root[data-theme='minecraft'][data-play='on'] body:has(.blocks-close) .page {
-    inset-block-end: 12rem;
   }
 }
