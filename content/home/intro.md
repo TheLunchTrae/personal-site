@@ -2,6 +2,6 @@
 order: 1
 ---
 
-# Trae
+# Meet Trae
 
-Software engineer. Site coming soon.
+I'm a software engineer, and this site tells my story through the games that inspired me.

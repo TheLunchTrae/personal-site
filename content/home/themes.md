@@ -2,6 +2,6 @@
 order: 2
 ---
 
-## Get to know me, one game at a time
+## My story, in games
 
-A few games shaped how I build software. Each theme restyles this whole site after one of them, with gameplay you can use to get around. Try each one, then read what it taught me.
+Each chapter is a phase of my life and the game that inspired me as a developer during it. Step into a chapter to see the whole site restyled after its game, with gameplay you can use to get around, then read how that game inspired me.

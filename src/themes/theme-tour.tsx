@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { gameThemes, storyHref } from './registry';
+import { chapterLabel, gameThemes, storyHref } from './registry';
 import { setTheme, useThemeState } from './theme-store';
 import { wordmarks } from './wordmarks';
 
-/** The game themes as a tour: switch into each one, then read what that game taught me. */
+/** The game themes as the chapters of my story: step into each one, then read how that game inspired me. */
 export function ThemeTour() {
   const { theme: active } = useThemeState();
 
@@ -17,6 +17,7 @@ export function ThemeTour() {
         const wordmark = wordmarks[theme.id];
         return (
           <li key={theme.id} className="theme-tour__card">
+            <span className="theme-tour__chapter">{chapterLabel(theme.id)}</span>
             <h3 className="theme-tour__name">
               {wordmark === undefined ? (
                 theme.name
@@ -40,7 +41,7 @@ export function ThemeTour() {
                   });
                 }}
               >
-                {on ? 'Back to the default theme' : `Switch to ${theme.name}`}
+                {on ? 'Back to the plain site' : `Step into ${theme.name}`}
               </button>
               <Link href={storyHref(theme.id)} className="theme-tour__story">
                 {theme.storyTitle}
