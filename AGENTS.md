@@ -147,6 +147,15 @@ version-numbered names.
 
 ## Testing
 
+- Always use the `test-audit` skill when you write, change, or remove unit
+  tests: judge each new or changed test with it before you commit, and use it
+  for any suite audit or cleanup. Codex and opencode load it from
+  `.agents/skills/test-audit/`, which is the only copy to edit;
+  `.claude/skills/test-audit/SKILL.md` points Claude Code there. The skill
+  comes from the owner's personal agent config and names skills that this
+  repository does not have: for `verify`, run the checks in
+  [Commands](#commands), and for `test-first` and `end-to-end-tests`, follow
+  the rules in this section.
 - A test earns its place by defending behavior, an invariant, a failure mode,
   or a trust boundary that types and the gate do not already enforce. Do not
   test trivial getters, constructors, enum declarations, framework behavior,
