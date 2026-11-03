@@ -177,14 +177,22 @@
   min-height: clamp(380px, 64svh, 620px);
 }
 
-/* Room under the page for the HUD strip. */
-:root[data-theme='call-of-duty'][data-play='on'] body {
-  padding-bottom: 5.5rem;
+/* The menu stage and the HUD take their places in the body's column, so the
+   HUD can come last and stick to the bottom of the screen. */
+:root[data-theme='call-of-duty'][data-play='on'] .play-layer:not(:empty) {
+  display: contents;
 }
 
+/* The menu switches stack in the stage's top right corner, over the scene. */
 :root[data-theme='call-of-duty'] .cod-menu-stage {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  justify-items: end;
+  gap: 0.375rem;
   height: clamp(260px, 40svh, 380px);
+  padding: 1rem;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   background: #070607;
@@ -194,6 +202,7 @@
   height: clamp(380px, 64svh, 620px);
 }
 
+/* The scene fills the stage behind its controls. */
 :root[data-theme='call-of-duty'] .cod-menu-scene {
   position: absolute;
   inset: 0;
@@ -244,9 +253,6 @@
 }
 
 :root[data-theme='call-of-duty'] .cod-menu-switch {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   z-index: 5;
   display: flex;
   border: 1px solid var(--cod-line);
@@ -267,7 +273,6 @@
 
 /* The gumball street's graphics presets, under the menu switch. */
 :root[data-theme='call-of-duty'] .cod-menu-presets {
-  top: 3.6rem;
   align-items: center;
 }
 
@@ -283,6 +288,7 @@
   font-size: 0.85rem;
 }
 
+/* The menu's choices float along the bottom of the scene. */
 :root[data-theme='call-of-duty'] .cod-menu-bar {
   position: absolute;
   right: 1rem;
@@ -385,6 +391,7 @@
 }
 
 :root[data-theme='call-of-duty'] .cod-globe-go {
+  gap: 1.1rem;
   padding: 0;
   border: 0;
   background: none;
@@ -392,7 +399,6 @@
 }
 
 :root[data-theme='call-of-duty'] .cod-globe-go-cue {
-  margin-left: 0.6rem;
   color: var(--cod-ember);
   font-family: var(--cod-type);
   font-size: 0.8rem;
@@ -405,6 +411,8 @@
   color: var(--accent);
 }
 
+/* The scene moves the tag to its site's point on the globe every frame, from
+   the top left corner; the name sits just above and right of that point. */
 :root[data-theme='call-of-duty'] .cod-globe-tag {
   position: absolute;
   top: 0;
@@ -433,13 +441,14 @@
   white-space: nowrap;
 }
 
-/* The HUD: round tally at the lower left, points at the lower right. */
+/* The HUD: round tally at the lower left, points at the lower right. It
+   comes last in the page and sticks to the bottom of the screen, so the
+   page ends with room for it at whatever height it wraps to. */
 :root[data-theme='call-of-duty'] .cod-hud {
-  position: fixed;
-  right: 0;
+  position: sticky;
   bottom: 0;
-  left: 0;
   z-index: 40;
+  order: 1;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -509,6 +518,7 @@
   text-align: right;
 }
 
+/* Points awards float up and away to the left of the total. */
 :root[data-theme='call-of-duty'] .cod-hud-awards {
   position: absolute;
   right: 100%;
@@ -567,6 +577,8 @@
   color: var(--foreground);
 }
 
+/* The new-round banner shows over the middle of the screen, a little high
+   so it clears the HUD on short screens. */
 :root[data-theme='call-of-duty'] .cod-hud-banner {
   position: fixed;
   top: 38%;
@@ -620,7 +632,7 @@
 
   /* On a phone the HUD is a solid bar: the tally and points on top, the
      buttons in a row under them, wrapping to a second row when four don't
-     fit. The page keeps room above the bar's tallest form. */
+     fit. */
   :root[data-theme='call-of-duty'] .cod-hud {
     flex-wrap: wrap;
     align-items: center;
@@ -628,14 +640,6 @@
     padding: 0.4rem 0.75rem;
     border-top: 1px solid var(--border);
     background: rgb(10 9 9 / 0.97);
-  }
-
-  :root[data-theme='call-of-duty'][data-play='on'] body {
-    padding-bottom: 5.75rem;
-  }
-
-  :root[data-theme='call-of-duty'][data-play='on'] body:has(.cod-hud-button:nth-child(4)) {
-    padding-bottom: 8rem;
   }
 
   :root[data-theme='call-of-duty'] .cod-menu-stage[data-home='true'] {
@@ -646,19 +650,14 @@
     min-height: clamp(360px, 58svh, 520px);
   }
 
-  :root[data-theme='call-of-duty'] .cod-menu-switch {
-    top: 0.6rem;
-    right: 0.6rem;
+  :root[data-theme='call-of-duty'] .cod-menu-stage {
+    padding: 0.6rem;
   }
 
   :root[data-theme='call-of-duty'] .cod-menu-switch-option {
     min-height: 2rem;
     padding: 0.3rem 0.6rem;
     font-size: 0.8rem;
-  }
-
-  :root[data-theme='call-of-duty'] .cod-menu-presets {
-    top: 3.2rem;
   }
 
   :root[data-theme='call-of-duty'] .cod-menu-presets .cod-menu-switch-option {
@@ -700,6 +699,7 @@
 
   :root[data-theme='call-of-duty'] .cod-globe-go {
     flex-direction: row;
+    gap: 0.6rem;
     align-items: baseline;
     padding: 0;
   }

@@ -17,14 +17,16 @@ export function ThemeTour() {
         const wordmark = wordmarks[theme.id];
         return (
           <li key={theme.id} className="theme-tour__card">
-            <span className="theme-tour__chapter">{chapterLabel(theme.id)}</span>
-            <h3 className="theme-tour__name">
-              {wordmark === undefined ? (
-                theme.name
-              ) : (
-                <Image src={wordmark} alt={theme.name} className="theme-tour__wordmark" />
-              )}
-            </h3>
+            <div className="theme-tour__heading">
+              <span className="theme-tour__chapter">{chapterLabel(theme.id)}</span>
+              <h3 className="theme-tour__name">
+                {wordmark === undefined ? (
+                  theme.name
+                ) : (
+                  <Image src={wordmark} alt={theme.name} className="theme-tour__wordmark" />
+                )}
+              </h3>
+            </div>
             <p>{theme.pitch}</p>
             <div className="theme-tour__actions">
               <button

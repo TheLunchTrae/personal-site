@@ -434,25 +434,28 @@ export function CallOfDutyPlay({ sections, reducedMotion, onExit, onFail }: Play
   // Leaving the theme closes its audio, so a background tab never wakes it.
   useEffect(() => releaseSound, []);
 
+  // A sticky element stays inside its parent, so the HUD sits outside the stage to stick to the screen.
   return (
-    <section className="cod-menu-stage" data-home={current === 'home'} aria-label="Page menu">
-      <div className="cod-menu-switch" role="group" aria-label="Menu style">
-        {MENU_STYLES.map((option) => (
-          <button
-            key={option.id}
-            type="button"
-            className="cod-menu-switch-option"
-            aria-pressed={style === option.id}
-            onClick={() => menuStyle.set(option.id)}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-      {style === 'screens' ? <TvWallMenu key="screens" {...menu} /> : null}
-      {style === 'globe' ? <GlobeMenu key="globe" {...menu} /> : null}
-      {style === 'machine' ? <GumballStage key="machine" {...menu} /> : null}
+    <>
+      <section className="cod-menu-stage" data-home={current === 'home'} aria-label="Page menu">
+        <div className="cod-menu-switch" role="group" aria-label="Menu style">
+          {MENU_STYLES.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              className="cod-menu-switch-option"
+              aria-pressed={style === option.id}
+              onClick={() => menuStyle.set(option.id)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        {style === 'screens' ? <TvWallMenu key="screens" {...menu} /> : null}
+        {style === 'globe' ? <GlobeMenu key="globe" {...menu} /> : null}
+        {style === 'machine' ? <GumballStage key="machine" {...menu} /> : null}
+      </section>
       <CallOfDutyHud sections={sections} onExit={onExit} />
-    </section>
+    </>
   );
 }

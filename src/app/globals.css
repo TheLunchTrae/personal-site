@@ -57,6 +57,7 @@ body {
   outline: none;
 }
 
+/* Off screen until it takes focus, then over the page's top left corner. */
 .skip-link {
   position: absolute;
   top: 0.5rem;
@@ -161,6 +162,7 @@ body {
   display: flex;
   flex: 1;
   flex-direction: column;
+  gap: 4rem;
   justify-content: center;
   max-width: 48rem;
   padding: 6rem 1.5rem;
@@ -190,8 +192,9 @@ body {
   margin-top: 1rem;
 }
 
-/* Sections drop their first heading's margin, so the gap between them is set here. */
-.prose-page .content-section + .content-section {
+/* Sections drop their first heading's margin, so the space between them is
+   set here. The home page is a column and spaces them with its gap. */
+.prose-page:not([data-section='home']) .content-section + .content-section {
   margin-top: 2.5rem;
 }
 
@@ -200,10 +203,6 @@ body {
   font-size: 1.125rem;
   line-height: 1.75rem;
   color: var(--muted);
-}
-
-.prose-page[data-section='home'] .content-section + .content-section {
-  margin-top: 4rem;
 }
 
 /* Markdown content renders as plain elements inside .content-section.
@@ -326,7 +325,8 @@ body {
   text-underline-offset: 0.2em;
 }
 
-/* Shown by the shared gameplay layer when a theme's gameplay cannot start. */
+/* Shown by the shared gameplay layer when a theme's gameplay cannot start. It
+   floats over the bottom left corner of the screen, apart from the page. */
 .game-notice {
   position: fixed;
   bottom: 1rem;
@@ -356,14 +356,20 @@ body {
 .theme-tour__card {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   padding: 1.25rem;
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   background: var(--surface);
 }
 
+.theme-tour__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .theme-tour__chapter {
-  margin-bottom: 0.25rem;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -387,17 +393,18 @@ body {
 }
 
 .prose-page .theme-tour__card p {
-  margin-top: 0.5rem;
+  margin-top: 0;
   flex: 1;
   color: var(--muted);
 }
 
+/* The actions sit further from the pitch than the card's gap. */
 .theme-tour__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .theme-tour__actions .button {
