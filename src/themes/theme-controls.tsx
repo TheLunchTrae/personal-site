@@ -6,6 +6,21 @@ import { setColorMode, setPlay, setTheme, useThemeState } from './theme-store';
 
 const subscribeNever = () => () => undefined;
 
+/**
+ * Focuses the first rendered match for a theme control. The bar and the menu
+ * panel each hold a copy, and on a narrow screen the bar's copy is hidden and
+ * the panel is closed, so focus goes to the menu button that opens it. An
+ * element with no client rects is not rendered: it, or an ancestor such as a
+ * closed dialog, has `display: none`. That check works in every browser the
+ * build targets, which `checkVisibility()` does not.
+ */
+export function focusThemeControl(selector: string): void {
+  const visible = [...document.querySelectorAll<HTMLElement>(selector)].find(
+    (control) => control.getClientRects().length > 0,
+  );
+  (visible ?? document.querySelector<HTMLElement>('.site-menu__button'))?.focus();
+}
+
 const colorModeLabels = { system: 'System', light: 'Light', dark: 'Dark' } as const;
 
 /**
