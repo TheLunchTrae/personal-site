@@ -6,6 +6,7 @@
 // apply_patch call that adds, updates, deletes, or moves a file here. Codex lets
 // a call through when its hook fails, so a hook error exits 2, which blocks the
 // call.
+import { existsSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { exit, stderr, stdin, stdout } from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -25,11 +26,21 @@ function isPersonalContent(relativePath) {
   });
 }
 
+// Node gives import.meta.url the real path, so resolve links in patch paths too.
+// A file being added doesn't exist yet, so resolve its nearest existing folder.
+function realPath(filePath) {
+  let existing = filePath;
+  while (!existsSync(existing) && path.dirname(existing) !== existing) {
+    existing = path.dirname(existing);
+  }
+  return path.join(realpathSync(existing), path.relative(existing, filePath));
+}
+
 // Patch paths are relative to the session's working directory unless absolute.
 // Returns the repository-relative paths that the patch would change.
 function personalContentInPatch(patch, cwd) {
   return [...patch.matchAll(patchPath)]
-    .map((match) => path.relative(repositoryRoot, path.resolve(cwd, match[1].trim())).replaceAll('\\', '/'))
+    .map((match) => path.relative(repositoryRoot, realPath(path.resolve(cwd, match[1].trim()))).replaceAll('\\', '/'))
     .filter(isPersonalContent);
 }
 

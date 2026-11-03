@@ -197,6 +197,8 @@ Keep module bindings immutable.
   invariant and why restructuring loses.
 - Review changes to `.oxlintrc.json`, `tsconfig.json`, the scripts, and the
   mise tasks for lost coverage, and justify every relaxation.
+- Agent tooling has no tests: `.claude/`, `.codex/`, `opencode.jsonc`, and
+  `scripts/personal-content.mjs`. Check a change to it by hand.
 - A behavior change needs a test that fails without it. Tests run with
   `bun test` (`mise run ts:test`); write them with `node:test` and
   `node:assert`, and put each `*.test.ts` file next to the module it covers.
