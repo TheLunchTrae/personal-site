@@ -121,8 +121,8 @@ the `order` front matter of the files in `content/home/`; see
    `content/influences/<id>/` with the theme's blurb files, left empty for
    Trae to write, and list them in `content/README.md`. End the page with a
    link to the theme's credits page (`creditsHref`). The tour, the theme
-   picker, the footer credit, and the gameplay's last destination pick the
-   theme up from the registry.
+   picker, the site tabs, the footer credit, and the gameplay's last
+   destination pick the theme up from the registry.
 5. Write the theme's credits in `content/credits/<id>/`: the owner's notice,
    then every font, library and other work the theme uses, with its author
    and license, linking any license text that has to ship with the code

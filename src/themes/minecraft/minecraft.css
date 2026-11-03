@@ -494,6 +494,19 @@ body:has(.blocks-close) .blocks-help {
   }
 }
 
+/* With gameplay on, the header's tabs and theme controls need about 41rem on
+   one row, so below 48rem they can wrap to two rows. The panel and its close
+   button start below both rows there. */
+@media (max-width: 48rem) {
+  :root[data-theme='minecraft'][data-play='on'] .page {
+    inset-block-start: 6rem;
+  }
+
+  .blocks-close {
+    top: 6rem;
+  }
+}
+
 /* The not-affiliated line wraps to two lines below about 44rem, so the hotbar
    and what sits above it move up to keep the line in view. */
 @media (max-width: 44rem) {

@@ -45,6 +45,25 @@ for (const [vpName, vp] of Object.entries(viewports)) {
     await ctx.close();
   }
 }
+// Narrow windows where the Minecraft gameplay header can wrap to two rows.
+for (const width of [660, 720, 800]) {
+  const ctx = await browser.newContext({ viewport: { width, height: 800 } });
+  await ctx.addInitScript(() => {
+    localStorage.setItem('theme', 'minecraft');
+    localStorage.setItem('play', 'on');
+  });
+  const page = await ctx.newPage();
+  await page.goto(base + '/credits/minecraft/', { waitUntil: 'load' });
+  await page.waitForTimeout(6000);
+  const box = await page.evaluate(() => {
+    const header = document.querySelector('.site-header').getBoundingClientRect();
+    const panel = document.querySelector('.page').getBoundingClientRect();
+    return { headerBottom: header.bottom, panelTop: panel.top };
+  });
+  console.log(`narrow ${width}px: header bottom ${box.headerBottom}, panel top ${box.panelTop}, ${box.headerBottom <= box.panelTop ? 'ok' : 'COVERED'}`);
+  await page.screenshot({ path: `out/shots/narrow-${width}-minecraft-on-credits.png` });
+  await ctx.close();
+}
 // Keyboard walk on the phone-free desktop: Tab from the top in Geometry Dash with gameplay on.
 const ctx = await browser.newContext({
   viewport: { width: 1280, height: 800 },
