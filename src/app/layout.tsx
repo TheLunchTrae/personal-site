@@ -7,6 +7,7 @@ import { PlayLayer } from '@/themes/play-layer';
 import { themeBootScript } from '@/themes/registry';
 import './globals.css';
 import '@/themes/minecraft/minecraft.css';
+import '@/themes/geometry-dash/geometry-dash.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,6 +32,15 @@ const minecraftFont = localFont({
   preload: false,
 });
 
+// Only the Geometry Dash theme uses this face, so it is not preloaded. Pusab by
+// Ryoichi Tsunekawa (Flat-it), a freeware font; the license sits next to the file
+// and is served from public/licenses/. It ships one weight, used for text only.
+const pusab = localFont({
+  variable: '--font-dash',
+  src: [{ path: '../themes/geometry-dash/fonts/Pusab.woff', weight: '400' }],
+  preload: false,
+});
+
 export const metadata: Metadata = {
   title: 'Trae',
   description: 'Personal site of Trae, software engineer.',
@@ -45,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       data-color-mode="system"
       data-play="off"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${minecraftFont.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${minecraftFont.variable} ${pusab.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />

@@ -6,13 +6,17 @@ the Mode control, stay in code.
 
 ## Where each file appears
 
-| File                                 | Where it appears                                                                               |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| `home/intro.md`                      | Top of the home page: your name and the line under it. The resume button follows it.           |
-| `home/themes.md`                     | Home page invite to try each game theme, followed by the theme tour.                           |
-| `influences/<theme id>/<section>.md` | A theme's influence page, one section per file. Each theme adds its own files, left empty.     |
-| `influences/minecraft/influence.md`  | The Minecraft influence page: what Minecraft meant to you.                                     |
-| `credits/<theme id>/<section>.md`    | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses. |
+| File                                        | Where it appears                                                                               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `home/intro.md`                             | Top of the home page: your name and the line under it. The resume button follows it.           |
+| `home/themes.md`                            | Home page invite to try each game theme, followed by the theme tour.                           |
+| `influences/<theme id>/<section>.md`        | A theme's influence page, one section per file. Each theme adds its own files, left empty.     |
+| `influences/minecraft/influence.md`         | The Minecraft influence page: what Minecraft meant to you.                                     |
+| `influences/geometry-dash/influence.md`     | The Geometry Dash influence page: what Geometry Dash meant to you.                             |
+| `credits/<theme id>/<section>.md`           | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses. |
+| `levels/progress.md`, `levels/favorites.md` | The Geometry Dash favorite levels page: the text above each list.                              |
+| `levels/progress/<level>.md`                | One line of the "Where I'm at" list. See [Level files](#level-files).                          |
+| `levels/favorites/<level>.md`               | One favorite level. See [Level files](#level-files).                                           |
 
 ## Format
 
@@ -35,13 +39,41 @@ Some text.
 
 - Files sort by `order`, a whole number, then by file name. A file without
   one has order 0.
-- Front matter takes one `order` line, so a typo fails the build instead of
-  being ignored. A file that starts with `---` must close its front matter
-  with another `---` line.
+- Front matter is YAML. Each folder accepts set fields, and every folder
+  accepts `order`, so a missing, misspelled or mistyped field fails the build
+  instead of being ignored. A file that starts with `---` must close its
+  front matter with another `---` line.
 - A new file in `home/` shows on the home page in its order, with no code
   change. A button or other display after a section's text is set in
   `src/app/page.tsx` by file name, so renaming `intro.md` or `themes.md`
   fails the build until that file is updated too.
+
+## Level files
+
+Each level on the Geometry Dash favorite levels page is one file whose front
+matter holds its details. The body below the front matter is left empty for
+now.
+
+```md
+---
+order: 1
+title: Anathema
+url: https://youtu.be/k9mLtwdIng4
+creator: Optional creator name
+---
+```
+
+- `order` is required and sets the level's place in the list. Favorites go
+  hardest first; the page shows no positions, so reorder by changing the
+  numbers.
+- `url` must be a YouTube video link. A link pasted from YouTube's Share
+  button works as is: the site drops its tracking parameters and keeps only a
+  start time. Shorts and live links are not supported.
+- A level file holds only front matter; text after it fails the build.
+- A file in `levels/progress/` also takes `status`, either `hardest` (the
+  hardest level beaten) or `next` (the one being played). A `next` level can
+  take `progress`, the best run in percent (0 to 99). There is exactly one
+  `hardest` level and at most one `next`.
 
 While `bun run dev` runs, refresh the page to see an edit. The live site
 picks up changes when it rebuilds after a merge to `main`.
