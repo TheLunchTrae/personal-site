@@ -177,6 +177,22 @@ Keep module bindings immutable.
   `bun test` (`mise run ts:test`); write them with `node:test` and
   `node:assert`, and put each `*.test.ts` file next to the module it covers.
 
+## CSS Layout
+
+Let content and the viewport size the layout. Hardcode a layout or style value
+only where intrinsic sizing cannot express it.
+
+- Use flex for a single row or column and grid for layouts in two axes. Space
+  items with `gap` rather than margins on each child.
+- Size with intrinsic and relative values: `auto`, `fr`, `min-content`,
+  `max-content`, percentages, `rem`, `ch`, viewport units, and `min()`,
+  `max()`, `clamp()`, and `minmax()`.
+- Use fixed pixel sizes, absolute or fixed positioning, and hand-tuned offsets
+  only where the design needs them, such as a pixel-art asset, an overlay, or
+  a game scene. Give each one a comment that says what it matches.
+- Prefer one fluid rule over a media query per breakpoint. Add a breakpoint
+  where the layout itself has to change.
+
 ## Git
 
 - Keep generated and local-only files out of commits.
