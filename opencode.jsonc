@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    // Trae's own writing; see "Trae's Own Writing" in AGENTS.md. `*` also
+    // matches `/`, so a folder pattern covers its subfolders.
+    "edit": {
+      "content/home/*": "ask",
+      "content/influences/*": "ask",
+      "content/levels/*": "ask",
+      "public/TraeStevens_Resume.pdf": "ask",
+    },
+  },
+}

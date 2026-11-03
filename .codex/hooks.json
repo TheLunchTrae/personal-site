@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/scripts/personal-content.mjs\"",
+            "statusMessage": "Checking for Trae's own writing",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

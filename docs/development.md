@@ -55,6 +55,23 @@ The site's text lives in Markdown files under `content/`;
 [themes.md](themes.md) describes the theme system: the color mode control and
 how a game theme plugs in.
 
+## Trae's own writing
+
+[AGENTS.md](../AGENTS.md#traes-own-writing) lists the files that agents change
+only with Trae's explicit permission.
+[scripts/personal-content.mjs](../scripts/personal-content.mjs) holds that list,
+and `scripts/personal-content.test.mjs` fails the gate when a tool's config or
+AGENTS.md drifts from it. Each tool enforces what it can:
+
+| Tool        | Config                  | What it enforces                                                                                                                                                                                                                                |
+| ----------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | `.claude/settings.json` | `ask` rules prompt before Claude's file tools change a listed path, in every permission mode, auto and bypass included. `dontAsk` mode denies instead.                                                                                          |
+| opencode    | `opencode.jsonc`        | `ask` rules prompt before `edit`, `write`, or `apply_patch` changes a listed path. Answer "once": "always" approves every edit for the rest of the session. `--auto` approves these prompts without asking.                                     |
+| Codex       | `.codex/hooks.json`     | Codex has no per-path prompt, so a `PreToolUse` hook denies an `apply_patch` call that touches a listed path. The hook runs the script with `node`. Codex runs project hooks only in a trusted project, after you approve the hook in `/hooks`. |
+
+None of these reliably stops a shell command or a script from writing, moving,
+or deleting a listed file. The rule in AGENTS.md covers those cases.
+
 ## Static export limits
 
 There is no server at runtime, so features that need one are unavailable:

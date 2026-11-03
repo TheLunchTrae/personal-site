@@ -6,12 +6,15 @@
 * @TheLunchTrae
 .oxfmtrc.* @TheLunchTrae
 .oxlintrc.* @TheLunchTrae
+/.claude/ @TheLunchTrae
+/.codex/ @TheLunchTrae
 /.config/mise/ @TheLunchTrae
 /.github/ @TheLunchTrae
 /AGENTS.md @TheLunchTrae
 /bunfig.toml @TheLunchTrae
 /knip.jsonc @TheLunchTrae
 /next.config.ts @TheLunchTrae
+/opencode.jsonc @TheLunchTrae
 /package.json @TheLunchTrae
 /scripts/ @TheLunchTrae
 /tsconfig.json @TheLunchTrae

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "ask": [
+      "Edit(/content/home/**)",
+      "Edit(/content/influences/**)",
+      "Edit(/content/levels/**)",
+      "Edit(/public/TraeStevens_Resume.pdf)"
+    ]
+  }
+}
