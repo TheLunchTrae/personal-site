@@ -70,7 +70,15 @@ async function main() {
 }
 
 // Node gives import.meta.url the real path, so resolve links in the script path too.
-if (argv[1] && pathToFileURL(realpathSync(argv[1])).href === import.meta.url) {
+function isEntryPoint() {
+  try {
+    return argv[1] !== undefined && pathToFileURL(realpathSync(argv[1])).href === import.meta.url;
+  } catch {
+    return false;
+  }
+}
+
+if (isEntryPoint()) {
   try {
     await main();
   } catch (error) {

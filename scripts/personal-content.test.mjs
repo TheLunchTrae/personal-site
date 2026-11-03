@@ -98,7 +98,8 @@ describe('the Codex hook', () => {
     const linkDirectory = mkdtempSync(path.join(tmpdir(), 'personal-content-'));
     try {
       const link = path.join(linkDirectory, 'repository');
-      symlinkSync(root, link, 'dir');
+      // A junction needs no admin rights on Windows; other systems ignore the type.
+      symlinkSync(root, link, 'junction');
       const result = run('*** Update File: content/home/intro.md', path.join(link, 'scripts/personal-content.mjs'));
       assert.equal(JSON.parse(result.stdout).hookSpecificOutput.permissionDecision, 'deny');
     } finally {
