@@ -24,7 +24,8 @@ export function SiteMenu() {
       return undefined;
     }
     const observer = new ResizeObserver(() => {
-      if (!menu.checkVisibility()) {
+      // No client rects means CSS has hidden the menu.
+      if (menu.getClientRects().length === 0) {
         panelRef.current?.close();
       }
     });
