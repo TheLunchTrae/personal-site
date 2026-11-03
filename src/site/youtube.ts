@@ -1,6 +1,8 @@
 import * as z from 'zod';
 
 const videoId = /^[\w-]{11}$/u;
+/** A start time: seconds (`90`, `90s`) or hours, minutes and seconds (`1m30s`). */
+const startTime = /^(?=\d)(?:\d+h)?(?:\d+m)?(?:\d+s?)?$/u;
 const watchHosts = new Set(['youtube.com', 'www.youtube.com', 'm.youtube.com']);
 
 /**
@@ -18,7 +20,7 @@ export const youtubeUrl = z.string().transform((value, context) => {
   }
   const id =
     url.hostname === 'youtu.be'
-      ? url.pathname.slice(1)
+      ? url.pathname.replace(/^\/|\/$/gu, '')
       : watchHosts.has(url.hostname) && url.pathname === '/watch'
         ? (url.searchParams.get('v') ?? '')
         : '';
@@ -27,5 +29,15 @@ export const youtubeUrl = z.string().transform((value, context) => {
     return z.NEVER;
   }
   const start = url.searchParams.get('t');
-  return start !== null && /^\d+s?$/u.test(start) ? `https://youtu.be/${id}?t=${start}` : `https://youtu.be/${id}`;
+  if (start === null) {
+    return `https://youtu.be/${id}`;
+  }
+  if (!startTime.test(start)) {
+    context.addIssue({
+      code: 'custom',
+      message: `"${value}" has a start time, t=${start}, that is not like 90, 90s or 1m30s.`,
+    });
+    return z.NEVER;
+  }
+  return `https://youtu.be/${id}?t=${start}`;
 });

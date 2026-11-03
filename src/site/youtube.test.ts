@@ -9,6 +9,7 @@ await test('YouTube links parse to the short form without share tracking', () =>
     youtubeUrl.parse('https://www.youtube.com/watch?v=k9mLtwdIng4&feature=share'),
     'https://youtu.be/k9mLtwdIng4',
   );
+  assert.equal(youtubeUrl.parse('https://youtu.be/SR4pQa0adsk/?t=1m30s'), 'https://youtu.be/SR4pQa0adsk?t=1m30s');
 });
 
 await test('links that are not YouTube videos fail', () => {
@@ -18,6 +19,8 @@ await test('links that are not YouTube videos fail', () => {
     'https://example.com/watch?v=SR4pQa0adsk',
     'https://www.youtube.com/@channel',
     'https://youtu.be/short',
+    'https://youtu.be/SR4pQa0adsk?t=soon',
+    'https://www.youtube.com/shorts/SR4pQa0adsk',
   ]) {
     assert.equal(youtubeUrl.safeParse(value).success, false, value);
   }

@@ -12,8 +12,8 @@ the Mode control, stay in code.
 | `home/themes.md`                            | Home page invite to try each game theme, followed by the theme tour.                           |
 | `influences/<theme id>/<section>.md`        | A theme's influence page, one section per file. Each theme adds its own files, left empty.     |
 | `influences/minecraft/influence.md`         | The Minecraft influence page: what Minecraft meant to you.                                     |
-| `credits/<theme id>/<section>.md`           | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses. |
 | `influences/geometry-dash/influence.md`     | The Geometry Dash influence page: what Geometry Dash meant to you.                             |
+| `credits/<theme id>/<section>.md`           | A theme's credits page: the owner's notice, then fonts, code and anything else the theme uses. |
 | `levels/progress.md`, `levels/favorites.md` | The Geometry Dash favorite levels page: the text above each list.                              |
 | `levels/progress/<level>.md`                | One line of the "Where I'm at" list. See [Level files](#level-files).                          |
 | `levels/favorites/<level>.md`               | One favorite level. See [Level files](#level-files).                                           |
@@ -68,10 +68,12 @@ creator: Optional creator name
   numbers.
 - `url` must be a YouTube video link. A link pasted from YouTube's Share
   button works as is: the site drops its tracking parameters and keeps only a
-  start time.
+  start time. Shorts and live links are not supported.
+- A level file holds only front matter; text after it fails the build.
 - A file in `levels/progress/` also takes `status`, either `hardest` (the
-  hardest level beaten) or `next` (the one being played), and, for a level
-  not beaten yet, `progress`, the best run in percent (0 to 99).
+  hardest level beaten) or `next` (the one being played). A `next` level can
+  take `progress`, the best run in percent (0 to 99). There is exactly one
+  `hardest` level and at most one `next`.
 
 While `bun run dev` runs, refresh the page to see an edit. The live site
 picks up changes when it rebuilds after a merge to `main`.

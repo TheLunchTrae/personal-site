@@ -16,7 +16,7 @@ export function ThemeTour() {
         const on = theme.id === active;
         const wordmark = wordmarks[theme.id];
         return (
-          <li key={theme.id} className="theme-tour__card" data-tour-theme={theme.id}>
+          <li key={theme.id} className="theme-tour__card">
             <h3 className="theme-tour__name">
               {wordmark === undefined ? (
                 theme.name

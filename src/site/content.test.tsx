@@ -55,6 +55,14 @@ await test('front matter mistakes fail the build', async () => {
   await assert.rejects(read({ 'page/a.md': '---\norder: 1.5\n---\nText.\n' }), /a\.md.*schema[\s\S]*order/u);
   await assert.rejects(read({ 'page/a.md': '---\norder: 1\norder: 2\n---\nText.\n' }), /a\.md.*YAML/u);
   await assert.rejects(read({ 'page/a.md': '---\norder: 1\nText.\n' }), /never closes/u);
+  await assert.rejects(
+    read({ 'page/a.md': '---js\n{ order: 1 }\n---\nText.\n' }),
+    /a\.md.*open with a line of just ---/u,
+  );
+  await assert.rejects(
+    read({ 'page/a.md': '---\norder: 1\n----\n---\nText.\n' }),
+    /a\.md.*close with a line of just ---/u,
+  );
 });
 
 await test('a rule in the body is not front matter', async () => {

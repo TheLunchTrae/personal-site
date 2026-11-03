@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useEffect, useEffectEvent, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import type { GameSection } from '@/site/sections';
 import { createRun, physics, pressJump, releaseJump, step, type RunState } from './engine';
 import { levelSource, parseLevel } from './level';
@@ -10,7 +10,10 @@ interface DashStageProps {
   readonly sections: readonly GameSection[];
   readonly currentHref: string;
   readonly onNavigate: (href: string) => void;
+  readonly reducedMotion: boolean;
   readonly onExit: () => void;
+  /** Reports that the runner cannot draw here, such as when canvas 2D is unavailable. */
+  readonly onFail: () => void;
 }
 
 /** Keys that jump while the jump button has focus. Space and Enter would otherwise click it. */
@@ -32,11 +35,13 @@ function isJumpKey(event: ReactKeyboardEvent): boolean {
  * own, so reaching a page never depends on skill. Keys act only while the
  * game has focus, so Space still scrolls the page everywhere else.
  */
-export function DashStage({ sections, currentHref, onNavigate, onExit }: DashStageProps) {
+export function DashStage({ sections, currentHref, reducedMotion, onNavigate, onExit, onFail }: DashStageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const jumpRef = useRef<HTMLButtonElement>(null);
   const navigateRef = useRef(onNavigate);
+  const reducedMotionRef = useRef(reducedMotion);
+  const reportFailure = useEffectEvent(() => onFail());
   const pointerTypeRef = useRef('mouse');
   const current = sectionIndex(sections, currentHref);
   const currentRef = useRef(current);
@@ -54,6 +59,10 @@ export function DashStage({ sections, currentHref, onNavigate, onExit }: DashSta
     navigateRef.current = onNavigate;
   }, [onNavigate]);
 
+  useEffect(() => {
+    reducedMotionRef.current = reducedMotion;
+  }, [reducedMotion]);
+
   // A page change from any source cancels a pending "Run to", so the game
   // never moves the visitor away from a page they chose with a link.
   useEffect(() => {
@@ -70,14 +79,17 @@ export function DashStage({ sections, currentHref, onNavigate, onExit }: DashSta
   useEffect(() => {
     const canvas = canvasRef.current;
     const frame = frameRef.current;
-    const context = canvas?.getContext('2d') ?? null;
-    if (canvas === null || frame === null || context === null) {
+    if (canvas === null || frame === null) {
+      return undefined;
+    }
+    const context = canvas.getContext('2d');
+    if (context === null) {
+      reportFailure();
       return undefined;
     }
     runRef.current ??= createRun(parseLevel(levelSource(sections.length)), currentRef.current);
     const state = runRef.current;
     const labels = sections.map((section) => section.tag);
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let width = 0;
     let height = 0;
     let visible = true;
@@ -135,7 +147,7 @@ export function DashStage({ sections, currentHref, onNavigate, onExit }: DashSta
             }
           }
         }
-        render(context, state, { width, height, labels, reducedMotion: motion.matches });
+        render(context, state, { width, height, labels, reducedMotion: reducedMotionRef.current });
       }
       handle = requestAnimationFrame(frameTick);
     };

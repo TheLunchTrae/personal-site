@@ -45,15 +45,29 @@ function parseSection<Fields extends SectionFields>(
   // Editors on Windows can save CRLF line endings and a byte order mark.
   const text = source.replace(/^\uFEFF/u, '').replaceAll('\r\n', '\n');
   const opening = openingLine.exec(text);
-  if (opening !== null && !closingLine.test(text.slice(opening[0].length))) {
-    throw new Error(`${file}: front matter opens with --- but never closes with a --- line.`);
+  // gray-matter would run `---js` front matter as code, so only a bare --- line may open it.
+  if (opening === null && text.startsWith('---')) {
+    throw new Error(`${file}: front matter must open with a line of just ---.`);
   }
-  let parsed: { data: unknown; content: string };
+  let frontMatter: string | null = null;
+  if (opening !== null) {
+    const rest = text.slice(opening[0].length);
+    const closing = closingLine.exec(rest);
+    if (closing === null) {
+      throw new Error(`${file}: front matter opens with --- but never closes with a --- line.`);
+    }
+    frontMatter = rest.slice(0, closing.index);
+  }
+  let parsed: { data: unknown; content: string; matter: string };
   try {
     // Passing options turns off gray-matter's cache, which would share one object across files.
     parsed = matter(text, {});
   } catch (error) {
     throw new Error(`${file}: front matter is not valid YAML.`, { cause: error });
+  }
+  // gray-matter ends the front matter at the first line that starts with ---, such as ----.
+  if (frontMatter !== null && parsed.matter.trim() !== frontMatter.trim()) {
+    throw new Error(`${file}: front matter must close with a line of just ---.`);
   }
   const result = schema.safeParse(parsed.data);
   if (!result.success) {

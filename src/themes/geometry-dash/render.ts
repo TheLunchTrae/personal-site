@@ -93,7 +93,8 @@ export function render(ctx: CanvasRenderingContext2D, state: RunState, view: Vie
     index += 1
   ) {
     const base = 0.6 + hash(index * 3.7) * 2.2;
-    const bar = (base + pulse * hash(index + Math.floor(beat)) * 1.6) * block;
+    const bounce = view.reducedMotion ? 0 : pulse * hash(index + Math.floor(beat)) * 1.6;
+    const bar = (base + bounce) * block;
     const x = (index * barSpacing - barCamera) * block;
     ctx.fillRect(x, groundY - bar, block * 0.9, bar);
   }

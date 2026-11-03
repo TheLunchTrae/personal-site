@@ -47,7 +47,8 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
   `.prose-page[data-section='home']` is the home page.
 - `.content-section[data-content='<file name>']`, one per Markdown file from
   `content/`; see [Content](#content).
-- `.button`, `.theme-tour__card`, `.theme-tour__name`, `.theme-tour__actions`,
+- `.button`, `.theme-tour__card`, `.theme-tour__name`, `.theme-tour__wordmark`
+  (a theme's title image, when it has one), `.theme-tour__actions`,
   `.theme-tour__story`.
 - `.game-notice`, the shared notice shown when a theme's gameplay cannot
   start.
@@ -167,10 +168,14 @@ such as a world to walk through. Either way:
   the page and the header controls keep their keys.
 - If gameplay can hide the control the visitor used to turn it on, move focus
   to a visible control.
-- Motion respects `reducedMotion`. Sound is off until the visitor turns it on,
-  and pauses when the tab is hidden.
+- Motion respects `reducedMotion`. A theme with sound keeps it off until the
+  visitor turns it on, and pauses it when the tab is hidden.
 - Heavy engines, such as three.js, load only inside the component, so they
   stay out of every other theme's bundle.
 - Art and sound are original. Fonts are original, or third-party under a
   license that allows web embedding and credited in the theme's credits.
   Never take files from the game itself. Reference the game by name only.
+  The one exception is a title image for the theme tour, added through
+  `src/themes/wordmarks.ts` only with the site owner's approval. Credit it on
+  the theme's credits page and list it in `NOTICE.md`, since the repo's MIT
+  license does not cover it.
