@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Black_Ops_One, Geist, Geist_Mono, Special_Elite, Teko } from 'next/font/google';
 import localFont from 'next/font/local';
 import { SiteFooter } from '@/site/site-footer';
 import { SiteHeader } from '@/site/site-header';
@@ -8,6 +8,7 @@ import { themeBootScript } from '@/themes/registry';
 import './globals.css';
 import '@/themes/minecraft/minecraft.css';
 import '@/themes/geometry-dash/geometry-dash.css';
+import '@/themes/call-of-duty/call-of-duty.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -41,6 +42,31 @@ const pusab = localFont({
   preload: false,
 });
 
+// Only the Call of Duty theme uses these three faces, so they are not preloaded.
+// Black Ops One by James Grieshaber and Eben Sorkin and Teko by Indian Type
+// Foundry are under the SIL OFL 1.1; Special Elite by Astigmatic is under the
+// Apache License 2.0. Their licenses are served from public/licenses/.
+const blackOpsOne = Black_Ops_One({
+  variable: '--font-call-of-duty-title',
+  subsets: ['latin'],
+  weight: '400',
+  preload: false,
+});
+
+const teko = Teko({
+  variable: '--font-call-of-duty',
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  preload: false,
+});
+
+const specialElite = Special_Elite({
+  variable: '--font-call-of-duty-type',
+  subsets: ['latin'],
+  weight: '400',
+  preload: false,
+});
+
 export const metadata: Metadata = {
   title: 'Trae',
   description: 'Personal site of Trae, software engineer.',
@@ -55,7 +81,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       data-color-mode="system"
       data-play="off"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${minecraftFont.variable} ${pusab.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${minecraftFont.variable} ${pusab.variable} ${blackOpsOne.variable} ${teko.variable} ${specialElite.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />

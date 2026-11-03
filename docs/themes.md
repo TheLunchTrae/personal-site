@@ -171,7 +171,10 @@ such as a world to walk through. Either way:
 - Motion respects `reducedMotion`. A theme with sound keeps it off until the
   visitor turns it on, and pauses it when the tab is hidden.
 - Heavy engines, such as three.js, load only inside the component, so they
-  stay out of every other theme's bundle.
+  stay out of every other theme's bundle. Large art, such as a baked 3D
+  scene, is served from `public/scenes/<name>/` and fetched only when the
+  gameplay that draws it starts; the scripts and sources that build it live
+  in `art/<name>/`.
 - Art and sound are original. Fonts are original, or third-party under a
   license that allows web embedding and credited in the theme's credits.
   Never take files from the game itself. Reference the game by name only.

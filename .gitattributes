@@ -149,6 +149,7 @@ cabal.project.freeze text linguist-generated=true
 *.exe binary
 *.ez binary
 *.gif binary
+*.glb binary
 *.gz binary
 *.icns binary
 *.ico binary

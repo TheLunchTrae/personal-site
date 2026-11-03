@@ -1,8 +1,8 @@
 Third-party software in this site's scripts
 
 The pages load minified JavaScript that includes the packages below. Their
-license texts follow. Fonts and the three.js library have their own files in
-this folder.
+license texts follow. Fonts, three.js and the meshoptimizer decoder bundled
+with it have their own files in this folder.
 
 ========================================================================
 next 16.4.3
