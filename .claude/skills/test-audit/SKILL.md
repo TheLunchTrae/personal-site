@@ -6,4 +6,4 @@ description: Audit existing test suites for useful coverage, duplication, mislea
 # Audit an existing test suite
 
 This repository keeps the `test-audit` skill in `.agents/skills/test-audit/`, where Codex and opencode load it.
-Read `.agents/skills/test-audit/SKILL.md` and follow it. Its `references/` paths are relative to that folder.
+Read `.agents/skills/test-audit/SKILL.md` from the repository root and follow it. Its `references/` paths are relative to that folder.
