@@ -14,16 +14,30 @@ const shots = [
   ['11-cod-globe-on-story', 'call-of-duty', 'on', '/influences/call-of-duty/', 'globe'],
   ['12-cod-gumball-on-credits', 'call-of-duty', 'on', '/credits/call-of-duty/', 'machine'],
 ];
-const viewports = { desktop: { width: 1280, height: 800 }, phone: { width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 2 } };
-const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const viewports = {
+  desktop: { width: 1280, height: 800 },
+  phone: { width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
+};
+const browser = await chromium.launch({
+  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
+});
 for (const [vpName, vp] of Object.entries(viewports)) {
   for (const [name, theme, play, route, menu] of shots) {
-    const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: vp.isMobile, hasTouch: vp.hasTouch, deviceScaleFactor: vp.deviceScaleFactor ?? 1 });
-    await ctx.addInitScript(([theme, play, menu]) => {
-      localStorage.setItem('theme', theme); localStorage.setItem('play', play);
-      localStorage.setItem('call-of-duty:quality', 'low');
-      if (menu) localStorage.setItem('call-of-duty:menu', menu);
-    }, [theme, play, menu]);
+    const ctx = await browser.newContext({
+      viewport: { width: vp.width, height: vp.height },
+      isMobile: vp.isMobile,
+      hasTouch: vp.hasTouch,
+      deviceScaleFactor: vp.deviceScaleFactor ?? 1,
+    });
+    await ctx.addInitScript(
+      ([theme, play, menu]) => {
+        localStorage.setItem('theme', theme);
+        localStorage.setItem('play', play);
+        localStorage.setItem('call-of-duty:quality', 'low');
+        if (menu) localStorage.setItem('call-of-duty:menu', menu);
+      },
+      [theme, play, menu],
+    );
     const page = await ctx.newPage();
     await page.goto(base + route, { waitUntil: 'load' });
     await page.waitForTimeout(play === 'on' ? 6000 : 1200);
@@ -32,8 +46,14 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   }
 }
 // Keyboard walk on the phone-free desktop: Tab from the top in Geometry Dash with gameplay on.
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, recordVideo: { dir: 'out/video', size: { width: 1280, height: 800 } } });
-await ctx.addInitScript(() => { localStorage.setItem('theme', 'geometry-dash'); localStorage.setItem('play', 'on'); });
+const ctx = await browser.newContext({
+  viewport: { width: 1280, height: 800 },
+  recordVideo: { dir: 'out/video', size: { width: 1280, height: 800 } },
+});
+await ctx.addInitScript(() => {
+  localStorage.setItem('theme', 'geometry-dash');
+  localStorage.setItem('play', 'on');
+});
 const page = await ctx.newPage();
 await page.goto(base + '/influences/geometry-dash/levels/');
 await page.waitForTimeout(2500);

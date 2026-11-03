@@ -63,7 +63,7 @@ jobs:
           cd ../before && "$BUN" install --frozen-lockfile && "$BUN" run build
       - name: Install Playwright
         working-directory: .capture
-        run: npm init -y >/dev/null && npm i playwright@1.56.1 && npx playwright install --with-deps chromium && sudo apt-get install -y ffmpeg >/dev/null
+        run: echo "{\"name\":\"capture\",\"private\":true}" > package.json && npm i playwright@1.56.1 && npx playwright install --with-deps chromium && sudo apt-get install -y ffmpeg >/dev/null
       - name: Audit and capture
         working-directory: .capture
         run: |
