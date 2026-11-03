@@ -37,10 +37,11 @@ the edit for Trae.
 Agents keep `content/README.md` and `content/credits/` current; they are not
 on the list. A change that adds another place for Trae's writing adds it here
 in the same change.
-[scripts/personal-content.mjs](scripts/personal-content.mjs) holds the list
-that each tool's config mirrors, and
-[docs/development.md](docs/development.md#traes-own-writing) says what each
-tool enforces. The rule holds where a tool cannot enforce it.
+When this list changes or a listed path moves, update the permission configs
+to match in the same change: `.claude/settings.json` for Claude Code,
+`opencode.jsonc` for opencode, and `scripts/personal-content.mjs` for the
+Codex hook. [docs/development.md](docs/development.md#traes-own-writing) says
+what each tool enforces. The rule holds where a tool cannot enforce it.
 
 ## Commands
 

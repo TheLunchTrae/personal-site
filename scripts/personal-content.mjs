@@ -1,7 +1,6 @@
 // Trae's own writing, which agents change only with Trae's explicit permission.
-// AGENTS.md states the rule. This list is the source of truth: the Claude Code
-// and opencode configs and AGENTS.md mirror it, and personal-content.test.mjs
-// fails when they drift. A path ending in `/` covers everything under it.
+// AGENTS.md states the rule and lists the paths; keep this list matching it.
+// A path ending in `/` covers everything under it.
 //
 // Run as a script, this is the Codex PreToolUse hook in .codex/hooks.json: it
 // denies an apply_patch call that adds, updates, deletes, or moves a file here.
@@ -12,12 +11,7 @@ import path from 'node:path';
 import { argv, exit, stderr, stdin, stdout } from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-export const personalContent = [
-  'content/home/',
-  'content/influences/',
-  'content/levels/',
-  'public/TraeStevens_Resume.pdf',
-];
+const personalContent = ['content/home/', 'content/influences/', 'content/levels/', 'public/TraeStevens_Resume.pdf'];
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Codex trims each patch line before it reads a header, so headers can be indented.

@@ -59,9 +59,8 @@ how a game theme plugs in.
 
 [AGENTS.md](../AGENTS.md#traes-own-writing) lists the files that agents change
 only with Trae's explicit permission.
-[scripts/personal-content.mjs](../scripts/personal-content.mjs) holds that list,
-and `scripts/personal-content.test.mjs` fails the gate when a tool's config or
-AGENTS.md drifts from it. Each tool enforces what it can:
+Each tool's config repeats that list, so a change to it updates all three.
+Each tool enforces what it can:
 
 - Claude Code: `ask` rules in `.claude/settings.json` prompt before Claude's
   file tools change a listed path, in every permission mode, auto and bypass
