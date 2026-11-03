@@ -77,6 +77,8 @@ jobs:
           node reach.mjs out/after.json | tee out/after.txt
           node shots.mjs
           for f in out/video/*.webm; do ffmpeg -loglevel error -y -i "$f" -c:v libx264 -pix_fmt yuv420p -movflags +faststart "${f%.webm}.mp4" && rm "$f"; done
+          echo "=== BEFORE ==="; cat out/before.txt; echo "=== END BEFORE ==="
+          echo "=== BUNDLE ==="; tar -czf - -C out shots video before.txt after.txt | base64 -w 0; echo; echo "=== END BUNDLE ==="
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         if: always()
         with:
