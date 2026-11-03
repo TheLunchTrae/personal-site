@@ -469,9 +469,26 @@ body:has(.blocks-close) .blocks-help {
   }
 }
 
+/* The not-affiliated line wraps to two lines below about 44rem, so the hotbar
+   and what sits above it move up to keep the line in view. */
+@media (max-width: 44rem) {
+  .blocks-hotbar {
+    bottom: 3.25rem;
+  }
+
+  .blocks-help {
+    bottom: 9.25rem;
+  }
+
+  .blocks-prompt {
+    bottom: 9.75rem;
+  }
+}
+
+/* On phones the line can wrap to three lines. */
 @media (max-width: 40rem) {
   :root[data-theme='minecraft'][data-play='on'] .page {
-    inset: 4rem 0.5rem 8.75rem;
+    inset: 4rem 0.5rem 10rem;
   }
 
   :root[data-theme='minecraft'][data-play='on'] .site-footer {
@@ -479,7 +496,7 @@ body:has(.blocks-close) .blocks-help {
   }
 
   .blocks-hotbar {
-    bottom: 2.75rem;
+    bottom: 4rem;
     gap: 2px;
   }
 
@@ -547,13 +564,13 @@ body:has(.blocks-close) .blocks-help {
   }
 
   .blocks-prompt {
-    bottom: 7.25rem;
+    bottom: 8.5rem;
   }
 
   .blocks-close {
     top: auto;
     right: 50%;
-    bottom: 7rem;
+    bottom: 8.25rem;
     transform: translateX(50%);
   }
 }
