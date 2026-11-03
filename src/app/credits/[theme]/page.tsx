@@ -14,7 +14,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<'/credits/[theme]'>): Promise<Metadata> {
   const { theme } = await params;
-  return isGameThemeId(theme) ? { title: `${gameTheme(theme).name} credits · Trae` } : {};
+  return isGameThemeId(theme) ? { title: `Credits for the ${gameTheme(theme).name} theme · Trae` } : {};
 }
 
 export default async function Credits({ params }: PageProps<'/credits/[theme]'>) {

@@ -172,7 +172,7 @@
   padding: 0.125rem 0.5rem;
   background: rgb(29 26 23 / 0.75);
   color: var(--foreground);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   line-height: 1.4;
   pointer-events: auto;
 }

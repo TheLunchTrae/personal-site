@@ -5,7 +5,7 @@ import { creditsHref, gameTheme } from '@/themes/registry';
 
 const theme = gameTheme('minecraft');
 
-export const metadata: Metadata = { title: `${theme.name} · Trae` };
+export const metadata: Metadata = { title: `${theme.storyTitle} · Trae` };
 
 export default async function MinecraftInfluence() {
   const sections = await readSections('influences/minecraft');
