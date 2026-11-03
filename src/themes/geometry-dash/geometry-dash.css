@@ -27,6 +27,38 @@
   display: block;
 }
 
+/* The site tabs as neon pads; the open page's tab glows green. */
+:root[data-theme='geometry-dash'] .site-nav__item[data-nav-for='geometry-dash'] {
+  display: block;
+}
+
+:root[data-theme='geometry-dash'] .site-nav__list {
+  gap: 0.375rem;
+}
+
+:root[data-theme='geometry-dash'] .site-nav__tab {
+  padding: 0.25rem 0.75rem;
+  border: 2px solid rgb(122 240 255 / 0.4);
+  border-radius: 0.375rem;
+  background: rgb(17 22 58 / 0.85);
+  color: var(--foreground);
+  font-family: var(--font-dash), var(--font-sans), sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+:root[data-theme='geometry-dash'] .site-nav__tab:hover {
+  border-color: var(--accent);
+}
+
+:root[data-theme='geometry-dash'] .site-nav__tab[aria-current='page'] {
+  border-color: var(--accent);
+  background: rgb(92 255 180 / 0.15);
+  box-shadow: 0 0 12px rgb(92 255 180 / 0.45);
+}
+
 :root[data-theme='geometry-dash'] .site-header {
   border-bottom: 2px solid rgb(122 240 255 / 0.35);
   background: rgb(8 10 31 / 0.7);

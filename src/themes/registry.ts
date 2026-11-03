@@ -27,6 +27,19 @@ export interface GameTheme {
   readonly pitch: string;
   /** Title of the theme's influence page, the chapter of Trae's story that the game inspired. */
   readonly storyTitle: string;
+  /**
+   * The theme's own pages besides its influence and credits pages. The site
+   * navigation shows them as tabs between those two while the theme is on.
+   */
+  readonly pages: readonly ThemePage[];
+}
+
+/** One of a game theme's own pages, which lives under its influence page. */
+interface ThemePage {
+  readonly id: string;
+  readonly href: string;
+  /** The page's tab label in the site navigation. */
+  readonly label: string;
 }
 
 /**
@@ -43,6 +56,7 @@ export const gameThemes: readonly GameTheme[] = [
     notice: 'NOT AN OFFICIAL MINECRAFT WEBSITE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.',
     pitch: 'Walk a voxel island and mine your way around it.',
     storyTitle: 'How Minecraft inspired me',
+    pages: [],
   },
   {
     id: 'geometry-dash',
@@ -51,6 +65,7 @@ export const gameThemes: readonly GameTheme[] = [
     notice: 'Fan-made Geometry Dash homage. Not affiliated with or endorsed by RobTop Games.',
     pitch: 'Run a neon level and jump through its gates to move between pages.',
     storyTitle: 'How Geometry Dash inspired me',
+    pages: [{ id: 'levels', href: '/influences/geometry-dash/levels/', label: 'Favorite levels' }],
   },
   {
     id: 'call-of-duty',
@@ -59,6 +74,7 @@ export const gameThemes: readonly GameTheme[] = [
     notice: 'Fan-made Call of Duty homage. Not affiliated with or endorsed by Activision.',
     pitch: 'Tune a wall of old TVs, turn a globe, or crank a gumball machine to pick your next page.',
     storyTitle: 'How Zombies inspired me',
+    pages: [],
   },
 ];
 
@@ -104,6 +120,15 @@ export function chapterLabel(id: GameThemeId): string {
 
 export function storyHref(id: GameThemeId): string {
   return `/influences/${id}/`;
+}
+
+/** The href of one of the theme's own pages from its `pages` entry. */
+export function themePageHref(id: GameThemeId, pageId: string): string {
+  const page = gameTheme(id).pages.find((candidate) => candidate.id === pageId);
+  if (page === undefined) {
+    throw new Error(`The ${id} theme has no page with id ${pageId} in its pages.`);
+  }
+  return page.href;
 }
 
 /** The theme's credits page, built from content/credits/<id>/. */

@@ -36,7 +36,9 @@ Three attributes on `<html>` hold the visitor's choices. The head script in
   gameplay failure is kept in memory for the visit only.
 - `src/themes/registry.test.ts` checks that the head script resolves state like
   the registry helpers, and `src/themes/theme-store.test.ts` checks that
-  choices apply when storage refuses them.
+  choices apply when storage refuses them. `src/site/site-nav.test.ts` checks
+  that every page the export builds has a tab, that every theme shows Home
+  and its own pages, and that each theme's stylesheet reveals its tabs.
 
 ## Shell
 
@@ -45,8 +47,15 @@ pages. Style these hooks under `:root[data-theme='<id>']`:
 
 - Tokens: `--background`, `--foreground`, `--muted`, `--border`, `--accent`,
   `--surface`, and `color-scheme`.
-- `.site-header`, which holds `.theme-controls` with its `select` elements and
-  `.theme-controls__play` (`aria-pressed`).
+- `.site-header`, which holds the site tabs and `.theme-controls` with its
+  `select` elements and `.theme-controls__play` (`aria-pressed`).
+- `.site-nav`, the site tabs: `.site-nav__item` holds one `.site-nav__tab`
+  link, and the open page's tab has `aria-current='page'`. They stay visible
+  in every theme, with gameplay on or off, so every page is reachable without
+  gameplay. Home shows in every theme. The default theme shows a tab for each
+  game theme's influence page. A game theme hides those, and its stylesheet
+  reveals its own tabs, the items with `data-nav-for='<id>'`: its influence
+  page, its own `pages`, and its credits page.
 - `.page`, `.prose-page` with `h1`, `h2`, `p`;
   `.prose-page[data-section='home']` is the home page.
 - `.content-section[data-content='<file name>']`, one per Markdown file from
@@ -84,16 +93,20 @@ the `order` front matter of the files in `content/home/`; see
    `src/themes/registry.ts`, and add its entry to `gameThemes` at the place it
    should appear: `id`, `name` (the game's name), `notice` (the not-affiliated
    note, in the owner's required wording when it has one), `pitch` (one line
-   for the theme's chapter card), and `storyTitle`.
+   for the theme's chapter card), `storyTitle`, and `pages`, the theme's own
+   pages besides its influence and credits pages, each with an `id`, `href` and
+   tab `label`.
 2. Create `src/themes/<id>/` with:
    - `<id>.css`: every rule for the shell scoped under
      `:root[data-theme='<id>']`, including
      `.theme-credit[data-credit-for='<id>'] { display: block; }`, plus the
      same rule under `:root:has(.prose-page[data-credit-for='<id>'])` so the
-     theme's own pages show it. Rules for the gameplay component's own
-     classes, which exist only while it is mounted, use a prefix of the
-     theme's own (Minecraft uses `.blocks-`) instead. Import it in
-     `src/app/layout.tsx`.
+     theme's own pages show it, and
+     `.site-nav__item[data-nav-for='<id>'] { display: block; }` under
+     `:root[data-theme='<id>']` so its tabs show. Rules for the gameplay
+     component's own classes, which exist only while it is mounted, use a
+     prefix of the theme's own (Minecraft uses `.blocks-`) instead. Import it
+     in `src/app/layout.tsx`.
    - A gameplay component that takes `PlayProps` from
      `src/themes/play-layer.tsx`.
 3. Register the component in `players` in `src/themes/play-layer.tsx` with
@@ -108,8 +121,8 @@ the `order` front matter of the files in `content/home/`; see
    `content/influences/<id>/` with the theme's blurb files, left empty for
    Trae to write, and list them in `content/README.md`. End the page with a
    link to the theme's credits page (`creditsHref`). The tour, the theme
-   picker, the footer credit, and the gameplay's last destination pick the
-   theme up from the registry.
+   picker, the site tabs, the footer credit, and the gameplay's last
+   destination pick the theme up from the registry.
 5. Write the theme's credits in `content/credits/<id>/`: the owner's notice,
    then every font, library and other work the theme uses, with its author
    and license, linking any license text that has to ship with the code
@@ -170,7 +183,8 @@ The component can sit in the flow of `.play-layer`, such as a runner strip
 above the page, or cover the viewport with fixed positioning behind the page,
 such as a world to walk through. Either way:
 
-- Plain navigation stays visible and works. Gameplay never replaces a link.
+- The site tabs stay visible and work, so gameplay never replaces a link. Never
+  cover the header.
 - Every gameplay action has a keyboard path, and keys act only while the game
   or the page it opened has focus, so Space and the arrow keys still scroll
   the page and the header controls keep their keys.

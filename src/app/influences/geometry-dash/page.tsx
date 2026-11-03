@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ContentBlock, readSections } from '@/site/content';
-import { chapterLabel, creditsHref, gameTheme } from '@/themes/registry';
+import { chapterLabel, creditsHref, gameTheme, themePageHref } from '@/themes/registry';
 
 const theme = gameTheme('geometry-dash');
-const levelsHref = '/influences/geometry-dash/levels/';
+const levelsHref = themePageHref('geometry-dash', 'levels');
 
 export const metadata: Metadata = { title: `${theme.storyTitle} · Trae` };
 

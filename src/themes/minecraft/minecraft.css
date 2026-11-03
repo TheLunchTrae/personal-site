@@ -122,6 +122,31 @@
   display: block;
 }
 
+/* The site tabs as stone buttons; the open page's tab is grass green. */
+:root[data-theme='minecraft'] .site-nav__item[data-nav-for='minecraft'] {
+  display: block;
+}
+
+:root[data-theme='minecraft'] .site-nav__tab {
+  padding: 0.25rem 0.625rem;
+  border: 2px solid var(--border);
+  background: #6f6f6f;
+  box-shadow:
+    inset 2px 2px 0 rgb(255 255 255 / 0.25),
+    inset -2px -2px 0 rgb(0 0 0 / 0.4);
+  color: #fff;
+  font-family: var(--font-pixel), monospace;
+  text-shadow: 1px 1px 0 #3a3a3a;
+}
+
+:root[data-theme='minecraft'] .site-nav__tab:hover {
+  background: #4f5a9a;
+}
+
+:root[data-theme='minecraft'] .site-nav__tab[aria-current='page'] {
+  background: var(--moss);
+}
+
 :root[data-theme='minecraft'] .theme-tour__card {
   border: 3px solid var(--border);
   border-radius: 0;
@@ -469,6 +494,19 @@ body:has(.blocks-close) .blocks-help {
   }
 }
 
+/* With gameplay on, the header's tabs and theme controls need about 41rem on
+   one row, so below 48rem they can wrap to two rows. The panel and its close
+   button start below both rows there. */
+@media (max-width: 48rem) {
+  :root[data-theme='minecraft'][data-play='on'] .page {
+    inset-block-start: 6rem;
+  }
+
+  .blocks-close {
+    top: 6rem;
+  }
+}
+
 /* The not-affiliated line wraps to two lines below about 44rem, so the hotbar
    and what sits above it move up to keep the line in view. */
 @media (max-width: 44rem) {
@@ -487,8 +525,9 @@ body:has(.blocks-close) .blocks-help {
 
 /* On phones the line can wrap to three lines. */
 @media (max-width: 40rem) {
+  /* The header can wrap to two rows here: the tabs, then the theme controls. */
   :root[data-theme='minecraft'][data-play='on'] .page {
-    inset: 4rem 0.5rem 10rem;
+    inset: 6rem 0.5rem 10rem;
   }
 
   :root[data-theme='minecraft'][data-play='on'] .site-footer {
@@ -520,9 +559,12 @@ body:has(.blocks-close) .blocks-help {
   }
 
   :root[data-theme='minecraft'][data-play='on'] .site-header {
-    flex-wrap: nowrap;
-    gap: 0.75rem;
+    gap: 0.5rem 0.75rem;
     padding: 0.625rem 0.75rem;
+  }
+
+  :root[data-theme='minecraft'][data-play='on'] .site-nav__list {
+    font-size: 0.75rem;
   }
 
   :root[data-theme='minecraft'][data-play='on'] .theme-controls {
