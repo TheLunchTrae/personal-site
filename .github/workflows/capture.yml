@@ -1,0 +1,36 @@
+name: Capture
+
+on:
+  push:
+    branches: ['capture/**']
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile && bun run build
+      - name: Install Playwright
+        working-directory: .capture
+        run: npm init -y >/dev/null && npm i playwright@1.56.1 && npx playwright install --with-deps chromium
+      - name: Audit and capture
+        working-directory: .capture
+        run: |
+          (cd ../out && python3 -m http.server 4310 >/dev/null 2>&1 &)
+          sleep 2
+          mkdir -p out
+          node audit.mjs > out/audit.json
+          node reach.mjs out/audit.json | tee out/reach.txt
+          if [ -f shots.mjs ]; then node shots.mjs; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capture
+          path: .capture/out
