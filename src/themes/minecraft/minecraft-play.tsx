@@ -121,13 +121,15 @@ export function MinecraftPlay({ sections, reducedMotion, onFail }: PlayProps) {
     engine.setPaused(onPage);
   }, [current, onPage, supported, reducedMotion]);
 
-  // Opening a page moves focus to it so it can be read and scrolled; closing
-  // it returns focus to the world. The first render leaves focus alone.
-  const wasOnPage = useRef<boolean | null>(null);
+  // Opening a page, or following a link from one page to another, moves focus
+  // to it so it can be read and scrolled; closing it returns focus to the
+  // world. The first render leaves focus alone.
+  const wasAt = useRef<string | null>(null);
   useEffect(() => {
-    const previous = wasOnPage.current;
-    wasOnPage.current = onPage;
-    if (previous === null || previous === onPage) {
+    const previous = wasAt.current;
+    const at = onPage ? pathname : '';
+    wasAt.current = at;
+    if (previous === null || previous === at) {
       return;
     }
     if (onPage) {
@@ -139,7 +141,7 @@ export function MinecraftPlay({ sections, reducedMotion, onFail }: PlayProps) {
     } else {
       hostRef.current?.focus({ preventScroll: true });
     }
-  }, [onPage]);
+  }, [onPage, pathname]);
 
   const travel = (section: GameSectionId) => {
     const engine = engineRef.current;

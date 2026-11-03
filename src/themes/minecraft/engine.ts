@@ -702,7 +702,6 @@ export function startEngine(host: HTMLElement, canvas: HTMLCanvasElement, option
       }
       atlas.dispose();
       renderer.dispose();
-      renderer.forceContextLoss();
     },
   };
 
