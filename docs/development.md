@@ -55,6 +55,8 @@ The site's text lives in Markdown files under `content/`;
 [story.md](story.md) describes the pages, the color mode, and how the story's
 chapters fit together. [scenes.md](scenes.md) describes the 3D scenes kept
 for the story.
+[DESIGN.md](../DESIGN.md) is the design system: colors and their roles,
+typography, spacing, shape, and components.
 
 ## Trae's own writing
 

@@ -19,12 +19,10 @@ The site has one look. The only visitor choice is the color mode.
 `localStorage` under `color-mode`. The head script in
 `src/site/color-mode.ts` sets it before first paint, and the Colors control in
 `src/site/color-mode-control.tsx` changes it. `globals.css` defines the
-palette tokens for light and redefines them for dark: `--background`,
-`--foreground`, `--muted`, `--border`, `--surface`, `--accent`,
-`--control-border` (control outlines, at 3:1 or more against the page), and
-the scene slot's `--sky-top` and `--sky-horizon`. A choice applies for the
-visit even when the browser refuses storage, and a choice made in another tab
-applies too.
+palette tokens for light and redefines them for dark;
+[DESIGN.md](../DESIGN.md#color) gives each token's role and values. A choice
+applies for the visit even when the browser refuses storage, and a choice made
+in another tab applies too.
 
 ## Header and menu
 

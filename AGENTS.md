@@ -9,12 +9,17 @@ This is a personal site, so `README.md` stays intentionally minimal: what the
 site is, where it lives, and pointers to the docs and license. Do not add
 setup, workflow, or architecture notes to it. Put context that agents need in
 this file, and general developer docs for people and agents in `docs/`.
+`DESIGN.md` is the one developer doc outside `docs/`, at the root where design
+tooling looks for it.
 
 - [docs/development.md](docs/development.md): stack, local setup, mise tasks,
   what each agent tool enforces for Trae's own writing, and static export
   limits.
 - [docs/deployment.md](docs/deployment.md): CI and Pages workflows, one-time
   repository and DNS setup, and the base path.
+- [DESIGN.md](DESIGN.md): the design system: colors and their roles,
+  typography, spacing, shape, and components, in light and dark. Follow it
+  for any visual change.
 - [docs/story.md](docs/story.md): the pages, the color mode, and how the
   story's chapters fit together.
 - [docs/scenes.md](docs/scenes.md): the 3D scenes kept, unmounted, for the
