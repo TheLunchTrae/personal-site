@@ -48,12 +48,13 @@ Project workflows run through mise:
 `mise tasks` lists the rest. To preview the production build, serve `out/` with
 any static server, for example `bunx serve out`.
 
-## Content and themes
+## Content and structure
 
 The site's text lives in Markdown files under `content/`;
 [content/README.md](../content/README.md) maps each file to where it appears.
-[themes.md](themes.md) describes the theme system: the color mode control and
-how a game theme plugs in.
+[story.md](story.md) describes the pages, the color mode, and how the story's
+chapters fit together. [scenes.md](scenes.md) describes the 3D scenes kept
+for the story.
 
 ## Trae's own writing
 

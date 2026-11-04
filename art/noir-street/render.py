@@ -22,7 +22,7 @@ import sys
 import bpy
 import numpy as np
 
-# Must match FOG_DENSITY and FOG_MAX in src/themes/call-of-duty/noir-street.ts.
+# Must match FOG_DENSITY and FOG_MAX in src/scenes/call-of-duty/noir-street.ts.
 FOG_DENSITY = 0.018
 FOG_MAX = 0.35
 

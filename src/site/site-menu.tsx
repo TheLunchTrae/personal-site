@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
-import { ThemeControls } from '@/themes/theme-controls';
+import { ColorModeControl } from './color-mode-control';
+import { SiteNav } from './site-nav';
 
 /**
- * The narrow-screen menu: a button that opens the theme controls in a modal
- * slide-out panel. The modal dialog keeps focus inside the panel, Escape
+ * The narrow-screen menu: a button that opens the site's pages and the color
+ * mode in a modal slide-out panel. The modal dialog keeps focus inside the panel, Escape
  * closes it, and focus returns to the button.
  */
 export function SiteMenu() {
@@ -16,7 +17,7 @@ export function SiteMenu() {
   const titleId = useId();
 
   // globals.css hides the menu on a wide screen, where the bar shows the
-  // controls. Hiding it resizes it to nothing, and an open modal panel would
+  // pages. Hiding it resizes it to nothing, and an open modal panel would
   // then leave the page inert behind a panel nobody can see, so it closes.
   useEffect(() => {
     const menu = menuRef.current;
@@ -52,7 +53,7 @@ export function SiteMenu() {
         </svg>
       </button>
       {
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- a backdrop click is a pointer shortcut that only the dialog itself can receive; Escape and the Close button are the keyboard paths
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- the handler closes the panel for a backdrop press and for a link activation, which already has its own key handling; Escape and the Close button are the keyboard paths
         <dialog
           ref={panelRef}
           id={panelId}
@@ -60,7 +61,11 @@ export function SiteMenu() {
           aria-labelledby={titleId}
           onClose={() => setOpen(false)}
           onClick={(event) => {
-            if (event.target === event.currentTarget) {
+            // A press on the backdrop, or on a page link, which navigates away from the panel.
+            if (
+              event.target === event.currentTarget ||
+              (event.target instanceof Element && event.target.closest('a') !== null)
+            ) {
               event.currentTarget.close();
             }
           }}
@@ -74,7 +79,8 @@ export function SiteMenu() {
                 Close
               </button>
             </div>
-            <ThemeControls />
+            <SiteNav />
+            <ColorModeControl />
           </div>
         </dialog>
       }

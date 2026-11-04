@@ -1,8 +1,13 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   // Knip's Next.js plugin supplies the app router entries and next.config.ts.
-  "entry": ["scripts/*.mjs"],
+  // src/scenes/ holds 3D scenes kept unmounted for the story's fly-through
+  // (docs/scenes.md), so each file is an entry until a page loads it.
+  "entry": ["scripts/*.mjs", "src/scenes/**/*.ts"],
   "project": ["src/**/*.{cts,mts,ts,tsx,css}", "scripts/**/*.mjs"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": true,
+  // The kept scenes' public classes and functions are their interface for the
+  // page that will mount them.
+  "ignoreIssues": { "src/scenes/**": ["exports"] },
 }

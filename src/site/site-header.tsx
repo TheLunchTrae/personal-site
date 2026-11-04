@@ -1,15 +1,23 @@
-import { ThemeControls } from '@/themes/theme-controls';
+import Link from 'next/link';
+import { ColorModeControl } from './color-mode-control';
 import { SiteMenu } from './site-menu';
+import { SiteNav } from './site-nav';
 
 /**
- * Holds the theme controls, which stay available in every theme, with
- * gameplay on or off. Wide screens show them in the bar; narrow screens show
- * a menu button that opens them in a slide-out panel.
+ * The site's name, its pages and the color mode. Wide screens show the pages
+ * and the control in the bar; narrow screens show a menu button that opens
+ * them in a slide-out panel.
  */
 export function SiteHeader() {
   return (
     <header className="site-header">
-      <ThemeControls />
+      <Link href="/" className="site-name">
+        Trae Stevens
+      </Link>
+      <div className="site-header__bar">
+        <SiteNav />
+        <ColorModeControl />
+      </div>
       <SiteMenu />
     </header>
   );

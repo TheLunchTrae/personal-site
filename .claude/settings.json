@@ -3,6 +3,8 @@
   "permissions": {
     "ask": [
       "Edit(/content/home/**)",
+      "Edit(/content/about/**)",
+      "Edit(/content/story/**)",
       "Edit(/content/influences/**)",
       "Edit(/content/levels/**)",
       "Edit(/public/TraeStevens_Resume.pdf)"

@@ -15,8 +15,10 @@ this file, and general developer docs for people and agents in `docs/`.
   limits.
 - [docs/deployment.md](docs/deployment.md): CI and Pages workflows, one-time
   repository and DNS setup, and the base path.
-- [docs/themes.md](docs/themes.md): the theme system, color mode, and how a
-  game theme plugs in.
+- [docs/story.md](docs/story.md): the pages, the color mode, and how the
+  story's chapters fit together.
+- [docs/scenes.md](docs/scenes.md): the 3D scenes kept, unmounted, for the
+  story's fly-through.
 - [content/README.md](content/README.md): where each content file appears and
   its Markdown format.
 
@@ -30,7 +32,10 @@ permission. When work needs one of these files, stop and ask Trae, or leave
 the edit for Trae.
 
 - `content/home/`: the home page intro and the invite to the story.
-- `content/influences/`: how each game inspired Trae, one file per section.
+- `content/about/`: the professional About me.
+- `content/story/`: the start of the personal story.
+- `content/influences/`: each story chapter, how a game inspired Trae, one
+  file per section.
 - `content/levels/`: Trae's Geometry Dash levels and progress.
 - `public/TraeStevens_Resume.pdf`: Trae's resume.
 
@@ -224,7 +229,7 @@ offset only where flex, grid, and relative sizing cannot express it.
   (`svh`, `dvh`), and `min()`, `max()`, `clamp()`, and `minmax()`.
 - Use fixed widths and heights, absolute or fixed positioning, and hand-tuned
   offsets only where the design needs them, such as a pixel-art asset, an
-  overlay, or a game scene. Comment a value when its source is not obvious.
+  overlay, or a 3D scene. Comment a value when its source is not obvious.
   Pixel borders, outlines, and shadows are fine as they are.
 - Prefer fluid sizing over stacked breakpoints. Add a media query where the
   layout itself has to change.

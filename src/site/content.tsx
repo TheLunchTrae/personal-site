@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
 import type { ReactNode } from 'react';
-import Markdown, { type Components } from 'react-markdown';
+import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import * as z from 'zod';
 
@@ -11,7 +11,7 @@ import * as z from 'zod';
  * section, so it can be written and edited on its own. Server components read
  * and render the files at build time, so no Markdown parser ships to the
  * browser. content/README.md maps each file to where it appears, and
- * docs/themes.md describes the format.
+ * docs/story.md#content describes the format.
  *
  * A file can open with YAML front matter. A schema checks it, so a missing,
  * misspelled or mistyped field fails the build instead of shipping, and only
@@ -113,23 +113,19 @@ export async function readSections(
 
 interface ContentBlockProps {
   readonly section: Pick<ContentSection, 'slug' | 'body'>;
-  /** Replaces the element rendered for a Markdown node, such as `h2` or `ul`, when a theme needs more than CSS. */
-  readonly components?: Components;
   /** What the page shows after the section's text, such as a button. */
   readonly children?: ReactNode;
 }
 
 /**
  * Renders one section as GitHub-flavored Markdown: plain semantic elements
- * (`h1`, `p`, `ul`, `em`) inside `section.content-section`, which the active
- * theme styles. Raw HTML in a file shows as literal text.
+ * (`h1`, `p`, `ul`, `em`) inside `section.content-section`, which
+ * globals.css styles. Raw HTML in a file shows as literal text.
  */
-export function ContentBlock({ section, components, children }: ContentBlockProps) {
+export function ContentBlock({ section, children }: ContentBlockProps) {
   return (
     <section className="content-section" data-content={section.slug}>
-      <Markdown remarkPlugins={[remarkGfm]} components={components}>
-        {section.body}
-      </Markdown>
+      <Markdown remarkPlugins={[remarkGfm]}>{section.body}</Markdown>
       {children}
     </section>
   );
