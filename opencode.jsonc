@@ -5,6 +5,8 @@
     // matches `/`, so a folder pattern covers its subfolders.
     "edit": {
       "content/home/*": "ask",
+      "content/about/*": "ask",
+      "content/story/*": "ask",
       "content/influences/*": "ask",
       "content/levels/*": "ask",
       "public/TraeStevens_Resume.pdf": "ask",

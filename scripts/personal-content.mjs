@@ -11,7 +11,14 @@ import path from 'node:path';
 import { exit, stderr, stdin, stdout } from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-const personalContent = ['content/home/', 'content/influences/', 'content/levels/', 'public/TraeStevens_Resume.pdf'];
+const personalContent = [
+  'content/home/',
+  'content/about/',
+  'content/story/',
+  'content/influences/',
+  'content/levels/',
+  'public/TraeStevens_Resume.pdf',
+];
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Codex trims each patch line before it reads a header, so headers can be indented.

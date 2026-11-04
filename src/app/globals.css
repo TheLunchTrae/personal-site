@@ -1,36 +1,47 @@
 @import 'tailwindcss';
 
-/* Theme tokens. `data-theme` on <html> picks the look. The default look
-   follows `data-color-mode` (system, light or dark); each game theme sets
-   these same tokens in its own stylesheet and ignores the color mode. */
+/* Palette tokens. `data-color-mode` on <html> picks light, dark, or the
+   system's preference; the boot script in src/site/color-mode.ts sets it
+   before first paint. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --muted: #5c5c5c;
-  --border: #d9d9d9;
-  --accent: #1f4fd1;
-  --surface: #f5f5f5;
+  --background: #fbfcfd;
+  --foreground: #15181d;
+  --muted: #4f5763;
+  --border: #dde1e6;
+  /* Outlines of controls such as buttons and selects, at 3:1 or more against the page and surface (WCAG 1.4.11). */
+  --control-border: #7d8590;
+  --surface: #f1f3f6;
+  --accent: #2457d6;
+  /* The scene slot's sky, from its top to the horizon. */
+  --sky-top: #e6eaf0;
+  --sky-horizon: #f7f8fa;
   color-scheme: light;
 }
 
-:root[data-theme='default'][data-color-mode='dark'] {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --muted: #a3a3a3;
-  --border: #2e2e2e;
-  --accent: #8fb0ff;
-  --surface: #161616;
+:root[data-color-mode='dark'] {
+  --background: #0f1217;
+  --foreground: #e8eaed;
+  --muted: #9aa3ae;
+  --border: #2a3039;
+  --control-border: #646d7a;
+  --surface: #171b21;
+  --accent: #8db0ff;
+  --sky-top: #0b0e13;
+  --sky-horizon: #1b2029;
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root[data-theme='default'][data-color-mode='system'] {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --muted: #a3a3a3;
-    --border: #2e2e2e;
-    --accent: #8fb0ff;
-    --surface: #161616;
+  :root[data-color-mode='system'] {
+    --background: #0f1217;
+    --foreground: #e8eaed;
+    --muted: #9aa3ae;
+    --border: #2a3039;
+    --control-border: #646d7a;
+    --surface: #171b21;
+    --accent: #8db0ff;
+    --sky-top: #0b0e13;
+    --sky-horizon: #1b2029;
     color-scheme: dark;
   }
 }
@@ -39,10 +50,12 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100svh;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
@@ -73,31 +86,89 @@ body {
   transform: none;
 }
 
+/* The page's side padding, shared by the header, the pages and the footer so
+   their edges line up. */
+:root {
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+}
+
 .site-header {
   position: relative;
   z-index: 20;
   display: flex;
-  gap: 0.75rem 1.5rem;
+  gap: 1rem;
   align-items: center;
-  justify-content: flex-end;
-  padding: 1rem 1.5rem;
+  justify-content: space-between;
+  padding: 1.25rem var(--gutter);
 }
 
-/* A narrow screen shows the menu button in the bar and the theme controls in
-   its panel; a wide screen shows the controls in the bar. SiteMenu closes the
+.site-name {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+/* A narrow screen shows the menu button in the bar and the pages and color
+   mode in its panel; a wide screen shows them in the bar. SiteMenu closes the
    panel when this rule hides the menu. */
-.site-header > .theme-controls {
+.site-header__bar {
   display: none;
 }
 
 @media (min-width: 40rem) {
-  .site-header > .theme-controls {
+  .site-header__bar {
     display: flex;
+    gap: 1.5rem;
+    align-items: center;
   }
 
   .site-menu {
     display: none;
   }
+}
+
+.site-nav ul {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.site-nav a {
+  display: block;
+  padding-block: 0.25rem;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--foreground);
+}
+
+.site-nav a[aria-current='page'] {
+  border-bottom-color: var(--foreground);
+  color: var(--foreground);
+}
+
+.color-mode {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.color-mode:not([data-hydrated]) {
+  visibility: hidden;
+}
+
+.color-mode select {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--control-border);
+  border-radius: 0.375rem;
+  background: var(--surface);
+  color: var(--foreground);
+  font: inherit;
 }
 
 .site-menu__button,
@@ -106,7 +177,7 @@ body {
   gap: 0.5rem;
   align-items: center;
   padding: 0.375rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: 0.375rem;
   background: var(--surface);
   color: var(--foreground);
@@ -201,50 +272,27 @@ body {
   font-weight: 600;
 }
 
-/* In the panel the controls stack, each label over its control. */
-.site-menu__panel .theme-controls {
+/* In the panel the pages stack as large touch targets, and the color mode
+   puts its label over its control. */
+.site-menu__panel .site-nav ul {
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.25rem;
+  font-size: 1.125rem;
+}
+
+.site-menu__panel .site-nav a {
+  padding-block: 0.625rem;
+}
+
+.site-menu__panel .color-mode {
+  flex-direction: column;
+  gap: 0.375rem;
   align-items: stretch;
   font-size: 1rem;
 }
 
-.site-menu__panel .theme-controls__field {
-  flex-direction: column;
-  gap: 0.375rem;
-  align-items: stretch;
-}
-
-.site-menu__panel :is(.theme-controls select, .theme-controls__play) {
+.site-menu__panel .color-mode select {
   padding: 0.5rem 0.75rem;
-}
-
-.theme-controls:not([data-hydrated]) {
-  visibility: hidden;
-}
-
-.theme-controls {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  font-size: 0.875rem;
-}
-
-.theme-controls__field {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  color: var(--muted);
-}
-
-.theme-controls select,
-.theme-controls__play {
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
-  background: var(--surface);
-  color: var(--foreground);
-  font: inherit;
 }
 
 .page {
@@ -253,67 +301,85 @@ body {
   flex-direction: column;
 }
 
-.prose-page {
+/* Pages share one wide column, so a story page's scene can run wider than
+   its text. Text keeps a readable measure inside it. */
+.prose-page,
+.story-page {
   width: 100%;
-  max-width: 42rem;
+  max-width: 60rem;
   margin: 0 auto;
-  padding: 4rem 1.5rem 6rem;
+  padding: clamp(2.5rem, 8vh, 6rem) var(--gutter) 5rem;
   line-height: 1.65;
+}
+
+.prose-page > *,
+.story-page__text {
+  max-width: 40rem;
+}
+
+.prose-page h1,
+.story-page h1 {
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.prose-page h2,
+.story-page h2 {
+  margin-top: 2.5rem;
+  font-size: 1.375rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.prose-page p,
+.story-page p {
+  margin-top: 1rem;
+}
+
+/* Sections drop their first heading's margin, so the space between them is
+   set here. The home page is a column and spaces them with its gap. */
+:where(.prose-page:not([data-section='home']), .story-page) .content-section + .content-section {
+  margin-top: 2.5rem;
+}
+
+/* A page whose title sits outside its Markdown spaces the first section from it. */
+.prose-page > h1 + :is(.content-section, .coming-soon) {
+  margin-top: 1.75rem;
 }
 
 .prose-page[data-section='home'] {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 4rem;
+  gap: 4.5rem;
   justify-content: center;
-  max-width: 48rem;
-  padding: 6rem 1.5rem;
-}
-
-.prose-page h1 {
-  font-size: 2.25rem;
-  font-weight: 600;
-  line-height: 2.5rem;
-  letter-spacing: -0.025em;
-}
-
-@media (min-width: 40rem) {
-  .prose-page h1 {
-    font-size: 3rem;
-    line-height: 1;
-  }
-}
-
-.prose-page h2 {
-  margin-top: 2.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.prose-page p {
-  margin-top: 1rem;
-}
-
-/* Sections drop their first heading's margin, so the space between them is
-   set here. The home page is a column and spaces them with its gap. */
-.prose-page:not([data-section='home']) .content-section + .content-section {
-  margin-top: 2.5rem;
 }
 
 /* The home intro's text under the name is the lede. */
 .prose-page[data-section='home'] [data-content='intro'] p {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.6;
   color: var(--muted);
+}
+
+/* The story route runs the width of the column, past the text's measure. */
+.prose-page[data-section='home'] [data-content='themes'] {
+  max-width: none;
+}
+
+.prose-page[data-section='home'] [data-content='themes'] > :not(.story-route) {
+  max-width: 40rem;
 }
 
 /* Markdown content renders as plain elements inside .content-section.
    Tailwind's reset strips list markers and link styling, so these base rules
-   restore markers, spacing and borders from the theme tokens. :where() keeps
-   them at zero specificity, so unlayered component rules (the theme tour) and
-   every theme's own rules win without a fight. A section's first element
-   drops its top margin, over the .prose-page heading and paragraph rules. */
+   restore markers, spacing and borders from the palette tokens. :where()
+   keeps them at zero specificity, so component rules win without a fight. A
+   section's first element drops its top margin, over the page heading and
+   paragraph rules. */
 .content-section > :first-child {
   margin-top: 0;
 }
@@ -331,7 +397,7 @@ body {
   list-style: decimal;
 }
 
-:where(.content-section) :where(a:not(.button)) {
+:where(.content-section, .page-aside) :where(a:not(.button)) {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 0.2em;
@@ -354,170 +420,241 @@ body {
   border: 1px solid var(--border);
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
 .button {
   display: inline-block;
-  margin-top: 2rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  padding: 0.625rem 1.125rem;
+  border: 1px solid var(--control-border);
+  border-radius: 0.5rem;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  font-weight: 550;
   line-height: 1.25rem;
   text-decoration: none;
-  color: var(--foreground);
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .button:hover {
   background: var(--surface);
 }
 
-.site-footer {
+.button--primary {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.button--primary:hover {
+  background: var(--muted);
+  border-color: var(--muted);
+}
+
+/* A small line above a page's title, such as a chapter's place in the story. */
+.page-kicker {
+  margin-bottom: 0.75rem;
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
 }
 
-/* A game theme's footer line: its short not-affiliated note and a link to its
-   credits. Small and quiet, but at least WCAG AA contrast so it stays legible.
-   The theme's stylesheet reveals it while that theme is on, and on the
-   theme's own influence and credits pages whatever theme is on. The padding
-   sits on the line, so the footer takes no space on the default look. */
-.theme-credit {
-  display: none;
-  max-width: 43rem;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 1.5rem;
-  font-size: 0.75rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.theme-credit a {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.theme-credit a:hover {
-  color: var(--foreground);
-}
-
-/* A page whose title sits outside its Markdown spaces the first section from it. */
-.prose-page > h1 + .content-section {
-  margin-top: 1.5rem;
-}
-
-/* A small line above a page's title, such as a story page's chapter. */
-.prose-page .page-kicker {
+.story-page .page-kicker {
   margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+}
+
+/* A closing line under a page's content, such as a link to a related page. */
+.page-aside {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* Stands in for text Trae has not written yet. */
+.coming-soon {
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.5rem;
   color: var(--muted);
 }
 
-/* A closing line under a page's content, such as a link to related pages. */
-.prose-page .page-aside {
-  margin-top: 3rem;
-  font-size: 0.875rem;
+.story-page__text {
+  margin-top: 2.5rem;
+}
+
+.story-page__text > h2:first-child {
+  margin-top: 0;
+}
+
+.story-page__text > h2 + .coming-soon {
+  margin-top: 0.75rem;
+}
+
+/* Where a story page's 3D scene goes: a still horizon, a sky over a floor
+   grid that SceneSlot draws in perspective. */
+.scene-slot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 2.25rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: linear-gradient(var(--sky-top), var(--sky-horizon) 55%, var(--surface) 55%);
+}
+
+@media (min-width: 40rem) {
+  .scene-slot {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+/* The floor fills the slot below the horizon, which the sky's gradient sets at 55%. */
+.scene-slot__floor {
+  position: absolute;
+  inset: 55% 0 0;
+  width: 100%;
+  height: 45%;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.scene-slot__floor line {
+  vector-effect: non-scaling-stroke;
+}
+
+.story-page .scene-slot__label {
+  position: relative;
+  margin: 1rem 1.25rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--background);
   color: var(--muted);
+  font-size: 0.875rem;
 }
 
-.prose-page .page-aside a {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-/* Shown by the shared gameplay layer when a theme's gameplay cannot start. It
-   floats over the bottom left corner of the screen, apart from the page. */
-.game-notice {
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  z-index: 30;
-  max-width: 22rem;
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--foreground);
-}
-
-.theme-tour {
+/* The chapters as stops on one route: a row on a wide screen, a column on a
+   narrow one. The dot is drawn on the line's start, so its offsets center it
+   on the 2px line. */
+.story-route {
   display: grid;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
   padding: 0;
   list-style: none;
 }
 
+.story-route li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 1.5rem 1.5rem;
+  border-left: 2px solid var(--border);
+}
+
+.story-route li::before {
+  content: '';
+  position: absolute;
+  top: 0.35rem;
+  left: -7px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--foreground);
+  border-radius: 50%;
+  background: var(--background);
+}
+
 @media (min-width: 40rem) {
-  .theme-tour {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .story-route {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+
+  .story-route li {
+    padding: 1.75rem 1rem 0 0;
+    border-top: 2px solid var(--border);
+    border-left: 0;
+  }
+
+  .story-route li::before {
+    top: -7px;
+    left: 0;
   }
 }
 
-.theme-tour__card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  background: var(--surface);
-}
-
-.theme-tour__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.theme-tour__chapter {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.story-route__number {
   color: var(--muted);
+  font-size: 0.875rem;
 }
 
-.theme-tour__name {
-  font-size: 1.125rem;
-  font-weight: 600;
+.story-route a {
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  font-weight: 650;
+  text-decoration: none;
 }
 
-/* A title image that stands in for a theme's name. It is drawn larger than it
-   shows, so the browser only ever scales it down; smooth scaling keeps its thin
-   outlines, even under a theme that sets pixelated rendering on the page. */
-.theme-tour__wordmark {
-  image-rendering: auto;
-  display: block;
-  width: 100%;
-  max-width: 18rem;
-  height: auto;
+.story-route a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
-.prose-page .theme-tour__card p {
-  margin-top: 0;
-  flex: 1;
-  color: var(--muted);
-}
-
-/* The actions sit further from the pitch than the card's gap. */
-.theme-tour__actions {
+.story-steps {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1rem;
-  align-items: center;
-  margin-top: 0.5rem;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
 }
 
-.theme-tour__actions .button {
-  margin-top: 0;
-  background: var(--background);
-  cursor: pointer;
+.story-steps a {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.theme-tour__story {
-  font-size: 0.875rem;
-  color: var(--accent);
+.story-steps a[rel='next'] {
+  margin-inline-start: auto;
+  text-align: end;
+}
+
+.story-steps a:hover {
+  text-decoration: underline;
   text-underline-offset: 0.2em;
+}
+
+.story-steps__label {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* The chapter's not-affiliated line: small and quiet, but at WCAG AA contrast. */
+.story-page .chapter-notice,
+.prose-page .chapter-notice {
+  margin-top: 3rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.site-footer {
+  padding: 1.25rem var(--gutter) 1.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.site-footer a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.site-footer a:hover {
+  color: var(--foreground);
 }

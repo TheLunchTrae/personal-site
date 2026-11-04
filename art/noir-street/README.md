@@ -1,6 +1,6 @@
 # Noir street
 
-The source of the Call of Duty theme's gumball street in
+The source of the gumball street in
 `public/scenes/noir-street/`: a plaza after the Junction, the first room of
 Shadows of Evil, seen from the first gumball machine by its pillar, out
 through the first door toward the canal, the elevated railway, and the giant
@@ -10,8 +10,10 @@ outside models, textures, or HDRIs. Reference images were used only for
 layout and lighting. The neon lettering uses Pacifico and Teko, both under
 the SIL Open Font License (`fonts/`).
 
-The scene is drawn by `src/themes/call-of-duty/gumball-scene.ts` and
-`noir-street.ts`. The machine's dimensions match the constants there, so the
+The street was built for the Call of Duty theme's gumball menu and is kept,
+unmounted, for the story's fly-through; see
+[docs/scenes.md](../../docs/scenes.md). The scene is drawn by
+`src/scenes/call-of-duty/gumball-scene.ts` and `noir-street.ts`. The machine's dimensions match the constants there, so the
 plate, chute, tray, and gumballs line up, and the camera framing (`WIDE` and
 `TALL` in `build.py`) matches the one in `gumball-scene.ts`.
 
@@ -40,7 +42,9 @@ node out/tools/panoramas.mjs out/render $PUBLIC
 ```
 
 The posters are frames of the live scene, so the poster and the first drawn
-frame match. Build and serve the site, then capture them with any Chromium:
+frame match. `poster.mjs` drives the Call of Duty theme's gameplay, so build
+and serve the site at the `pre-restructure` tag, then capture them with any
+Chromium:
 
 ```sh
 CHROMIUM=/path/to/chromium node out/tools/poster.mjs http://localhost:3000/ $PUBLIC

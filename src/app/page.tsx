@@ -1,15 +1,31 @@
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { ContentBlock, readSections } from '@/site/content';
-import { ThemeTour } from '@/themes/theme-tour';
+import { storyHref } from '@/site/story';
+import { StoryRoute } from '@/site/story-route';
 
 // What the home page shows after a section's text, keyed by the section's file name in content/home/.
 const displays: Readonly<Record<string, ReactNode>> = {
   intro: (
-    <a href="/TraeStevens_Resume.pdf" download="TraeStevens_Resume.pdf" className="button">
-      Download resume (PDF)
-    </a>
+    <div className="actions">
+      <a href="/TraeStevens_Resume.pdf" download="TraeStevens_Resume.pdf" className="button button--primary">
+        Download resume (PDF)
+      </a>
+      <Link href="/about/" className="button">
+        About me
+      </Link>
+    </div>
   ),
-  themes: <ThemeTour />,
+  themes: (
+    <>
+      <StoryRoute />
+      <div className="actions">
+        <Link href={storyHref} className="button">
+          Start the story
+        </Link>
+      </div>
+    </>
+  ),
 };
 
 export default async function Home() {
