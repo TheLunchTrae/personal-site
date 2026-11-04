@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
+import { colorModes } from '../site/color-mode';
 
 type Palette = Map<string, string>;
 
@@ -91,4 +92,16 @@ await test("DESIGN.md's color table matches globals.css", () => {
   const row = /^\| `(--[\w-]+)`\s*\| `(#[\da-f]{6})`\s*\| `(#[\da-f]{6})`/gim;
   assert.deepEqual(readPalette(design, row, 2), light);
   assert.deepEqual(readPalette(design, row, 3), dark);
+});
+
+// The color mode button draws one icon per mode and CSS shows the one that
+// matches <html>, so the icon is right before hydration. A mode without its
+// rule leaves the button empty.
+await test('globals.css shows the color mode button icon for every mode', () => {
+  for (const mode of colorModes) {
+    assert.ok(
+      css.includes(`:root[data-color-mode='${mode}'] .color-mode .icon[data-mode='${mode}']`),
+      `globals.css shows the ${mode} icon`,
+    );
+  }
 });

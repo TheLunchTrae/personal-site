@@ -24,7 +24,7 @@ The visitor picks light, dark, or the system's setting
 | Token              | Light     | Dark      | Role                                                                  |
 | ------------------ | --------- | --------- | --------------------------------------------------------------------- |
 | `--background`     | `#f7fff8` | `#111a14` | Page background.                                                      |
-| `--surface`        | `#ffffff` | `#1a261e` | Raised areas: selects, the menu buttons, and the scene floor.         |
+| `--surface`        | `#ffffff` | `#1a261e` | Raised areas: the header's icon buttons, and the scene floor.         |
 | `--foreground`     | `#14281a` | `#f3fff5` | Body text and headings.                                               |
 | `--muted`          | `#4a6352` | `#a3baa9` | _Derived._ Secondary text: lede, labels, captions, footer.            |
 | `--link`           | `#256438` | `#8af793` | Links inside prose.                                                   |
@@ -33,7 +33,7 @@ The visitor picks light, dark, or the system's setting
 | `--on-primary`     | `#14281a` | `#14281a` | Text on `--primary`.                                                  |
 | `--control-border` | `#256438` | `#8af793` | Outlines of buttons and controls, the current page marker, dot rings. |
 | `--border`         | `#d3e4d7` | `#2b3b30` | _Derived._ Decorative hairlines and dividers that carry no meaning.   |
-| `--tint`           | `#e7f6ea` | `#223329` | _Derived._ Hover wash behind secondary buttons.                       |
+| `--tint`           | `#e7f6ea` | `#223329` | _Derived._ Hover wash behind secondary and icon buttons.              |
 | `--focus`          | `#14281a` | `#f3fff5` | Keyboard focus outline.                                               |
 | `--sky-top`        | `#e2f1e5` | `#0b120d` | _Derived._ Top of the scene slot's sky.                               |
 | `--sky-horizon`    | `#f2fbf3` | `#1d2b22` | _Derived._ The scene slot's sky at the horizon.                       |
@@ -71,18 +71,18 @@ with the system sans-serif stack as fallback. Headings get their character
 from weight and tight tracking, not from a second face. `globals.css` sets
 each size; the styles, from largest to smallest:
 
-| Style       | Where in `globals.css`                                        | Weight           | Use                                              |
-| ----------- | ------------------------------------------------------------- | ---------------- | ------------------------------------------------ |
-| Display     | `.prose-page h1`, `.story-page h1`                            | 700              | Page title. Fluid size, tight tracking.          |
-| Heading     | `.prose-page h2`, `.story-page h2`                            | 650              | Section heading.                                 |
-| Lede        | `[data-content='intro'] p` on home                            | 400              | Home intro under the name, in `--muted`.         |
-| Menu link   | `.site-menu__panel .site-nav ul`                              | 400              | Page links in the phone menu panel.              |
-| Route title | `.story-route a`                                              | 650              | Chapter names on the story route.                |
-| Body        | `.prose-page`, `.story-page`                                  | 400              | Prose, at 1rem.                                  |
-| UI          | `.site-nav ul`, `.button`, `.page-kicker`, `.page-aside`      | 400, buttons 550 | Nav links in the bar, buttons, kicker, aside.    |
-| Caption     | `.color-mode` in the bar, `.story-route__number`, scene label | 400              | Labels, chapter numbers, back and next captions. |
-| Footer      | `.site-footer`                                                | 400              | Footer.                                          |
-| Notice      | `.chapter-notice`                                             | 400              | A chapter's not-affiliated line.                 |
+| Style       | Where in `globals.css`                                   | Weight           | Use                                              |
+| ----------- | -------------------------------------------------------- | ---------------- | ------------------------------------------------ |
+| Display     | `.prose-page h1`, `.story-page h1`                       | 700              | Page title. Fluid size, tight tracking.          |
+| Heading     | `.prose-page h2`, `.story-page h2`                       | 650              | Section heading.                                 |
+| Lede        | `[data-content='intro'] p` on home                       | 400              | Home intro under the name, in `--muted`.         |
+| Menu link   | `.site-menu__panel .site-nav ul`                         | 400              | Page links in the phone menu panel.              |
+| Route title | `.story-route a`                                         | 650              | Chapter names on the story route.                |
+| Body        | `.prose-page`, `.story-page`                             | 400              | Prose, at 1rem.                                  |
+| UI          | `.site-nav ul`, `.button`, `.page-kicker`, `.page-aside` | 400, buttons 550 | Nav links in the bar, buttons, kicker, aside.    |
+| Caption     | `.story-route__number`, scene label                      | 400              | Labels, chapter numbers, back and next captions. |
+| Footer      | `.site-footer`                                           | 400              | Footer.                                          |
+| Notice      | `.chapter-notice`                                        | 400              | A chapter's not-affiliated line.                 |
 
 Weights in use: 400 for text, 550 for buttons, 600 for the back and next
 titles and the menu title, 650 for headings, the route titles, and the site
@@ -106,12 +106,12 @@ a chapter, which aligns to the end.
 
 ## Shape and depth
 
-| Radius   | Use                                                                                       |
-| -------- | ----------------------------------------------------------------------------------------- |
-| 0.375rem | Small controls and labels: the color select, the menu and close buttons, the scene label. |
-| 0.5rem   | Buttons and the "still being written" panel.                                              |
-| 0.75rem  | The scene slot.                                                                           |
-| 50%      | Story route dots.                                                                         |
+| Radius   | Use                                                                             |
+| -------- | ------------------------------------------------------------------------------- |
+| 0.375rem | Small controls and labels: the icon buttons, the close button, the scene label. |
+| 0.5rem   | Buttons and the "still being written" panel.                                    |
+| 0.75rem  | The scene slot.                                                                 |
+| 50%      | Story route dots.                                                               |
 
 There are no shadows. Depth comes from `--surface` against `--background`
 and from borders. The menu panel's backdrop is `rgb(0 0 0 / 0.5)`.
@@ -130,9 +130,17 @@ and from borders. The menu panel's backdrop is `rgb(0 0 0 / 0.5)`.
   underline on hover.
 - **Site nav**: `--muted` links; hover turns them `--foreground`. The
   current page is `--foreground` with a 2px `--control-border` underline.
-- **Color select and menu buttons**: `--surface` fill, 1px
-  `--control-border` outline, 0.375rem radius. The menu button is a 2.75rem
-  square touch target.
+- **Icon buttons** (`.icon-button`): the color mode button and the menu
+  button. `--surface` fill, `--foreground` icon, 1px `--control-border`
+  outline, 0.375rem radius, in a 2.75rem square touch target. Hover fills
+  `--tint`. An `aria-label` names the button, and the color mode button
+  repeats it as a tooltip.
+- **Color mode button**: shows the current mode's icon (Monitor for System,
+  Sun for Light, Moon for Dark); a press moves to the next mode. Its name says
+  the current mode and the next one. It stays in the header on every screen
+  size, before the menu button on a narrow screen.
+- **Close button**: the menu panel's text button, styled like an icon
+  button without the square.
 - **Menu panel**: `--background`, with a `--border` edge, over a dimmed
   backdrop. [docs/story.md](docs/story.md#header-and-menu) describes how it
   opens.
@@ -148,9 +156,9 @@ and from borders. The menu panel's backdrop is `rgb(0 0 0 / 0.5)`.
 
 ## Imagery and icons
 
-- Icons are inline SVG, 1.5 stroke, `currentColor`, hidden from assistive
-  technology when a label names the control. There is no icon set and no
-  emoji.
+- Icons come from Lucide (`lucide-react`), at 1.25rem with a 1.5 stroke in
+  `currentColor`, hidden from assistive technology when a label names the
+  control. There is no emoji.
 - The story's only imagery is the 3D scenes ([docs/scenes.md](docs/scenes.md)),
   shown in the scene slot. The site uses no stock photos or illustrations, and
   no game's own assets.

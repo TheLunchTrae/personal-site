@@ -13,4 +13,4 @@ The story names the games that inspired me. Their names belong to their owners, 
 
 ## Code
 
-- The site runs on [Next.js](https://nextjs.org/) and [React](https://react.dev/). Their notices, and those of the other code in the site's scripts, are in [third-party.txt](/licenses/third-party.txt).
+- The site runs on [Next.js](https://nextjs.org/) and [React](https://react.dev/). Its icons are from [Lucide](https://lucide.dev/). Their notices, and those of the other code in the site's scripts, are in [third-party.txt](/licenses/third-party.txt).
