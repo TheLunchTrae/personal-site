@@ -1,4 +1,4 @@
-"""Builds the Junction scene for the Call of Duty theme's gumball menu.
+"""Builds the Junction scene for the Call of Duty gumball menu.
 
 Run headless: python build.py <out.blend>
 

@@ -15,17 +15,21 @@ function withSlash(pathname: string): string {
   return pathname.endsWith('/') ? pathname : `${pathname}/`;
 }
 
-/** The site's pages. The story link stays current on every chapter page. */
+/**
+ * The site's pages. On a chapter page the story link is marked as the current
+ * section (`aria-current="true"`), since it links to a different page.
+ */
 export function SiteNav() {
   const pathname = withSlash(usePathname());
   return (
     <nav className="site-nav" aria-label="Site">
       <ul>
         {links.map(({ href, label }) => {
-          const current = href === '/' ? pathname === '/' : pathname.startsWith(href);
+          const within = href !== '/' && pathname.startsWith(href);
+          const current = pathname === href ? 'page' : within ? 'true' : undefined;
           return (
             <li key={href}>
-              <Link href={href} aria-current={current ? 'page' : undefined}>
+              <Link href={href} aria-current={current}>
                 {label}
               </Link>
             </li>

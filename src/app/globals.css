@@ -145,7 +145,7 @@ body {
   color: var(--foreground);
 }
 
-.site-nav a[aria-current='page'] {
+.site-nav a[aria-current] {
   border-bottom-color: var(--foreground);
   color: var(--foreground);
 }
@@ -466,8 +466,9 @@ body {
   margin-top: 0;
 }
 
-/* A closing line under a page's content, such as a link to a related page. */
-.page-aside {
+/* A closing line under a page's content, such as a link to a related page.
+   The page prefix outranks the pages' paragraph margin. */
+:is(.prose-page, .story-page) .page-aside {
   margin-top: 2.5rem;
   color: var(--muted);
   font-size: 0.9375rem;
@@ -489,7 +490,7 @@ body {
   margin-top: 0;
 }
 
-.story-page__text > h2 + .coming-soon {
+.story-page__text > h2 + :is(.coming-soon, .content-section) {
   margin-top: 0.75rem;
 }
 
@@ -570,7 +571,8 @@ body {
 
 @media (min-width: 40rem) {
   .story-route {
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
   }
 
   .story-route li {

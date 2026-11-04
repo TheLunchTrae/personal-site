@@ -63,8 +63,8 @@ scene goes: a still horizon with the label "Background scene coming soon".
 The plan is a scroll-driven camera that flies the visitor through one world
 from chapter to chapter, with the text readable on its own and the scene as
 an enhancement on top: a light preset for phones and a still frame for
-reduced motion. The 3D work kept from the game themes for that is described
-in [scenes.md](scenes.md).
+reduced motion. [scenes.md](scenes.md) describes the 3D scenes kept for
+it.
 
 ### Text that is not written yet
 
