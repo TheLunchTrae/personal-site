@@ -5,10 +5,11 @@ professional About page, and a personal story told one game at a time. It
 should read as calm and precise, with the green brand color used sparingly so
 it marks the things a visitor can act on.
 
-Every page follows this file. `src/app/globals.css` holds the values as CSS
-custom properties, and components use the token names, never raw values.
-`src/app/globals.test.ts` checks that the tables here match the CSS and that
-each text and control pair meets WCAG AA.
+Every page follows this file. `src/app/globals.css` is the source of truth for
+values: colors are CSS custom properties, and components use the token names,
+never raw colors, except the menu backdrop. This file gives each value's role.
+`src/app/globals.test.ts` checks that the color table here matches the CSS and
+that each text and control pair meets WCAG AA.
 
 ## Color
 
@@ -49,20 +50,15 @@ Rules:
 
 ### Contrast
 
-All pairs meet WCAG 2.2 AA in both modes: 4.5:1 for text, 3:1 for control
-boundaries and focus outlines (1.4.11).
+Every pair below meets WCAG 2.2 AA in both modes: 4.5:1 for text (1.4.3) and
+3:1 for control boundaries and focus outlines (1.4.11). The test computes each
+ratio from the CSS.
 
-| Pair                                 | Light | Dark |
-| ------------------------------------ | ----- | ---- |
-| `--foreground` on `--background`     | 15.3  | 17.3 |
-| `--muted` on `--background`          | 6.5   | 8.6  |
-| `--muted` on `--surface`             | 6.6   | 7.6  |
-| `--link` on `--background`           | 7.0   | 13.4 |
-| `--on-primary` on `--primary`        | 11.7  | 11.7 |
-| `--on-primary` on `--primary-hover`  | 10.3  | 12.6 |
-| `--foreground` on `--tint`           | 13.9  | 13.0 |
-| `--control-border` on `--background` | 7.0   | 13.4 |
-| `--focus` on `--background`          | 15.3  | 17.3 |
+- Text: `--foreground` on `--background`, `--surface`, and `--tint`;
+  `--muted` on `--background` and `--surface`; `--link` on `--background`;
+  `--on-primary` on `--primary` and `--primary-hover`.
+- Boundaries: `--control-border` on `--background` and `--surface`; `--focus`
+  on `--background`.
 
 The brand's light page and primary fill are 1.3:1 apart, so the fill alone
 does not mark the primary button in light mode. The primary button keeps the
@@ -72,48 +68,50 @@ brand's control border in both modes, which carries the 3:1 boundary.
 
 One family: Geist, loaded with `next/font/google` in `src/app/layout.tsx`,
 with the system sans-serif stack as fallback. Headings get their character
-from weight and tight tracking, not from a second face.
+from weight and tight tracking, not from a second face. `globals.css` sets
+each size; the styles, from largest to smallest:
 
-| Style       | Size                         | Weight | Line height | Tracking | Use                                      |
-| ----------- | ---------------------------- | ------ | ----------- | -------- | ---------------------------------------- |
-| Display     | `clamp(2.5rem, 7vw, 4.5rem)` | 700    | 1           | -0.04em  | Page title (`h1`).                       |
-| Heading     | 1.375rem                     | 650    | inherited   | -0.015em | Section heading (`h2`).                  |
-| Lede        | 1.25rem                      | 400    | 1.6         | 0        | Home intro under the name, in `--muted`. |
-| Route title | 1.0625rem                    | 650    | inherited   | 0        | Chapter names on the story route.        |
-| Body        | 1rem                         | 400    | 1.65        | 0        | Prose.                                   |
-| UI          | 0.9375rem                    | 400    | inherited   | 0        | Nav links, buttons, kicker, page aside.  |
-| Caption     | 0.875rem                     | 400    | inherited   | 0        | Labels, chapter numbers, scene label.    |
-| Footer      | 0.8125rem                    | 400    | inherited   | 0        | Footer.                                  |
-| Notice      | 0.75rem                      | 400    | 1.5         | 0        | A chapter's not-affiliated line.         |
+| Style       | Where in `globals.css`                                   | Weight | Use                                              |
+| ----------- | -------------------------------------------------------- | ------ | ------------------------------------------------ |
+| Display     | `.prose-page h1`, `.story-page h1`                       | 700    | Page title. Fluid size, tight tracking.          |
+| Heading     | `.prose-page h2`, `.story-page h2`                       | 650    | Section heading.                                 |
+| Lede        | `[data-content='intro'] p` on home                       | 400    | Home intro under the name, in `--muted`.         |
+| Menu link   | `.site-menu__panel .site-nav ul`                         | 400    | Page links in the phone menu panel.              |
+| Route title | `.story-route a`                                         | 650    | Chapter names on the story route.                |
+| Body        | `.prose-page`, `.story-page`                             | 400    | Prose, at 1rem.                                  |
+| UI          | `.site-nav ul`, `.button`, `.page-kicker`, `.page-aside` | 400    | Nav links in the bar, buttons, kicker, aside.    |
+| Caption     | `.color-mode`, `.story-route__number`, scene label       | 400    | Labels, chapter numbers, back and next captions. |
+| Footer      | `.site-footer`                                           | 400    | Footer.                                          |
+| Notice      | `.chapter-notice`                                        | 400    | A chapter's not-affiliated line.                 |
 
-Buttons use weight 550, and the site name 650. Prose keeps a 40rem measure,
-about 70 characters of body text. Text is left-aligned everywhere; there is
-no centered section.
+Weights in use: 400 for text, 550 for buttons, 600 for the back and next
+titles and the menu title, 650 for headings, the route titles, and the site
+name, and 700 for page titles. Body text is never under 1rem, and prose keeps
+a 40rem measure, about 70 characters. Text is left-aligned, except the next
+link at the end of a chapter, which aligns to the end.
 
 ## Spacing and layout
 
-- Base unit: 0.25rem. Use its multiples; the common steps are 0.5, 0.75, 1,
-  1.5, 2.5, and 4.5rem.
-- Gutter: `--gutter`, `clamp(1.25rem, 4vw, 3rem)`, shared by the header,
-  pages, and footer so their edges line up.
-- Column: 60rem wide, centered. Text inside it keeps the 40rem measure;
+- Spacing is in rem. Prefer the common steps (0.5, 0.75, 1, 1.5, 2.5, and
+  4.5rem); control padding uses smaller steps to size touch targets.
+- `--gutter` is the page's side padding, shared by the header, pages, and
+  footer so their edges line up.
+- Pages share one centered column. Text inside it keeps the 40rem measure;
   the scene slot and the story route use the full column.
-- Page padding: `clamp(2.5rem, 8vh, 6rem)` above the title, 5rem below.
-- Between sections: 2.5rem. Home spaces its two parts with a 4.5rem gap.
-- Breakpoint: 40rem. Below it the header collapses to the menu button, the
-  story route runs as a column, and the scene slot is 4:3 instead of 21:9.
-
-[AGENTS.md](AGENTS.md#css-layout) sets how layout is built: flex and grid,
-`gap`, and intrinsic sizing.
+- Sections on a page sit 2.5rem apart. Home spaces its two parts with a wider
+  gap.
+- [docs/story.md](docs/story.md#header-and-menu) describes the header and the
+  phone menu, and [AGENTS.md](AGENTS.md#css-layout) sets how layout is built:
+  flex and grid, `gap`, and intrinsic sizing.
 
 ## Shape and depth
 
-| Radius   | Use                                            |
-| -------- | ---------------------------------------------- |
-| 0.375rem | Small controls: the color select, menu button. |
-| 0.5rem   | Buttons and the "still being written" panel.   |
-| 0.75rem  | The scene slot.                                |
-| 50%      | Story route dots.                              |
+| Radius   | Use                                                                                       |
+| -------- | ----------------------------------------------------------------------------------------- |
+| 0.375rem | Small controls and labels: the color select, the menu and close buttons, the scene label. |
+| 0.5rem   | Buttons and the "still being written" panel.                                              |
+| 0.75rem  | The scene slot.                                                                           |
+| 50%      | Story route dots.                                                                         |
 
 There are no shadows. Depth comes from `--surface` against `--background`
 and from borders. The menu panel's backdrop is `rgb(0 0 0 / 0.5)`.
@@ -132,12 +130,12 @@ and from borders. The menu panel's backdrop is `rgb(0 0 0 / 0.5)`.
   underline on hover.
 - **Site nav**: `--muted` links; hover turns them `--foreground`. The
   current page is `--foreground` with a 2px `--control-border` underline.
-- **Color select and menu button**: `--surface` fill, 1px
+- **Color select and menu buttons**: `--surface` fill, 1px
   `--control-border` outline, 0.375rem radius. The menu button is a 2.75rem
   square touch target.
-- **Menu panel**: a modal sheet from the right edge, `--background`, with a
-  `--border` edge. It slides in over 200ms and appears without motion when
-  the visitor prefers reduced motion.
+- **Menu panel**: `--background`, with a `--border` edge, over a dimmed
+  backdrop. [docs/story.md](docs/story.md#header-and-menu) describes how it
+  opens.
 - **Story route**: chapters as stops on one line. The line is `--border`;
   each stop is a 12px `--primary` dot with a 2px `--control-border` ring.
 - **Back and next**: a `--border` rule above, a `--muted` caption over a
@@ -146,7 +144,7 @@ and from borders. The menu panel's backdrop is `rgb(0 0 0 / 0.5)`.
   `--surface` floor with a `--border` grid, a `--border` outline, and a
   `--muted` label on `--background`.
 - **Still being written**: a dashed `--border` panel with `--muted` text.
-- **Footer**: `--muted` caption-size text with underlined links.
+- **Footer**: small `--muted` text with underlined links.
 
 ## Imagery and icons
 

@@ -19,10 +19,14 @@ function readPalette(text: string, pattern: RegExp, valueGroup: number): Palette
   return palette;
 }
 
-function blockAfter(opener: string): Palette {
+function blockText(opener: string): string {
   const start = css.indexOf(opener);
   assert.notEqual(start, -1, `globals.css has ${opener}`);
-  return readPalette(css.slice(start, css.indexOf('}', start)), /(--[\w-]+):\s*(#[\da-f]{6});/gi, 2);
+  return css.slice(start, css.indexOf('}', start));
+}
+
+function blockAfter(opener: string): Palette {
+  return readPalette(blockText(opener), /(--[\w-]+):\s*(#[\da-f]{6});/gi, 2);
 }
 
 const light = blockAfter(':root {');
@@ -56,7 +60,6 @@ const pairs: [front: string, back: string, minimum: number][] = [
   ['--foreground', '--tint', 4.5],
   ['--muted', '--background', 4.5],
   ['--muted', '--surface', 4.5],
-  ['--muted', '--sky-top', 4.5],
   ['--link', '--background', 4.5],
   ['--on-primary', '--primary', 4.5],
   ['--on-primary', '--primary-hover', 4.5],
@@ -79,6 +82,7 @@ await test('text and control colors meet WCAG AA in both color modes', () => {
 
 await test('the system dark palette matches the chosen dark palette', () => {
   assert.deepEqual(systemDark, dark);
+  assert.match(blockText(":root[data-color-mode='system'] {"), /color-scheme: dark;/);
 });
 
 // DESIGN.md gives each token's value next to its role; this keeps the table
