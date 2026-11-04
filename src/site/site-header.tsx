@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ColorModeButton } from './color-mode-control';
+import { ColorModeButton } from './color-mode-button';
 import { SiteMenu } from './site-menu';
 import { SiteNav } from './site-nav';
 

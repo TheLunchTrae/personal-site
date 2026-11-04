@@ -40,7 +40,7 @@ await test('the boot script falls back to the system mode when storage is blocke
   assert.equal(runBootScript('dark', true), 'system');
 });
 
-await test('pressing the color mode button visits every mode once and returns to the first', () => {
+await test('nextColorMode visits every mode once and returns to the first', () => {
   const visited: string[] = [];
   let mode: ColorMode = 'system';
   for (const _press of colorModes) {

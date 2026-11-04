@@ -204,8 +204,12 @@ body {
   cursor: pointer;
 }
 
-.icon-button:hover {
-  background: var(--tint);
+/* Touch screens keep :hover after a tap, which would read as a pressed
+   state, so only a pointer that hovers gets the wash. */
+@media (hover: hover) {
+  .icon-button:hover {
+    background: var(--tint);
+  }
 }
 
 .icon {
@@ -250,6 +254,12 @@ body {
 
 .site-menu__panel[open] {
   translate: 0 0;
+}
+
+/* Opening the menu focuses the panel so focus starts inside it; the panel is
+   not a control, so it shows no focus ring. */
+.site-menu__panel:focus-visible {
+  outline: none;
 }
 
 @starting-style {

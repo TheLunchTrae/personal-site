@@ -1,8 +1,8 @@
 'use client';
 
-import { Monitor, Moon, Sun } from 'lucide-react';
+import { type LucideIcon, Monitor, Moon, Sun } from 'lucide-react';
 import { useSyncExternalStore } from 'react';
-import { type ColorMode, colorModeKey, isColorMode, nextColorMode } from './color-mode';
+import { type ColorMode, colorModeKey, colorModes, isColorMode, nextColorMode } from './color-mode';
 
 const listeners = new Set<() => void>();
 // The visitor's choice lives here, so it applies for the visit even when storage refuses it.
@@ -60,7 +60,8 @@ export function setColorMode(mode: ColorMode): void {
   applyColorMode(mode);
 }
 
-const labels = { system: 'System', light: 'Light', dark: 'Dark' } as const;
+const labels = { system: 'System', light: 'Light', dark: 'Dark' } as const satisfies Record<ColorMode, string>;
+const icons = { system: Monitor, light: Sun, dark: Moon } as const satisfies Record<ColorMode, LucideIcon>;
 
 /**
  * The color mode button: each press moves to the next mode. It draws all three
@@ -79,9 +80,10 @@ export function ColorModeButton() {
       title={name}
       onClick={() => setColorMode(next)}
     >
-      <Monitor className="icon" data-mode="system" strokeWidth={1.5} aria-hidden="true" />
-      <Sun className="icon" data-mode="light" strokeWidth={1.5} aria-hidden="true" />
-      <Moon className="icon" data-mode="dark" strokeWidth={1.5} aria-hidden="true" />
+      {colorModes.map((option) => {
+        const Icon = icons[option];
+        return <Icon key={option} className="icon" data-mode={option} strokeWidth={1.5} aria-hidden="true" />;
+      })}
     </button>
   );
 }

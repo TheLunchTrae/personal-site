@@ -12,7 +12,7 @@ Object.assign(globalThis, {
   window: { localStorage: { getItem: refuse, setItem: refuse } },
   document: { documentElement: { setAttribute: (name: string, value: string) => attributes.set(name, value) } },
 });
-const { setColorMode } = await import('./color-mode-control');
+const { setColorMode } = await import('./color-mode-button');
 
 await test('a color mode applies for the visit when storage refuses it', () => {
   setColorMode('dark');

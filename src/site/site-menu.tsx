@@ -6,8 +6,9 @@ import { SiteNav } from './site-nav';
 
 /**
  * The narrow-screen menu: a button that opens the site's pages in a modal
- * slide-out panel. The modal dialog keeps focus inside the panel, Escape
- * closes it, and focus returns to the button.
+ * slide-out panel. Opening focuses the panel itself rather than a control.
+ * The modal dialog keeps focus inside the panel, Escape closes it, and focus
+ * returns to the button.
  */
 export function SiteMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -38,13 +39,18 @@ export function SiteMenu() {
     <div ref={menuRef} className="site-menu">
       <button
         type="button"
-        className="icon-button site-menu__button"
+        className="icon-button"
         aria-label="Menu"
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => {
-          panelRef.current?.showModal();
+          const panel = panelRef.current;
+          panel?.showModal();
+          // showModal focuses the Close button, which shows its focus ring on
+          // a tap. Focusing the panel instead lets a screen reader announce
+          // the menu and leaves Tab to reach the Close button and the links.
+          panel?.focus();
           setOpen(true);
         }}
       >
@@ -56,6 +62,7 @@ export function SiteMenu() {
           ref={panelRef}
           id={panelId}
           className="site-menu__panel"
+          tabIndex={-1}
           aria-labelledby={titleId}
           onClose={() => setOpen(false)}
           onClick={(event) => {

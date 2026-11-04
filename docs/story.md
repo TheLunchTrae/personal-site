@@ -18,14 +18,13 @@ The site has one look. The only visitor choice is the color mode.
 `data-color-mode` on `<html>` is `system`, `light` or `dark`, stored in
 `localStorage` under `color-mode`. The head script in
 `src/site/color-mode.ts` sets it before first paint, and the color mode button
-in `src/site/color-mode-control.tsx` changes it: each press moves from System
+in `src/site/color-mode-button.tsx` changes it: each press moves from System
 to Light to Dark and back to System. The button draws all three icons, and
 `globals.css` shows the one for the current mode, so the icon is right from
-first paint. `globals.css` defines the
-palette tokens for light and redefines them for dark;
-[DESIGN.md](../DESIGN.md#color) gives each token's role and values. A choice
-applies for the visit even when the browser refuses storage, and a choice made
-in another tab applies too.
+first paint. `globals.css` defines the palette tokens for light and redefines
+them for dark; [DESIGN.md](../DESIGN.md#color) gives each token's role and
+values. A choice applies for the visit even when the browser refuses storage,
+and a choice made in another tab applies too.
 
 ## Header and menu
 
@@ -33,8 +32,10 @@ in another tab applies too.
 (`site-nav.tsx`) and the color mode button. Below a 40rem viewport the bar
 shows the menu button instead of the links, and the color mode button stays
 beside it. The menu button opens the links in a modal panel that slides in
-from the right (`site-menu.tsx`). A link press in the
-panel closes it.
+from the right (`site-menu.tsx`). Opening it focuses the panel rather than a
+control, so a tap shows no focus ring; Tab moves through the panel, Escape
+closes it, and focus returns to the menu button. A link press in the panel
+closes it.
 
 ## The story
 
