@@ -1,12 +1,12 @@
 'use client';
 
+import { Menu } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
-import { ColorModeControl } from './color-mode-control';
 import { SiteNav } from './site-nav';
 
 /**
- * The narrow-screen menu: a button that opens the site's pages and the color
- * mode in a modal slide-out panel. The modal dialog keeps focus inside the panel, Escape
+ * The narrow-screen menu: a button that opens the site's pages in a modal
+ * slide-out panel. The modal dialog keeps focus inside the panel, Escape
  * closes it, and focus returns to the button.
  */
 export function SiteMenu() {
@@ -38,7 +38,7 @@ export function SiteMenu() {
     <div ref={menuRef} className="site-menu">
       <button
         type="button"
-        className="site-menu__button"
+        className="icon-button site-menu__button"
         aria-label="Menu"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -48,9 +48,7 @@ export function SiteMenu() {
           setOpen(true);
         }}
       >
-        <svg className="site-menu__icon" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M2 3.5h12M2 8h12M2 12.5h12" />
-        </svg>
+        <Menu className="icon" strokeWidth={1.5} aria-hidden="true" />
       </button>
       {
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- the handler closes the panel for a backdrop press and for a link activation, which already has its own key handling; Escape and the Close button are the keyboard paths
@@ -80,7 +78,6 @@ export function SiteMenu() {
               </button>
             </div>
             <SiteNav />
-            <ColorModeControl />
           </div>
         </dialog>
       }

@@ -12,6 +12,9 @@ export function isColorMode(value: unknown): value is ColorMode {
   return typeof value === 'string' && (colorModes as readonly string[]).includes(value);
 }
 
+/** The mode a press of the color mode button switches to: system, then light, then dark, then system again. */
+export const nextColorMode: Readonly<Record<ColorMode, ColorMode>> = { system: 'light', light: 'dark', dark: 'system' };
+
 /**
  * Runs in <head> before first paint, so a stored color mode never flashes the
  * system palette. It mirrors `isColorMode`; color-mode.test.ts holds them in

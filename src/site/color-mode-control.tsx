@@ -1,7 +1,8 @@
 'use client';
 
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useSyncExternalStore } from 'react';
-import { type ColorMode, colorModeKey, colorModes, isColorMode } from './color-mode';
+import { type ColorMode, colorModeKey, isColorMode, nextColorMode } from './color-mode';
 
 const listeners = new Set<() => void>();
 // The visitor's choice lives here, so it applies for the visit even when storage refuses it.
@@ -59,35 +60,28 @@ export function setColorMode(mode: ColorMode): void {
   applyColorMode(mode);
 }
 
-const subscribeNever = () => () => undefined;
 const labels = { system: 'System', light: 'Light', dark: 'Dark' } as const;
 
-/** The Colors select. Until hydration it would show the server's default, so CSS keeps it hidden. */
-export function ColorModeControl() {
-  const mode = useSyncExternalStore(subscribe, currentMode, () => 'system');
-  const hydrated = useSyncExternalStore(
-    subscribeNever,
-    () => true,
-    () => false,
-  );
+/**
+ * The color mode button: each press moves to the next mode. It draws all three
+ * icons and globals.css shows the one that matches `data-color-mode`, so the
+ * right icon shows from first paint, before hydration.
+ */
+export function ColorModeButton() {
+  const mode = useSyncExternalStore(subscribe, currentMode, (): ColorMode => 'system');
+  const next = nextColorMode[mode];
+  const name = `Colors: ${labels[mode]}. Switch to ${labels[next]}`;
   return (
-    <label className="color-mode" data-hydrated={hydrated ? '' : undefined}>
-      <span>Colors</span>
-      <select
-        value={mode}
-        onChange={(event) => {
-          const next = event.currentTarget.value;
-          if (isColorMode(next)) {
-            setColorMode(next);
-          }
-        }}
-      >
-        {colorModes.map((option) => (
-          <option key={option} value={option}>
-            {labels[option]}
-          </option>
-        ))}
-      </select>
-    </label>
+    <button
+      type="button"
+      className="icon-button color-mode"
+      aria-label={name}
+      title={name}
+      onClick={() => setColorMode(next)}
+    >
+      <Monitor className="icon" data-mode="system" strokeWidth={1.5} aria-hidden="true" />
+      <Sun className="icon" data-mode="light" strokeWidth={1.5} aria-hidden="true" />
+      <Moon className="icon" data-mode="dark" strokeWidth={1.5} aria-hidden="true" />
+    </button>
   );
 }

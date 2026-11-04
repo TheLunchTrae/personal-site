@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { colorModeBootScript, colorModeKey, colorModes, isColorMode } from './color-mode';
+import {
+  type ColorMode,
+  colorModeBootScript,
+  colorModeKey,
+  colorModes,
+  isColorMode,
+  nextColorMode,
+} from './color-mode';
 
 // Runs the pre-paint script the way the browser does, against stub globals,
 // and returns the color mode it sets on <html>.
@@ -31,4 +38,15 @@ await test('the boot script resolves a stored color mode like isColorMode', () =
 
 await test('the boot script falls back to the system mode when storage is blocked', () => {
   assert.equal(runBootScript('dark', true), 'system');
+});
+
+await test('pressing the color mode button visits every mode once and returns to the first', () => {
+  const visited: string[] = [];
+  let mode: ColorMode = 'system';
+  for (const _press of colorModes) {
+    visited.push(mode);
+    mode = nextColorMode[mode];
+  }
+  assert.deepEqual(new Set(visited), new Set(colorModes));
+  assert.equal(mode, 'system');
 });
