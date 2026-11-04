@@ -12,6 +12,7 @@ import { SiteNav } from './site-nav';
  */
 export function SiteMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -38,6 +39,7 @@ export function SiteMenu() {
   return (
     <div ref={menuRef} className="site-menu">
       <button
+        ref={buttonRef}
         type="button"
         className="icon-button"
         aria-label="Menu"
@@ -64,7 +66,12 @@ export function SiteMenu() {
           className="site-menu__panel"
           tabIndex={-1}
           aria-labelledby={titleId}
-          onClose={() => setOpen(false)}
+          onClose={() => {
+            setOpen(false);
+            // Safari does not focus a button on a click or tap, so the dialog
+            // would hand focus back to the page; return it to the button.
+            buttonRef.current?.focus();
+          }}
           onClick={(event) => {
             // A press on the backdrop, or on a page link, which navigates away from the panel.
             if (
