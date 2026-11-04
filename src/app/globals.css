@@ -1,47 +1,63 @@
 @import 'tailwindcss';
 
-/* Palette tokens. `data-color-mode` on <html> picks light, dark, or the
-   system's preference; the boot script in src/site/color-mode.ts sets it
+/* Palette tokens, from the green set in Trae's branding repo; DESIGN.md
+   gives each one's role. `data-color-mode` on <html> picks light, dark, or
+   the system's preference; the boot script in src/site/color-mode.ts sets it
    before first paint. */
 :root {
-  --background: #fbfcfd;
-  --foreground: #15181d;
-  --muted: #4f5763;
-  --border: #dde1e6;
+  --background: #f7fff8;
+  --surface: #ffffff;
+  --foreground: #14281a;
+  --muted: #4a6352;
+  --link: #256438;
+  --primary: #8af793;
+  --primary-hover: #74ea80;
+  --on-primary: #14281a;
   /* Outlines of controls such as buttons and selects, at 3:1 or more against the page and surface (WCAG 1.4.11). */
-  --control-border: #7d8590;
-  --surface: #f1f3f6;
-  --accent: #2457d6;
+  --control-border: #256438;
+  --border: #d3e4d7;
+  --tint: #e7f6ea;
+  --focus: #14281a;
   /* The scene slot's sky, from its top to the horizon. */
-  --sky-top: #e6eaf0;
-  --sky-horizon: #f7f8fa;
+  --sky-top: #e2f1e5;
+  --sky-horizon: #f2fbf3;
   color-scheme: light;
 }
 
 :root[data-color-mode='dark'] {
-  --background: #0f1217;
-  --foreground: #e8eaed;
-  --muted: #9aa3ae;
-  --border: #2a3039;
-  --control-border: #646d7a;
-  --surface: #171b21;
-  --accent: #8db0ff;
-  --sky-top: #0b0e13;
-  --sky-horizon: #1b2029;
+  --background: #111a14;
+  --surface: #1a261e;
+  --foreground: #f3fff5;
+  --muted: #a3baa9;
+  --link: #8af793;
+  --primary: #8af793;
+  --primary-hover: #a6fbad;
+  --on-primary: #14281a;
+  --control-border: #8af793;
+  --border: #2b3b30;
+  --tint: #223329;
+  --focus: #f3fff5;
+  --sky-top: #0b120d;
+  --sky-horizon: #1d2b22;
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root[data-color-mode='system'] {
-    --background: #0f1217;
-    --foreground: #e8eaed;
-    --muted: #9aa3ae;
-    --border: #2a3039;
-    --control-border: #646d7a;
-    --surface: #171b21;
-    --accent: #8db0ff;
-    --sky-top: #0b0e13;
-    --sky-horizon: #1b2029;
+    --background: #111a14;
+    --surface: #1a261e;
+    --foreground: #f3fff5;
+    --muted: #a3baa9;
+    --link: #8af793;
+    --primary: #8af793;
+    --primary-hover: #a6fbad;
+    --on-primary: #14281a;
+    --control-border: #8af793;
+    --border: #2b3b30;
+    --tint: #223329;
+    --focus: #f3fff5;
+    --sky-top: #0b120d;
+    --sky-horizon: #1d2b22;
     color-scheme: dark;
   }
 }
@@ -61,8 +77,13 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+::selection {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
 :focus-visible {
-  outline: 2px solid var(--foreground);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -146,7 +167,7 @@ body {
 }
 
 .site-nav a[aria-current] {
-  border-bottom-color: var(--foreground);
+  border-bottom-color: var(--control-border);
   color: var(--foreground);
 }
 
@@ -398,7 +419,7 @@ body {
 }
 
 :where(.content-section, .page-aside) :where(a:not(.button)) {
-  color: var(--accent);
+  color: var(--link);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -441,18 +462,19 @@ body {
 }
 
 .button:hover {
-  background: var(--surface);
+  background: var(--tint);
 }
 
+/* The light page is too close to the green fill for the fill alone to mark
+   the button, so its outline is the control border in both modes. */
 .button--primary {
-  border-color: var(--foreground);
-  background: var(--foreground);
-  color: var(--background);
+  border-color: var(--control-border);
+  background: var(--primary);
+  color: var(--on-primary);
 }
 
 .button--primary:hover {
-  background: var(--muted);
-  border-color: var(--muted);
+  background: var(--primary-hover);
 }
 
 /* A small line above a page's title, such as a chapter's place in the story. */
@@ -564,9 +586,9 @@ body {
   left: -7px;
   width: 12px;
   height: 12px;
-  border: 2px solid var(--foreground);
+  border: 2px solid var(--control-border);
   border-radius: 50%;
-  background: var(--background);
+  background: var(--primary);
 }
 
 @media (min-width: 40rem) {
