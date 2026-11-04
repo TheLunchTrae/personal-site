@@ -24,7 +24,7 @@ The visitor picks light, dark, or the system's setting
 | Token              | Light     | Dark      | Role                                                                  |
 | ------------------ | --------- | --------- | --------------------------------------------------------------------- |
 | `--background`     | `#f7fff8` | `#111a14` | Page background.                                                      |
-| `--surface`        | `#ffffff` | `#1a261e` | Raised areas: selects and the menu button.                            |
+| `--surface`        | `#ffffff` | `#1a261e` | Raised areas: selects, the menu buttons, and the scene floor.         |
 | `--foreground`     | `#14281a` | `#f3fff5` | Body text and headings.                                               |
 | `--muted`          | `#4a6352` | `#a3baa9` | _Derived._ Secondary text: lede, labels, captions, footer.            |
 | `--link`           | `#256438` | `#8af793` | Links inside prose.                                                   |
@@ -71,24 +71,24 @@ with the system sans-serif stack as fallback. Headings get their character
 from weight and tight tracking, not from a second face. `globals.css` sets
 each size; the styles, from largest to smallest:
 
-| Style       | Where in `globals.css`                                   | Weight | Use                                              |
-| ----------- | -------------------------------------------------------- | ------ | ------------------------------------------------ |
-| Display     | `.prose-page h1`, `.story-page h1`                       | 700    | Page title. Fluid size, tight tracking.          |
-| Heading     | `.prose-page h2`, `.story-page h2`                       | 650    | Section heading.                                 |
-| Lede        | `[data-content='intro'] p` on home                       | 400    | Home intro under the name, in `--muted`.         |
-| Menu link   | `.site-menu__panel .site-nav ul`                         | 400    | Page links in the phone menu panel.              |
-| Route title | `.story-route a`                                         | 650    | Chapter names on the story route.                |
-| Body        | `.prose-page`, `.story-page`                             | 400    | Prose, at 1rem.                                  |
-| UI          | `.site-nav ul`, `.button`, `.page-kicker`, `.page-aside` | 400    | Nav links in the bar, buttons, kicker, aside.    |
-| Caption     | `.color-mode`, `.story-route__number`, scene label       | 400    | Labels, chapter numbers, back and next captions. |
-| Footer      | `.site-footer`                                           | 400    | Footer.                                          |
-| Notice      | `.chapter-notice`                                        | 400    | A chapter's not-affiliated line.                 |
+| Style       | Where in `globals.css`                                        | Weight           | Use                                              |
+| ----------- | ------------------------------------------------------------- | ---------------- | ------------------------------------------------ |
+| Display     | `.prose-page h1`, `.story-page h1`                            | 700              | Page title. Fluid size, tight tracking.          |
+| Heading     | `.prose-page h2`, `.story-page h2`                            | 650              | Section heading.                                 |
+| Lede        | `[data-content='intro'] p` on home                            | 400              | Home intro under the name, in `--muted`.         |
+| Menu link   | `.site-menu__panel .site-nav ul`                              | 400              | Page links in the phone menu panel.              |
+| Route title | `.story-route a`                                              | 650              | Chapter names on the story route.                |
+| Body        | `.prose-page`, `.story-page`                                  | 400              | Prose, at 1rem.                                  |
+| UI          | `.site-nav ul`, `.button`, `.page-kicker`, `.page-aside`      | 400, buttons 550 | Nav links in the bar, buttons, kicker, aside.    |
+| Caption     | `.color-mode` in the bar, `.story-route__number`, scene label | 400              | Labels, chapter numbers, back and next captions. |
+| Footer      | `.site-footer`                                                | 400              | Footer.                                          |
+| Notice      | `.chapter-notice`                                             | 400              | A chapter's not-affiliated line.                 |
 
 Weights in use: 400 for text, 550 for buttons, 600 for the back and next
 titles and the menu title, 650 for headings, the route titles, and the site
-name, and 700 for page titles. Body text is never under 1rem, and prose keeps
-a 40rem measure, about 70 characters. Text is left-aligned, except the next
-link at the end of a chapter, which aligns to the end.
+name, and 700 for page titles. Body prose is 1rem and keeps a 40rem measure,
+about 70 characters. Text is left-aligned, except the next link at the end of
+a chapter, which aligns to the end.
 
 ## Spacing and layout
 
