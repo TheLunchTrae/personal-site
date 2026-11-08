@@ -4,11 +4,11 @@ The site has three parts, linked from the header on every page:
 
 | Page            | Route                          | What it holds                                                    |
 | --------------- | ------------------------------ | ---------------------------------------------------------------- |
-| Home            | `/`                            | Trae's intro, the resume, and the invite to the story.           |
+| Home            | `/`                            | My intro, the resume, and the invite to the story.               |
 | About           | `/about/`                      | The professional About me.                                       |
 | My story        | `/story/`                      | The personal story's start, then one chapter per game, in order. |
-| A chapter       | `/story/<chapter id>/`         | How that game inspired Trae.                                     |
-| Favorite levels | `/story/geometry-dash/levels/` | Trae's Geometry Dash levels, under that chapter.                 |
+| A chapter       | `/story/<chapter id>/`         | How that game inspired me.                                       |
+| Favorite levels | `/story/geometry-dash/levels/` | My Geometry Dash levels, under that chapter.                     |
 | Credits         | `/credits/`                    | Notices for the games the story names, and fonts and code.       |
 
 The site has one look. The only visitor choice is the color mode.
@@ -48,7 +48,7 @@ under the chapter in the wording the game's owner asks for when it has one.
 
 Each chapter page in `src/app/story/<id>/page.tsx` renders `ChapterPage` from
 `src/site/chapter-page.tsx`: the chapter's place in the story, its title, the
-scene slot, Trae's text from `content/influences/<id>/`, the back and next
+scene slot, my text from `content/influences/<id>/`, the back and next
 links, and the notice. A page can pass `headings` to put a heading before a
 file's text, as the Call of Duty chapter does for each Black Ops game, and
 children to add a line after the text, as the Geometry Dash chapter does for
@@ -56,8 +56,8 @@ the favorite levels page.
 
 To add a chapter, add it to `ChapterId` and `chapters`, add its page under
 `src/app/story/<id>/`, write its notice into `content/credits/credits.md`,
-and leave its text folder for Trae: `content/influences/` is
-[Trae's own writing](../AGENTS.md#traes-own-writing).
+and leave its text folder for me: `content/influences/` is
+[my own writing](../AGENTS.md#traes-own-writing).
 
 ### Scene slot
 

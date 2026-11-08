@@ -50,7 +50,7 @@ in the same change.
 When this list changes or a listed path moves, update the permission configs
 to match in the same change: `.claude/settings.json` for Claude Code,
 `opencode.jsonc` for opencode, and `scripts/personal-content.mjs` for the
-Codex hook. [docs/development.md](docs/development.md#traes-own-writing) says
+Codex hook. [docs/development.md](docs/development.md#my-own-writing) says
 what each tool enforces. The rule holds where a tool cannot enforce it.
 
 ## Commands
