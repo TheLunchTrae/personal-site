@@ -5,7 +5,7 @@ export function hasText(sections: readonly Pick<ContentSection, 'body'>[]): bool
   return sections.some((section) => section.body.trim() !== '');
 }
 
-/** Stands in for a page's text until Trae writes it. */
+/** Stands in for a page's text until I write it. */
 export function ComingSoon() {
   return <p className="coming-soon">This part is still being written.</p>;
 }

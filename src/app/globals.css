@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-/* Palette tokens, from the green set in Trae's branding repo; DESIGN.md
+/* Palette tokens, from the green set in my branding repo; DESIGN.md
    gives each one's role. `data-color-mode` on <html> picks light, dark, or
    the system's preference; the boot script in src/site/color-mode.ts sets it
    before first paint. */
@@ -495,7 +495,7 @@ body {
   font-size: 0.9375rem;
 }
 
-/* Stands in for text Trae has not written yet. */
+/* Stands in for text I have not written yet. */
 .coming-soon {
   padding: 1rem 1.25rem;
   border: 1px dashed var(--border);

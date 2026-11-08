@@ -1,5 +1,5 @@
 /**
- * The personal story: one chapter per game that inspired Trae, read in this
+ * The personal story: one chapter per game that inspired me, read in this
  * order. A chapter's place here is its number, so reordering the entries
  * reorders the story. docs/story.md describes how the section fits together.
  */
