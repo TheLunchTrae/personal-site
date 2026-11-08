@@ -13,7 +13,7 @@ that each text and control pair meets WCAG AA.
 
 ## Color
 
-The colors come from the green set in Trae's branding repository
+The colors come from the green set in my branding repository
 (`TheLunchTrae/personal-branding`, `green-color-palette.md`). That set names
 eight roles; the rows marked _derived_ fill roles it does not name, in the
 same green-tinted family.

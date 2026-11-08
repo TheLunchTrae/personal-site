@@ -1,7 +1,7 @@
 # Kept 3D scenes
 
 These 3D scenes are kept, unmounted, for the story's fly-through (see
-[story.md](story.md#scene-slot)). Trae decided to keep them while the story's
+[story.md](story.md#scene-slot)). I decided to keep them while the story's
 text is written. The game themes that mounted them, with their gameplay, are
 at commit `3a63d82` (tagged `pre-restructure`).
 

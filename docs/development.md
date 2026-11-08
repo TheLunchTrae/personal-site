@@ -58,10 +58,10 @@ for the story.
 [DESIGN.md](../DESIGN.md) is the design system: colors and their roles,
 typography, spacing, shape, and components.
 
-## Trae's own writing
+## My own writing
 
 [AGENTS.md](../AGENTS.md#traes-own-writing) lists the files that agents change
-only with Trae's explicit permission.
+only with my explicit permission.
 Each tool's config repeats that list, so a change to the list updates all three configs.
 Each tool enforces what it can:
 
