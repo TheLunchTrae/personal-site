@@ -21,7 +21,7 @@ runs).
    setting. Turn on **Enforce HTTPS** once the certificate is issued.
 3. At the DNS provider (Porkbun), point the apex at `thelunchtrae.github.io`
    with an `ALIAS` record and add a `CNAME` for `www` to the same host.
-   Verifying the domain in your GitHub account settings (Settings → Pages) is
+   Verifying the domain in my GitHub account settings (Settings → Pages) is
    recommended to prevent takeover.
 4. Protect `main` with a ruleset that requires a pull request and the `quality`
    check, and blocks force pushes and deletion. Committed files cannot

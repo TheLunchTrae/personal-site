@@ -14,7 +14,7 @@ interface ChapterPageProps {
 }
 
 /**
- * One chapter of the story: its scene, then Trae's text from
+ * One chapter of the story: its scene, then my text from
  * content/influences/<id>/, then the way on to the next chapter.
  */
 export async function ChapterPage({ id, headings = {}, children }: ChapterPageProps) {
