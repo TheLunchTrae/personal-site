@@ -51,7 +51,7 @@ url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332
 [[tools.python]]
 version = "3.15.1"
 backend = "core:python"
-specifiers = ["3.15"]
+specifiers = ["3.15.1"]
 
 [tools.python."platforms.linux-x64"]
 checksum = "sha256:01d901e09ca673c99a6c9bd9ec2cfbd58dbe8813d07514c36cb73cfd20b18bd8"
