@@ -181,10 +181,11 @@ version-numbered names.
 
 ## TypeScript, Next.js, and Bun
 
-`package.json`, `bun.lock`, and the mise tasks own the tested versions and
-commands. The site is a Next.js App Router project exported as static files
-(`output: "export"`) and served by GitHub Pages, so it has no runtime server:
-use only features that the
+`package.json` and the mise config declare version ranges and commands;
+`bun.lock` and `.config/mise/mise.lock` hold the exact tested versions, so CI
+stays reproducible. The site is a Next.js App Router project exported as
+static files (`output: "export"`) and served by GitHub Pages, so it has no
+runtime server: use only features that the
 [static export guide](node_modules/next/dist/docs/01-app/02-guides/static-exports.md)
 supports. Read the installed Next.js docs in `node_modules/next/dist/docs/`
 before using an unfamiliar Next.js API.
@@ -198,9 +199,16 @@ Select checks for the change:
 | Formatting              | `ts:fmt:check`; `ts:standards` applies autofixes |
 
 Before handoff, run `mise run standards:check`. Run `mise run ts:lock` after
-changing declared dependencies and commit `bun.lock`. `bunfig.toml` pins new
-dependencies exactly and holds back versions younger than three days; an
-exception goes in `minimumReleaseAgeExcludes` and needs the owner's approval.
+changing declared dependencies and commit `bun.lock`. Dependencies use caret
+ranges, and tilde ranges where a minor release can break the build:
+TypeScript, Next.js, `oxlint-tsgolint`, and 0.x packages. Update coupled
+packages together: `react` with `react-dom`, `tailwindcss` with
+`@tailwindcss/turbopack`, and `oxlint` with `oxlint-tsgolint`. The mise
+`[tools]` use version prefixes. Pins stay exact only where a range cannot
+work: GitHub Actions use commit SHAs, `mise-action` installs one mise release,
+and the `hygiene` task's Python, because `mise lock` re-resolves a task tool's
+prefix. `bunfig.toml` holds back versions younger than three days; an exception
+goes in `minimumReleaseAgeExcludes` and needs the owner's approval.
 
 Source uses `.ts` or `.tsx` so the type, lint, and knip checks cover the same
 files. Use named exports. Next.js route files (`page`, `layout`, and the other

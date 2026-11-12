@@ -45,6 +45,10 @@ Project workflows run through mise:
 | `mise run ts:test`         | `bun test`                                                                    |
 | `mise run ts:lock`         | Refreshes `bun.lock` after a dependency change                                |
 
+`mise run ts:lock` keeps the locked versions. To take an update within the
+declared ranges, run `mise exec -- bun update` for packages or
+`mise upgrade <tool>` for mise tools, then commit the lockfile.
+
 `mise tasks` lists the rest. To preview the production build, serve `out/` with
 any static server, for example `bunx serve out`.
 
