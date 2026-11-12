@@ -198,9 +198,13 @@ Select checks for the change:
 | Formatting              | `ts:fmt:check`; `ts:standards` applies autofixes |
 
 Before handoff, run `mise run standards:check`. Run `mise run ts:lock` after
-changing declared dependencies and commit `bun.lock`. `bunfig.toml` pins new
-dependencies exactly and holds back versions younger than three days; an
-exception goes in `minimumReleaseAgeExcludes` and needs the owner's approval.
+changing declared dependencies and commit `bun.lock`. `package.json` declares
+caret ranges, and tilde ranges where a minor release can break the build:
+TypeScript, Next.js, `oxlint-tsgolint`, and 0.x packages. The mise tools
+declare version prefixes. `bun.lock` and `.config/mise/mise.lock` hold the
+exact tested versions, so CI stays reproducible. `bunfig.toml` holds back
+versions younger than three days; an exception goes in
+`minimumReleaseAgeExcludes` and needs the owner's approval.
 
 Source uses `.ts` or `.tsx` so the type, lint, and knip checks cover the same
 files. Use named exports. Next.js route files (`page`, `layout`, and the other
